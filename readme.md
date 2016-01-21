@@ -1,3 +1,3 @@
 # An example SPA in Elm
 
-Example application built for https://github.com/sporto/web-apps-with-elm
+Example application built for http://www.elm-tutorial.org/
