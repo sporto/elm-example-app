@@ -1,6 +1,6 @@
 module Perks.Models where
 
-type alias Model = {
+type alias Perk = {
     id: Int,
     name: String,
     strengh: Int

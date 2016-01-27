@@ -1,6 +1,6 @@
 module Players.Models where
 
-type alias Model = {
+type alias Player = {
     id: Int,
     name: String,
     level: Int

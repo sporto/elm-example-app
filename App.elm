@@ -1,35 +1,75 @@
 module App where
 
 import Effects exposing (Effects, Never)
-import Html
+import Html as H
 import Html.Events as Events
 import Http
 import StartApp
-import Task
+import Task exposing (Task)
+import Perks.Models
+import Players.Actions
+import Players.Models
+import Players.List
+import PerksPlayers.Models
+import Routing exposing(router)
 
-type Action =
-  NoOp
+type Action
+  = NoOp
+  | RoutingAction Routing.Action
+  | PlayersAction Players.Actions.Action
 
 type alias Model = {
-    players: List String,
-    perks: List String
+    routing: Routing.Model,
+    perks: List Perks.Models.Perk,
+    perksPlayers: List PerksPlayers.Models.PerkPlayer,
+    players: List Players.Models.Player
   }
 
+initialModel : Model
 initialModel = {
-    players = [],
-    perks = []
+    routing = Routing.initialModel,
+    perks = [],
+    perksPlayers = [],
+    players = [
+      {
+        id = 1,
+        name = "Sam",
+        level = 1
+      }
+    ]
   }
 
-view : Signal.Address Action -> Model -> Html.Html
+view : Signal.Address Action -> Model -> H.Html
 view address model =  
-  Html.div [] [
-    Html.button [
+  H.div [] [
+    nav address model,
+    page address model
+  ]
 
-    ]
-    [
-      Html.text "Refresh"
+nav : Signal.Address Action -> Model -> H.Html
+nav address model =
+  H.div [] [
+    H.button [
+      Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/users")
+    ] [
+      H.text "Users"
+    ],
+    H.button [
+      Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/perks")
+    ] [
+      H.text "Perks"
     ]
   ]
+
+page : Signal.Address Action -> Model -> H.Html
+page address model =
+  case model.routing.view of
+    "users" ->
+      Players.List.view (Signal.forwardTo address PlayersAction) model.players
+    _ ->
+      H.div [] [
+        H.text "Not found"
+      ]
 
 --httpTask : Task.Task Http.Error String
 --httpTask =
@@ -49,22 +89,35 @@ init =
 update : Action -> Model -> (Model, Effects.Effects Action)
 update action model =
   case Debug.log "action" action of
+    RoutingAction subAction ->
+      let
+        (updatedRouting, fx) =
+          Routing.update subAction model.routing
+      in
+        ({model | routing = updatedRouting}, Effects.map RoutingAction fx)
     _ ->
       (model, Effects.none)
+
+routerSignal =
+  Signal.map RoutingAction router.signal
 
 app : StartApp.App Model
 app = 
   StartApp.start {
     init = init,
-    inputs = [],
+    inputs = [routerSignal],
     update = update,
     view = view
   }
 
-main: Signal.Signal Html.Html
+main: Signal.Signal H.Html
 main =
   app.html
 
 port runner : Signal (Task.Task Never ())
 port runner =
   app.tasks
+
+port routeRunTask : Task () ()
+port routeRunTask =
+  router.run

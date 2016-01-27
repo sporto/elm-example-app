@@ -45,18 +45,22 @@
   ],
   "perksPlayers": [
     {
+      "id": 1,
       "perkId": 1,
       "playerId": 1
     },
     {
+      "id": 2,
       "perkId": 2,
       "playerId": 2
     },
     {
+      "id": 3,
       "perkId": 3,
       "playerId": 3
     },
     {
+      id": 4,
       "perkId": 4,
       "playerId": 4
     }
