@@ -10,6 +10,8 @@ import Perks.Models
 import Players.Actions
 import Players.Models
 import Players.List
+import Perks.Actions
+import Perks.List
 import PerksPlayers.Models
 import Routing exposing(router)
 
@@ -17,6 +19,7 @@ type Action
   = NoOp
   | RoutingAction Routing.Action
   | PlayersAction Players.Actions.Action
+  | PerksAction Perks.Actions.Action
 
 type alias Model = {
     routing: Routing.Model,
@@ -28,7 +31,13 @@ type alias Model = {
 initialModel : Model
 initialModel = {
     routing = Routing.initialModel,
-    perks = [],
+    perks = [
+      {
+        id = 1,
+        name = "Amulet",
+        strengh = 1
+      }
+    ],
     perksPlayers = [],
     players = [
       {
@@ -66,6 +75,8 @@ page address model =
   case model.routing.view of
     "users" ->
       Players.List.view (Signal.forwardTo address PlayersAction) model.players
+    "perks" ->
+      Perks.List.view (Signal.forwardTo address PerksAction) model.perks
     _ ->
       H.div [] [
         H.text "Not found"

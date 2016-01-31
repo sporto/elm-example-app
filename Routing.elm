@@ -1,7 +1,6 @@
 module Routing where
 
 import Effects exposing (Effects, Never)
-import Dict
 import Hop
 
 type Action

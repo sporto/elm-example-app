@@ -1,4 +1,4 @@
-module Players.Actions where
+module Perks.Actions where
 
 type Action
   = NoOp
