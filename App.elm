@@ -35,7 +35,7 @@ initialModel = {
       {
         id = 1,
         name = "Amulet",
-        strengh = 1
+        bonus = 1
       }
     ],
     perksPlayers = [],
