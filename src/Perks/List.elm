@@ -2,11 +2,11 @@ module Perks.List where
 
 import Html as H
 import Html.Attributes exposing (class)
-import Perks.Models as Models
+import Perks.Models exposing (Perk)
 import Perks.Actions as Actions
-import PerksPlayers.Models
+import PerksPlayers.Models exposing (PerkPlayer)
 
-view : Signal.Address Actions.Action -> (List Models.Perk, List PerksPlayers.Models.PerkPlayer) -> H.Html
+view : Signal.Address Actions.Action -> (List Perk, List PerkPlayer) -> H.Html
 view address (perks, perksPlayers) =
   H.table [ class "table-light" ] [
     H.thead [] [
@@ -21,7 +21,7 @@ view address (perks, perksPlayers) =
     H.tbody [] (List.map (perkRow address perksPlayers) perks)
   ]
 
-perkRow : Signal.Address Actions.Action -> List PerksPlayers.Models.PerkPlayer -> Models.Perk -> H.Html
+perkRow : Signal.Address Actions.Action -> List PerkPlayer -> Perk -> H.Html
 perkRow address perksPlayers perk =
   H.tr [] [
     H.td [] [ H.text (toString perk.id) ],
@@ -33,7 +33,7 @@ perkRow address perksPlayers perk =
     ]
   ]
 
-userCountForPerk : List PerksPlayers.Models.PerkPlayer -> Models.Perk -> Int
+userCountForPerk : List PerkPlayer -> Perk -> Int
 userCountForPerk perksPlayers perk =
   perksPlayers
     |> List.filter (\perkPlayer -> perkPlayer.perkId == perk.id)
