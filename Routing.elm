@@ -12,15 +12,20 @@ type Action
   | NavigateTo String
   | NoOp
 
+type View
+  = Players
+  | Perks
+  | NotFound
+
 type alias Model = {
     routerPayload : Hop.Payload,
-    view: String
+    view: View
   }
 
 initialModel : Model
 initialModel = {
     routerPayload = router.payload,
-    view = "Users"
+    view = Players
   }
 
 update : Action -> Model -> (Model, Effects Action)
@@ -29,9 +34,9 @@ update action model =
     NavigateTo path ->
       (model, Effects.map HopAction (Hop.navigateTo path))
     ShowUsers payload ->
-      ({model | view = "users", routerPayload = payload}, Effects.none)
+      ({model | view = Players, routerPayload = payload}, Effects.none)
     ShowPerks payload ->
-      ({model | view = "perks", routerPayload = payload}, Effects.none)
+      ({model | view = Perks, routerPayload = payload}, Effects.none)
     _ ->
       (model, Effects.none)
 
@@ -39,7 +44,7 @@ routes : List (String, Hop.Payload -> Action)
 routes =
   [
     ("/", ShowUsers),
-    ("/users", ShowUsers),
+    ("/players", ShowUsers),
     ("/perks", ShowPerks)
   ]
 

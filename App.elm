@@ -59,9 +59,9 @@ nav : Signal.Address Action -> Model -> H.Html
 nav address model =
   H.div [] [
     H.button [
-      Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/users")
+      Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/players")
     ] [
-      H.text "Users"
+      H.text "Players"
     ],
     H.button [
       Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/perks")
@@ -73,9 +73,9 @@ nav address model =
 page : Signal.Address Action -> Model -> H.Html
 page address model =
   case model.routing.view of
-    "users" ->
+    Routing.Players ->
       Players.List.view (Signal.forwardTo address PlayersAction) model.players
-    "perks" ->
+    Routing.Perks ->
       Perks.List.view (Signal.forwardTo address PerksAction) model.perks
     _ ->
       H.div [] [
