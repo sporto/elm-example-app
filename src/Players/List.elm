@@ -1,12 +1,13 @@
 module Players.List where
 
 import Html as H
+import Html.Attributes exposing (class)
 import Players.Models as Models
 import Players.Actions as Actions
 
 view : Signal.Address Actions.Action -> List Models.Player -> H.Html
 view address collection =
-  H.table [] [
+  H.table [ class "table-light" ] [
     H.thead [] [
       H.tr [] [
         H.th [] [ H.text "Id" ],
@@ -29,7 +30,7 @@ playerRow address player =
     H.td [] [ H.text (toString player.level) ],
     H.td [] [ H.text (toString player.level) ],
     H.td [] [ 
-      H.button [] [ H.text "Delete" ],
-      H.button [] [ H.text "Edit" ]
+      H.button [ class "btn" ] [ H.text "Delete" ],
+      H.button [ class "btn" ] [ H.text "Edit" ]
     ]
   ]

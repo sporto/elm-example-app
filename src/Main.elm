@@ -1,8 +1,9 @@
-module App where
+module Main where
 
 import Effects exposing (Effects, Never)
 import Html as H
 import Html.Events as Events
+import Html.Attributes exposing (class)
 import Http
 import StartApp
 import Task exposing (Task)
@@ -13,7 +14,7 @@ import Players.List
 import Perks.Actions
 import Perks.List
 import PerksPlayers.Models
-import Routing exposing(router)
+import Routing exposing(router) 
 
 type Action
   = NoOp
@@ -38,7 +39,13 @@ initialModel = {
         bonus = 1
       }
     ],
-    perksPlayers = [],
+    perksPlayers = [
+      {
+        id = 1,
+        playerId = 1,
+        perkId = 1
+      }
+    ],
     players = [
       {
         id = 1,
@@ -57,13 +64,17 @@ view address model =
 
 nav : Signal.Address Action -> Model -> H.Html
 nav address model =
-  H.div [] [
+  H.div [
+      class "p2"
+    ] [
     H.button [
+      class "btn btn-primary mr1", 
       Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/players")
     ] [
       H.text "Players"
     ],
     H.button [
+      class "btn btn-primary",
       Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/perks")
     ] [
       H.text "Perks"
@@ -76,7 +87,7 @@ page address model =
     Routing.Players ->
       Players.List.view (Signal.forwardTo address PlayersAction) model.players
     Routing.Perks ->
-      Perks.List.view (Signal.forwardTo address PerksAction) model.perks
+      Perks.List.view (Signal.forwardTo address PerksAction) (model.perks, model.perksPlayers)
     _ ->
       H.div [] [
         H.text "Not found"

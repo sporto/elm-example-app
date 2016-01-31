@@ -4,7 +4,9 @@
   "description": "Example application built for http://www.elm-tutorial.org/",
   "main": "elm.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "dev": "webpack-dev-server --port 3000"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,14 @@
   },
   "homepage": "https://github.com/sporto/elm-tutorial-app#readme",
   "dependencies": {
-    "json-server": "^0.8.6"
+    "basscss": "^7.1.0",
+    "css-loader": "^0.23.1",
+    "elm-webpack-loader": "^2.0.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "json-server": "^0.8.6",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.12",
+    "webpack-dev-server": "^1.14.1"
   }
 }
