@@ -1,7 +1,8 @@
-module PerksPlayers.Models where
+module PerksPlayers.Models (..) where
 
-type alias PerkPlayer = {
-    id: Int,
-    perkId: Int,
-    playerId: Int
+
+type alias PerkPlayer =
+  { id : Int
+  , perkId : Int
+  , playerId : Int
   }
