@@ -5,7 +5,6 @@ import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Effects exposing (Effects, Never)
 import Perks.Models exposing (Perk)
-import Perks.Actions as Actions
 import PerksPlayers.Models exposing (PerkPlayer)
 
 
@@ -14,12 +13,16 @@ import PerksPlayers.Models exposing (PerkPlayer)
 
 type alias Model =
   { expanded : List Int
+  , perks : List Perk
+  , perksPlayers : List PerkPlayer
   }
 
 
 initialModel : Model
 initialModel =
   { expanded = []
+  , perks = []
+  , perksPlayers = []
   }
 
 
@@ -29,6 +32,16 @@ initialModel =
 
 type Action
   = Expand Int
+  | Collapse Int
+
+
+
+-- UTILS
+
+
+isPerkExpanded : List Int -> Perk -> Bool
+isPerkExpanded expanded perk =
+  List.any (\i -> i == perk.id) expanded
 
 
 
@@ -37,49 +50,94 @@ type Action
 
 update : Action -> Model -> ( Model, Effects.Effects Action )
 update action model =
-  ( model, Effects.none )
+  case action of
+    Expand id ->
+      let
+        updateExanded =
+          id :: model.expanded
+      in
+        ( { model | expanded = updateExanded }, Effects.none )
+
+    Collapse id ->
+      let
+        updateExanded =
+          List.filter (\i -> i /= id) model.expanded
+      in
+        ( { model | expanded = updateExanded }, Effects.none )
 
 
 
 -- VIEW
 
 
-view : Signal.Address Actions.Action -> ( List Perk, List PerkPlayer ) -> H.Html
-view address ( perks, perksPlayers ) =
-  H.table
-    [ class "table-light" ]
-    [ H.thead
-        []
-        [ H.tr
-            []
-            [ H.th [] [ H.text "Id" ]
-            , H.th [] [ H.text "Name" ]
-            , H.th [] [ H.text "Bonus" ]
-            , H.th [] [ H.text "Player count" ]
-            , H.th [] [ H.text "Actions" ]
-            ]
-        ]
-    , H.tbody [] (List.map (perkRow address perksPlayers) perks)
-    ]
+view : Signal.Address Action -> Model -> H.Html
+view address model =
+  let
+    rows =
+      List.map (perkRow address model) model.perks
+  in
+    H.table
+      [ class "table-light" ]
+      (tableHead
+        :: rows
+      )
 
 
-perkRow : Signal.Address Actions.Action -> List PerkPlayer -> Perk -> H.Html
-perkRow address perksPlayers perk =
-  H.tr
+
+--:: (List.map (perkRow address model) model.perks)
+
+
+tableHead : H.Html
+tableHead =
+  H.thead
     []
-    [ H.td [] [ H.text (toString perk.id) ]
-    , H.td [] [ H.text perk.name ]
-    , H.td [] [ H.text (toString perk.bonus) ]
-    , H.td [] [ H.text (toString (userCountForPerk perksPlayers perk)) ]
-    , H.td
+    [ H.tr
         []
-        [ H.button
-            [ class "btn"
-            , onClick address (Expand perk.id)
-            ]
-            [ H.text "Expand" ]
+        [ H.th [] [ H.text "Id" ]
+        , H.th [] [ H.text "Name" ]
+        , H.th [] [ H.text "Bonus" ]
+        , H.th [] [ H.text "Player count" ]
+        , H.th [] [ H.text "Actions" ]
         ]
     ]
+
+
+perkRow : Signal.Address Action -> Model -> Perk -> H.Html
+perkRow address model perk =
+  H.tbody
+    []
+    [ H.tr
+        []
+        [ H.td [] [ H.text (toString perk.id) ]
+        , H.td [] [ H.text perk.name ]
+        , H.td [] [ H.text (toString perk.bonus) ]
+        , H.td [] [ H.text (toString (userCountForPerk model.perksPlayers perk)) ]
+        , H.td
+            []
+            [ toggle address model perk
+            ]
+        ]
+    , (perkRowDescription model perk)
+    ]
+
+
+perkRowDescription : Model -> Perk -> H.Html
+perkRowDescription model perk =
+  if isPerkExpanded model.expanded perk then
+    H.tr
+      []
+      [ H.td [] [ H.text "Des" ]
+      ]
+  else
+    H.span [] []
+
+
+toggle : Signal.Address Action -> Model -> Perk -> H.Html
+toggle address model perk =
+  if isPerkExpanded model.expanded perk then
+    H.button [ class "btn", onClick address (Collapse perk.id) ] [ H.text "Collapse" ]
+  else
+    H.button [ class "btn", onClick address (Expand perk.id) ] [ H.text "Expand" ]
 
 
 userCountForPerk : List PerkPlayer -> Perk -> Int

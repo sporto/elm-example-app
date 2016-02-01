@@ -36,6 +36,7 @@ initialModel =
       [ { id = 1
         , name = "Amulet"
         , bonus = 1
+        , description = "Lorem ipsum"
         }
       ]
   , perksPlayers =
@@ -135,7 +136,14 @@ page address model =
       Players.List.view (Signal.forwardTo address PlayersAction) model.players
 
     Routing.Perks ->
-      Perks.List.view (Signal.forwardTo address PerksAction) ( model.perks, model.perksPlayers )
+      let
+        perksListModel =
+          model.perksListModel
+
+        updatedPerksListModel =
+          { perksListModel | perks = model.perks, perksPlayers = model.perksPlayers }
+      in
+        Perks.List.view (Signal.forwardTo address PerksListAction) updatedPerksListModel
 
     _ ->
       H.div

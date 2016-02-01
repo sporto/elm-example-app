@@ -1,7 +1,9 @@
-module Perks.Models where
+module Perks.Models (..) where
 
-type alias Perk = {
-    id: Int,
-    name: String,
-    bonus: Int
+
+type alias Perk =
+  { id : Int
+  , name : String
+  , bonus : Int
+  , description : String
   }
