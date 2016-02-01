@@ -1,7 +1,8 @@
-module Routing where
+module Routing (..) where
 
 import Effects exposing (Effects, Never)
 import Hop
+
 
 type Action
   = HopAction Hop.Action
@@ -12,45 +13,53 @@ type Action
   | NavigateTo String
   | NoOp
 
+
 type View
   = Players
   | Perks
   | NotFound
 
-type alias Model = {
-    routerPayload : Hop.Payload,
-    view: View
+
+type alias Model =
+  { routerPayload : Hop.Payload
+  , view : View
   }
+
 
 initialModel : Model
-initialModel = {
-    routerPayload = router.payload,
-    view = Players
+initialModel =
+  { routerPayload = router.payload
+  , view = Players
   }
 
-update : Action -> Model -> (Model, Effects Action)
+
+update : Action -> Model -> ( Model, Effects Action )
 update action model =
   case action of
     NavigateTo path ->
-      (model, Effects.map HopAction (Hop.navigateTo path))
-    ShowUsers payload ->
-      ({model | view = Players, routerPayload = payload}, Effects.none)
-    ShowPerks payload ->
-      ({model | view = Perks, routerPayload = payload}, Effects.none)
-    _ ->
-      (model, Effects.none)
+      ( model, Effects.map HopAction (Hop.navigateTo path) )
 
-routes : List (String, Hop.Payload -> Action)
+    ShowUsers payload ->
+      ( { model | view = Players, routerPayload = payload }, Effects.none )
+
+    ShowPerks payload ->
+      ( { model | view = Perks, routerPayload = payload }, Effects.none )
+
+    _ ->
+      ( model, Effects.none )
+
+
+routes : List ( String, Hop.Payload -> Action )
 routes =
-  [
-    ("/", ShowUsers),
-    ("/players", ShowUsers),
-    ("/perks", ShowPerks)
+  [ ( "/", ShowUsers )
+  , ( "/players", ShowUsers )
+  , ( "/perks", ShowPerks )
   ]
+
 
 router : Hop.Router Action
 router =
-  Hop.new {
-    routes = routes,
-    notFoundAction = ShowNotFound
-  }
+  Hop.new
+    { routes = routes
+    , notFoundAction = ShowNotFound
+    }
