@@ -1,4 +1,5 @@
-module Players.Actions where
+module Players.Actions (..) where
+
 
 type Action
   = NoOp

@@ -38,6 +38,11 @@ initialModel =
         , bonus = 1
         , description = "Lorem ipsum"
         }
+      , { id = 2
+        , name = "Shield"
+        , bonus = 1
+        , description = "Lorem ipsum"
+        }
       ]
   , perksPlayers =
       [ { id = 1
