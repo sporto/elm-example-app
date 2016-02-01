@@ -2,8 +2,9 @@
   "name": "elm-tutorial-app",
   "version": "1.0.0",
   "description": "Example application built for http://www.elm-tutorial.org/",
-  "main": "elm.js",
+  "main": "",
   "scripts": {
+    "api": "node api.js",
     "build": "webpack",
     "watch": "webpack --watch",
     "dev": "webpack-dev-server --port 3000"

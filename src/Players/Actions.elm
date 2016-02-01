@@ -7,4 +7,4 @@ import Players.Models exposing (Player)
 type Action
   = NoOp
   | FetchAll
-  | FetchAllSuccess (Result Http.Error (List Player))
+  | FetchAllDone (Result Http.Error (List Player))

@@ -4,14 +4,15 @@ import Effects exposing (Effects, Never)
 import Html as H
 import Html.Events as Events
 import Html.Attributes exposing (class)
-import Http
 import StartApp
 import Task exposing (Task)
 import Perks.Models
 import Players.Actions
 import Players.Models
+import Players.Update
 import Players.List
 import Perks.Actions
+import Players.Effects
 import Perks.List
 import PerksPlayers.Models
 import Routing exposing (router)
@@ -50,12 +51,7 @@ initialModel =
         , perkId = 1
         }
       ]
-  , players =
-      [ { id = 1
-        , name = "Sam"
-        , level = 1
-        }
-      ]
+  , players = []
   , perksListModel = Perks.List.initialModel
   }
 
@@ -85,6 +81,13 @@ update action model =
           Routing.update subAction model.routing
       in
         ( { model | routing = updatedRouting }, Effects.map RoutingAction fx )
+
+    PlayersAction subAction ->
+      let
+        ( updatedPlayers, fx ) =
+          Players.Update.update subAction model.players
+      in
+        ( { model | players = updatedPlayers }, Effects.map PlayersAction fx )
 
     PerksListAction subAction ->
       let
@@ -160,23 +163,16 @@ page address model =
         ]
 
 
-
---httpTask : Task.Task Http.Error String
---httpTask =
---  Http.getString "http://localhost:3000/"
---refreshFx : Effects.Effects Action
---refreshFx =
---  httpTask
---    |> Task.toResult
---    |> Task.map OnRefresh
---    |> Effects.task
-
-
 init : ( Model, Effects Action )
 init =
-  ( initialModel, Effects.none )
+  let
+    fx =
+      Effects.map PlayersAction Players.Effects.fetchAll
+  in
+    ( initialModel, fx )
 
 
+routerSignal : Signal Action
 routerSignal =
   Signal.map RoutingAction router.signal
 

@@ -12,13 +12,13 @@ fetchAll : Effects Actions.Action
 fetchAll =
   Http.get playersDecoder fetchAllUrl
     |> Task.toResult
-    |> Task.map Actions.FetchAllSuccess
+    |> Task.map Actions.FetchAllDone
     |> Effects.task
 
 
 fetchAllUrl : String
 fetchAllUrl =
-  "/players"
+  "http://localhost:4000/players"
 
 
 playersDecoder : Decode.Decoder (List Player)
