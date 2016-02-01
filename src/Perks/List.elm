@@ -135,9 +135,9 @@ perkRowDescription model perk =
 toggle : Signal.Address Action -> Model -> Perk -> H.Html
 toggle address model perk =
   if isPerkExpanded model.expanded perk then
-    H.button [ class "btn", onClick address (Collapse perk.id) ] [ H.text "Collapse" ]
+    H.button [ class "btn btn-outline", onClick address (Collapse perk.id) ] [ H.text "Collapse" ]
   else
-    H.button [ class "btn", onClick address (Expand perk.id) ] [ H.text "Expand" ]
+    H.button [ class "btn btn-outline", onClick address (Expand perk.id) ] [ H.text "Expand" ]
 
 
 userCountForPerk : List PerkPlayer -> Perk -> Int

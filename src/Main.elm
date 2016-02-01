@@ -112,26 +112,29 @@ view address model =
 
 nav : Signal.Address Action -> Model -> H.Html
 nav address model =
-  H.div
-    [ class "p2"
-    ]
-    [ H.button
-        [ class "btn btn-primary mr1"
-        , Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/players")
-        ]
-        [ H.text "Players"
-        ]
-    , H.button
-        [ class "btn btn-primary"
-        , Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/perks")
-        ]
-        [ H.text "Perks"
-        ]
-    ]
-
-
-
---PlayersAction needs to be or PerksListAction
+  let
+    activeClass view =
+      if model.routing.view == view then
+        "btn-primary"
+      else
+        ""
+  in
+    H.div
+      [ class "p2"
+      ]
+      [ H.button
+          [ class ("btn button-narrow mr1 " ++ activeClass Routing.Players)
+          , Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/players")
+          ]
+          [ H.text "Players"
+          ]
+      , H.button
+          [ class ("btn button-narrow " ++ activeClass Routing.Perks)
+          , Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/perks")
+          ]
+          [ H.text "Perks"
+          ]
+      ]
 
 
 page : Signal.Address Action -> Model -> H.Html
