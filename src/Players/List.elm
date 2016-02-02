@@ -2,12 +2,21 @@ module Players.List (..) where
 
 import Html as H
 import Html.Attributes exposing (class)
-import Players.Models as Models
+import Players.Models exposing (Player)
 import Players.Actions as Actions
+import Perks.Models exposing (Perk)
+import PerksPlayers.Models exposing (PerkPlayer)
 
 
-view : Signal.Address Actions.Action -> List Models.Player -> H.Html
-view address collection =
+type alias ViewModel =
+  { players : List Player
+  , perks : List Perk
+  , perksPlayers : List PerkPlayer
+  }
+
+
+view : Signal.Address Actions.Action -> ViewModel -> H.Html
+view address model =
   H.table
     [ class "table-light" ]
     [ H.thead
@@ -22,22 +31,47 @@ view address collection =
             , H.th [] [ H.text "Actions" ]
             ]
         ]
-    , H.tbody [] (List.map (playerRow address) collection)
+    , H.tbody [] (List.map (playerRow address model) model.players)
     ]
 
 
-playerRow : Signal.Address Actions.Action -> Models.Player -> H.Html
-playerRow address player =
-  H.tr
-    []
-    [ H.td [] [ H.text (toString player.id) ]
-    , H.td [] [ H.text player.name ]
-    , H.td [] [ H.text (toString player.level) ]
-    , H.td [] [ H.text (toString player.level) ]
-    , H.td [] [ H.text (toString player.level) ]
-    , H.td
-        []
-        [ H.button [ class "btn btn-outline mr1" ] [ H.text "Delete" ]
-        , H.button [ class "btn btn-outline" ] [ H.text "Edit" ]
-        ]
-    ]
+playerRow : Signal.Address Actions.Action -> ViewModel -> Player -> H.Html
+playerRow address model player =
+  let
+    bonuses =
+      bonusesForPlayer model player
+
+    strength =
+      bonuses + player.level
+  in
+    H.tr
+      []
+      [ H.td [] [ H.text (toString player.id) ]
+      , H.td [] [ H.text player.name ]
+      , H.td [] [ H.text (toString player.level) ]
+      , H.td [] [ H.text (toString bonuses) ]
+      , H.td [] [ H.text (toString strength) ]
+      , H.td
+          []
+          [ H.button [ class "btn btn-outline mr1" ] [ H.text "Delete" ]
+          , H.button [ class "btn btn-outline" ] [ H.text "Edit" ]
+          ]
+      ]
+
+
+bonusesForPlayer : ViewModel -> Player -> Int
+bonusesForPlayer model player =
+  perksForPlayer model player
+    |> List.foldl (\perk acc -> acc + perk.bonus) 0
+
+
+perksForPlayer : ViewModel -> Player -> List Perk
+perksForPlayer model player =
+  let
+    perkIds =
+      model.perksPlayers
+        |> List.filter (\perkPlayer -> perkPlayer.perkId == player.id)
+        |> List.map (\perkPlayer -> perkPlayer.perkId)
+  in
+    model.perks
+      |> List.filter (\perk -> List.any (\id -> id == perk.id) perkIds)

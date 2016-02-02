@@ -156,7 +156,14 @@ page : Signal.Address Actions.Action -> Model -> H.Html
 page address model =
   case model.routing.view of
     Routing.Players ->
-      Players.List.view (Signal.forwardTo address Actions.PlayersAction) model.players
+      let
+        viewModel =
+          { players = model.players
+          , perks = model.perks
+          , perksPlayers = model.perksPlayers
+          }
+      in
+        Players.List.view (Signal.forwardTo address Actions.PlayersAction) viewModel
 
     Routing.Perks ->
       let

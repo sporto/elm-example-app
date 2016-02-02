@@ -2,13 +2,20 @@
 
 An example Elm single page application built for http://www.elm-tutorial.org/
 
-This application uses:
+## This application uses
 
 - StartApp for structure
 - Hop for routing
 - Webpack for building
 - Basscss for css styles
 - JsonServer for fake api
+
+## This application demonstrate
+
+- Elm architecture
+- Routing
+- Ajax requests and json parsing
+- External CSS
 
 ## Setup
 
