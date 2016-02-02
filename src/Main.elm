@@ -5,7 +5,9 @@ import Html as H
 import Html.Events as Events
 import Html.Attributes exposing (class)
 import StartApp
+import String
 import Task exposing (Task)
+import Actions
 import Perks.Models
 import Players.Actions
 import Players.Models
@@ -27,6 +29,7 @@ type alias Model =
   , perksPlayers : List PerksPlayers.Models.PerkPlayer
   , players : List Players.Models.Player
   , perksListModel : Perks.List.Model
+  , errorMessage : String
   }
 
 
@@ -53,48 +56,43 @@ initialModel =
       ]
   , players = []
   , perksListModel = Perks.List.initialModel
+  , errorMessage = ""
   }
-
-
-
--- ACTIONS
-
-
-type Action
-  = NoOp
-  | RoutingAction Routing.Action
-  | PlayersAction Players.Actions.Action
-  | PerksAction Perks.Actions.Action
-  | PerksListAction Perks.List.Action
 
 
 
 -- UPDATE
 
 
-update : Action -> Model -> ( Model, Effects.Effects Action )
+update : Actions.Action -> Model -> ( Model, Effects.Effects Actions.Action )
 update action model =
   case Debug.log "action" action of
-    RoutingAction subAction ->
+    Actions.RoutingAction subAction ->
       let
         ( updatedRouting, fx ) =
           Routing.update subAction model.routing
       in
-        ( { model | routing = updatedRouting }, Effects.map RoutingAction fx )
+        ( { model | routing = updatedRouting }, Effects.map Actions.RoutingAction fx )
 
-    PlayersAction subAction ->
+    Actions.PlayersAction subAction ->
       let
-        ( updatedPlayers, fx ) =
+        ( updatedPlayers, fx, fx2 ) =
           Players.Update.update subAction model.players
-      in
-        ( { model | players = updatedPlayers }, Effects.map PlayersAction fx )
 
-    PerksListAction subAction ->
+        allFx =
+          Effects.batch [ (Effects.map Actions.PlayersAction fx), fx2 ]
+      in
+        ( { model | players = updatedPlayers }, allFx )
+
+    Actions.PerksListAction subAction ->
       let
         ( updatedPerkListModel, fx ) =
           Perks.List.update subAction model.perksListModel
       in
-        ( { model | perksListModel = updatedPerkListModel }, Effects.map PerksListAction fx )
+        ( { model | perksListModel = updatedPerkListModel }, Effects.map Actions.PerksListAction fx )
+
+    Actions.ShowError message ->
+      ( { model | errorMessage = message }, Effects.none )
 
     _ ->
       ( model, Effects.none )
@@ -104,47 +102,59 @@ update action model =
 -- VIEW
 
 
-view : Signal.Address Action -> Model -> H.Html
+view : Signal.Address Actions.Action -> Model -> H.Html
 view address model =
   H.div
     []
     [ nav address model
+    , flash address model
     , page address model
     ]
 
 
-nav : Signal.Address Action -> Model -> H.Html
+nav : Signal.Address Actions.Action -> Model -> H.Html
 nav address model =
   let
     activeClass view =
       if model.routing.view == view then
-        "btn-primary"
+        "bg-white black"
       else
         ""
   in
     H.div
-      [ class "p2"
+      [ class "clearfix mb2 bg-blue white"
       ]
-      [ H.button
-          [ class ("btn button-narrow mr1 " ++ activeClass Routing.Players)
-          , Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/players")
-          ]
-          [ H.text "Players"
-          ]
-      , H.button
-          [ class ("btn button-narrow " ++ activeClass Routing.Perks)
-          , Events.onClick (Signal.forwardTo address RoutingAction) (Routing.NavigateTo "/perks")
-          ]
-          [ H.text "Perks"
+      [ H.div
+          [ class "left" ]
+          [ H.button
+              [ class ("btn py2 button-narrow mr1 " ++ activeClass Routing.Players)
+              , Events.onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/players")
+              ]
+              [ H.text "Players"
+              ]
+          , H.button
+              [ class ("btn py2 button-narrow " ++ activeClass Routing.Perks)
+              , Events.onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/perks")
+              ]
+              [ H.text "Perks"
+              ]
           ]
       ]
 
 
-page : Signal.Address Action -> Model -> H.Html
+flash : Signal.Address Actions.Action -> Model -> H.Html
+flash address model =
+  if String.isEmpty model.errorMessage then
+    H.span [] []
+  else
+    H.div [ class "bold center p2 mb2 white bg-red rounded" ] [ H.text model.errorMessage ]
+
+
+page : Signal.Address Actions.Action -> Model -> H.Html
 page address model =
   case model.routing.view of
     Routing.Players ->
-      Players.List.view (Signal.forwardTo address PlayersAction) model.players
+      Players.List.view (Signal.forwardTo address Actions.PlayersAction) model.players
 
     Routing.Perks ->
       let
@@ -154,7 +164,7 @@ page address model =
         updatedPerksListModel =
           { perksListModel | perks = model.perks, perksPlayers = model.perksPlayers }
       in
-        Perks.List.view (Signal.forwardTo address PerksListAction) updatedPerksListModel
+        Perks.List.view (Signal.forwardTo address Actions.PerksListAction) updatedPerksListModel
 
     _ ->
       H.div
@@ -163,18 +173,18 @@ page address model =
         ]
 
 
-init : ( Model, Effects Action )
+init : ( Model, Effects Actions.Action )
 init =
   let
     fx =
-      Effects.map PlayersAction Players.Effects.fetchAll
+      Effects.map Actions.PlayersAction Players.Effects.fetchAll
   in
     ( initialModel, fx )
 
 
-routerSignal : Signal Action
+routerSignal : Signal Actions.Action
 routerSignal =
-  Signal.map RoutingAction router.signal
+  Signal.map Actions.RoutingAction router.signal
 
 
 app : StartApp.App Model
