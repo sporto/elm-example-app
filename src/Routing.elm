@@ -2,6 +2,7 @@ module Routing (..) where
 
 import Effects exposing (Effects, Never)
 import Hop
+import Debug
 
 
 type Action
@@ -48,7 +49,7 @@ update action model =
       ( { model | view = EditPlayerView, routerPayload = payload }, Effects.none )
 
     ShowPerks payload ->
-      ( { model | view = Perks, routerPayload = payload }, Effects.none )
+      ( { model | view = Perks, routerPayload = (Debug.log "" payload) }, Effects.none )
 
     _ ->
       ( model, Effects.none )

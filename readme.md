@@ -54,6 +54,7 @@ Open http://localhost:3000
 - More server fixtures
 - Tests?
 - Add FA icons
+- Add player
 
 Guide:
 

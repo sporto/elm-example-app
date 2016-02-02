@@ -13,6 +13,7 @@ type alias Model =
   , perksPlayers : List PerksPlayers.Models.PerkPlayer
   , players : List Players.Models.Player
   , perksListModel : Perks.List.Model
+  , currentPlayer : Int
   , errorMessage : String
   }
 
@@ -20,25 +21,10 @@ type alias Model =
 initialModel : Model
 initialModel =
   { routing = Routing.initialModel
-  , perks =
-      [ { id = 1
-        , name = "Amulet"
-        , bonus = 1
-        , description = "Lorem ipsum"
-        }
-      , { id = 2
-        , name = "Shield"
-        , bonus = 1
-        , description = "Lorem ipsum"
-        }
-      ]
-  , perksPlayers =
-      [ { id = 1
-        , playerId = 1
-        , perkId = 1
-        }
-      ]
+  , perks = []
+  , perksPlayers = []
   , players = []
   , perksListModel = Perks.List.initialModel
+  , currentPlayer = 1
   , errorMessage = ""
   }

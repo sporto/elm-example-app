@@ -3,9 +3,11 @@ module View (..) where
 import Html as H
 import Html.Events as Events
 import Html.Attributes exposing (class)
+import Dict
 import Actions
 import Models
 import Players.List
+import Players.Edit
 import Perks.List
 import Routing
 import String
@@ -72,6 +74,26 @@ page address model =
       in
         Players.List.view (Signal.forwardTo address Actions.PlayersAction) viewModel
 
+    Routing.EditPlayerView ->
+      let
+        playerId =
+          model.routing.routerPayload.params
+            |> Dict.get "id"
+            |> Maybe.withDefault ""
+
+        maybePlayer =
+          model.players
+            |> List.filter (\player -> (toString player.id) == playerId)
+            |> List.head
+      in
+        case maybePlayer of
+          Just player ->
+            Players.Edit.view (Signal.forwardTo address Actions.PlayersAction) { player = player }
+
+          _ ->
+            notFoundView
+
+    -- TODO change to PerksView
     Routing.Perks ->
       let
         perksListModel =
@@ -83,7 +105,11 @@ page address model =
         Perks.List.view (Signal.forwardTo address Actions.PerksListAction) updatedPerksListModel
 
     _ ->
-      H.div
-        []
-        [ H.text "Not found"
-        ]
+      notFoundView
+
+
+notFoundView =
+  H.div
+    []
+    [ H.text "Not found"
+    ]
