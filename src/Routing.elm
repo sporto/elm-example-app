@@ -6,8 +6,9 @@ import Hop
 
 type Action
   = HopAction Hop.Action
-  | ShowUsers Hop.Payload
-  | ShowUser Hop.Payload
+  | ShowPlayers Hop.Payload
+  | ShowPlayer Hop.Payload
+  | EditPlayer Hop.Payload
   | ShowPerks Hop.Payload
   | ShowNotFound Hop.Payload
   | NavigateTo String
@@ -17,6 +18,7 @@ type Action
 type View
   = Players
   | Perks
+  | EditPlayerView
   | NotFound
 
 
@@ -39,8 +41,11 @@ update action model =
     NavigateTo path ->
       ( model, Effects.map HopAction (Hop.navigateTo path) )
 
-    ShowUsers payload ->
+    ShowPlayers payload ->
       ( { model | view = Players, routerPayload = payload }, Effects.none )
+
+    EditPlayer payload ->
+      ( { model | view = EditPlayerView, routerPayload = payload }, Effects.none )
 
     ShowPerks payload ->
       ( { model | view = Perks, routerPayload = payload }, Effects.none )
@@ -51,8 +56,9 @@ update action model =
 
 routes : List ( String, Hop.Payload -> Action )
 routes =
-  [ ( "/", ShowUsers )
-  , ( "/players", ShowUsers )
+  [ ( "/", ShowPlayers )
+  , ( "/players", ShowPlayers )
+  , ( "/players/:id/edit", EditPlayer )
   , ( "/perks", ShowPerks )
   ]
 

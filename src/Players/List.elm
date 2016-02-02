@@ -2,8 +2,9 @@ module Players.List (..) where
 
 import Html as H
 import Html.Attributes exposing (class)
+import Html.Events exposing (onClick)
 import Players.Models exposing (Player)
-import Players.Actions as Actions
+import Players.Actions as PlayersActions
 import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
 
@@ -15,7 +16,7 @@ type alias ViewModel =
   }
 
 
-view : Signal.Address Actions.Action -> ViewModel -> H.Html
+view : Signal.Address PlayersActions.Action -> ViewModel -> H.Html
 view address model =
   H.table
     [ class "table-light" ]
@@ -35,7 +36,7 @@ view address model =
     ]
 
 
-playerRow : Signal.Address Actions.Action -> ViewModel -> Player -> H.Html
+playerRow : Signal.Address PlayersActions.Action -> ViewModel -> Player -> H.Html
 playerRow address model player =
   let
     bonuses =
@@ -54,7 +55,7 @@ playerRow address model player =
       , H.td
           []
           [ H.button [ class "btn btn-outline mr1" ] [ H.text "Delete" ]
-          , H.button [ class "btn btn-outline" ] [ H.text "Edit" ]
+          , H.button [ class "btn btn-outline", onClick address (PlayersActions.EditPlayer player.id) ] [ H.text "Edit" ]
           ]
       ]
 

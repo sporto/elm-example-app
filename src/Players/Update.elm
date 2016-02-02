@@ -1,5 +1,6 @@
 module Players.Update (..) where
 
+import Hop
 import Effects exposing (Effects)
 import Players.Actions exposing (..)
 import Players.Models exposing (Player)
@@ -21,6 +22,13 @@ update action collection =
               toString error
           in
             ( [], Effects.none, CommonEffects.showError message )
+
+    EditPlayer id ->
+      let
+        path =
+          "/players/" ++ (toString id) ++ "/edit"
+      in
+        ( collection, Effects.map HopAction (Hop.navigateTo path), Effects.none )
 
     _ ->
       ( collection, Effects.none, Effects.none )
