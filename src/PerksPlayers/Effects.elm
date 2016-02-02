@@ -1,11 +1,11 @@
-module Players.Effects (..) where
+module PerksPlayers.Effects (..) where
 
 import Effects exposing (Effects)
 import Http
 import Json.Decode as Decode exposing ((:=))
 import Task
-import Players.Models exposing (Player)
-import Players.Actions as Actions
+import PerksPlayers.Models exposing (PerkPlayer)
+import PerksPlayers.Actions as Actions
 
 
 fetchAll : Effects Actions.Action
@@ -18,18 +18,18 @@ fetchAll =
 
 fetchAllUrl : String
 fetchAllUrl =
-  "http://localhost:4000/players"
+  "http://localhost:4000/perks_players"
 
 
-collectionDecoder : Decode.Decoder (List Player)
+collectionDecoder : Decode.Decoder (List PerkPlayer)
 collectionDecoder =
   Decode.list memberDecoder
 
 
-memberDecoder : Decode.Decoder Player
+memberDecoder : Decode.Decoder PerkPlayer
 memberDecoder =
   Decode.object3
-    Player
+    PerkPlayer
     ("id" := Decode.int)
-    ("name" := Decode.string)
-    ("level" := Decode.int)
+    ("perkId" := Decode.int)
+    ("playerId" := Decode.int)

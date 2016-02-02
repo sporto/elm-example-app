@@ -8,15 +8,17 @@ import StartApp
 import String
 import Task exposing (Task)
 import Actions
+import Perks.Actions
+import Perks.Effects
+import Perks.List
 import Perks.Models
+import PerksPlayers.Effects
+import PerksPlayers.Models
 import Players.Actions
+import Players.Effects
+import Players.List
 import Players.Models
 import Players.Update
-import Players.List
-import Perks.Actions
-import Players.Effects
-import Perks.List
-import PerksPlayers.Models
 import Routing exposing (router)
 
 
@@ -176,8 +178,14 @@ page address model =
 init : ( Model, Effects Actions.Action )
 init =
   let
+    fxs =
+      [ Effects.map Actions.PlayersAction Players.Effects.fetchAll
+      , Effects.map Actions.PerksAction Perks.Effects.fetchAll
+      , Effects.map Actions.PerksPlayersAction PerksPlayers.Effects.fetchAll
+      ]
+
     fx =
-      Effects.map Actions.PlayersAction Players.Effects.fetchAll
+      Effects.batch fxs
   in
     ( initialModel, fx )
 

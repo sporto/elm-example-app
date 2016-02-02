@@ -1,13 +1,39 @@
 # An example SPA in Elm
 
-Example application built for http://www.elm-tutorial.org/
+An example Elm single page application built for http://www.elm-tutorial.org/
+
+This application uses:
+
+- StartApp for structure
+- Hop for routing
+- Webpack for building
+- Basscss for css styles
+- JsonServer for fake api
+
+## Setup
+
+```
+npm install
+```
+
+## Running the application:
+
+In one terminal run the webpack dev server:
+
+```
+npm run dev
+```
+
+In another terminal run the fake api server:
+
+```
+npm run api
+```
+
+Open http://localhost:3000
 
 ## TODO
 
-- Get initial data
-  - Get list of players from server
-  - Get list of perks from server
-  - Get list of perksPlayers from server
 - Edit player name
   - Validation for player name
   - Save player edit to server
@@ -39,12 +65,5 @@ basscss
 
 - change 'src' in elm-package
 
-## Running the application:
 
-```
-npm install
-npm run dev
-```
-
-Open localhost:3000
 

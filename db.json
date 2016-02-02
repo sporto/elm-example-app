@@ -25,22 +25,26 @@
     {
       "id": 1,
       "name": "Steel armor",
-      "strengh": 2
+      "bonus": 2,
+      "description": ""
     },
     {
       "id": 2,
       "name": "Scroll of protection",
-      "strengh": 2
+      "bonus": 2,
+      "description": ""
     },
     {
       "id": 3,
       "name": "Steel sword",
-      "strengh": 1
+      "bonus": 1,
+      "description": ""
     },
     {
       "id": 4,
       "name": "Amulet of luck",
-      "strengh": 1
+      "bonus": 1,
+      "description": ""
     }
   ],
   "perksPlayers": [
