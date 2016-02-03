@@ -34,7 +34,7 @@ update action collection =
     ChangeLevel id howMuch ->
       let
         updatedCollectionWithFxs =
-          changeLevel collection id howMuch
+          changeLevelForPlayerId howMuch collection id
 
         updatedCollection =
           List.map fst updatedCollectionWithFxs
@@ -48,7 +48,7 @@ update action collection =
     ChangeName id name ->
       let
         updatedCollectionWithFxs =
-          changeName collection id name
+          changeNameForPlayerId name collection id
 
         updatedCollection =
           List.map fst updatedCollectionWithFxs
@@ -63,37 +63,45 @@ update action collection =
       ( collection, Effects.none, Effects.none )
 
 
-changeLevel : List Player -> Id -> Int -> List ( Player, Effects Action )
-changeLevel players playerId howMuch =
+updatePlayerLevel : Int -> Player -> ( Player, Effects Action )
+updatePlayerLevel howMuch player =
   let
-    updater player =
-      if player.id == playerId then
-        let
-          newLevel =
-            List.maximum [ 1, player.level + howMuch ]
-              |> Maybe.withDefault 1
+    newLevel =
+      List.maximum [ 1, player.level + howMuch ]
+        |> Maybe.withDefault 1
 
-          updatedPlayer =
-            { player | level = newLevel }
-        in
-          ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
+    updatedPlayer =
+      { player | level = newLevel }
+  in
+    ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
+
+
+changeLevelForPlayerId : Int -> List Player -> Id -> List ( Player, Effects Action )
+changeLevelForPlayerId howMuch =
+  changeAttribute (updatePlayerLevel howMuch)
+
+
+updatePlayerName : String -> Player -> ( Player, Effects Action )
+updatePlayerName name player =
+  let
+    updatedPlayer =
+      { player | name = name }
+  in
+    ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
+
+
+changeNameForPlayerId : String -> List Player -> Id -> List ( Player, Effects Action )
+changeNameForPlayerId name =
+  changeAttribute (updatePlayerName name)
+
+
+changeAttribute : (Player -> ( Player, Effects Action )) -> List Player -> Id -> List ( Player, Effects Action )
+changeAttribute callback players playerId =
+  let
+    mapper player =
+      if player.id == playerId then
+        callback player
       else
         ( player, Effects.none )
   in
-    List.map updater players
-
-
-changeName : List Player -> Id -> String -> List ( Player, Effects Action )
-changeName players playerId name =
-  let
-    updater player =
-      if player.id == playerId then
-        let
-          updatedPlayer =
-            { player | name = name }
-        in
-          ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
-      else
-        ( player, Effects.none )
-  in
-    List.map updater players
+    List.map mapper players
