@@ -39,8 +39,8 @@ view address model =
           , H.div
               [ class "col col-7" ]
               [ H.span [ class "h2 bold" ] [ H.text (toString player.level) ]
-              , H.a [ class "btn btn-outline ml1", onClick address (PlayersActions.DecreaseLevel player.id) ] [ H.text "-" ]
-              , H.a [ class "btn btn-outline ml1", onClick address (PlayersActions.IncreaseLevel player.id) ] [ H.text "+" ]
+              , H.a [ class "btn btn-outline ml1", onClick address (PlayersActions.ChangeLevel player.id -1) ] [ H.text "-" ]
+              , H.a [ class "btn btn-outline ml1", onClick address (PlayersActions.ChangeLevel player.id 1) ] [ H.text "+" ]
               ]
           ]
       , H.div

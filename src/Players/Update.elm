@@ -3,7 +3,8 @@ module Players.Update (..) where
 import Hop
 import Effects exposing (Effects)
 import Players.Actions exposing (..)
-import Players.Models exposing (Player)
+import Players.Models exposing (Id, Player)
+import Players.Effects
 import CommonEffects
 import Actions as MainActions
 
@@ -30,17 +31,25 @@ update action collection =
       in
         ( collection, Effects.map HopAction (Hop.navigateTo path), Effects.none )
 
-    IncreaseLevel id ->
-      ( changeLevel collection id 1, Effects.none, Effects.none )
+    ChangeLevel id howMuch ->
+      let
+        updatedCollectionWithFxs =
+          changeLevel collection id howMuch
 
-    DecreaseLevel id ->
-      ( changeLevel collection id -1, Effects.none, Effects.none )
+        updatedCollection =
+          List.map fst updatedCollectionWithFxs
+
+        fxs =
+          List.map snd updatedCollectionWithFxs
+            |> Effects.batch
+      in
+        ( updatedCollection, fxs, Effects.none )
 
     _ ->
       ( collection, Effects.none, Effects.none )
 
 
-changeLevel : List Player -> Int -> Int -> List Player
+changeLevel : List Player -> Id -> Int -> List ( Player, Effects Action )
 changeLevel players playerId howMuch =
   let
     updater player =
@@ -49,9 +58,12 @@ changeLevel players playerId howMuch =
           newLevel =
             List.maximum [ 1, player.level + howMuch ]
               |> Maybe.withDefault 1
+
+          updatedPlayer =
+            { player | level = newLevel }
         in
-          { player | level = newLevel }
+          ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
       else
-        player
+        ( player, Effects.none )
   in
     List.map updater players
