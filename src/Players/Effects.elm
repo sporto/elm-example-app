@@ -29,8 +29,16 @@ create player =
       memberEncoder player
         |> Encode.encode 0
         |> Http.string
+
+    config =
+      { verb = "POST"
+      , headers = [ ( "Content-Type", "application/json" ) ]
+      , url = createUrl
+      , body = body
+      }
   in
-    Http.post memberDecoder createUrl body
+    Http.send Http.defaultSettings config
+      |> Http.fromJson memberDecoder
       |> Task.toResult
       |> Task.map Actions.CreatePlayerDone
       |> Effects.task
