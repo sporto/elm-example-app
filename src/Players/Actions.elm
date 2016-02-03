@@ -13,3 +13,4 @@ type Action
   | HopAction Hop.Action
   | EditPlayer Int
   | ChangeLevel Id Int
+  | ChangeName Id String

@@ -45,6 +45,20 @@ update action collection =
       in
         ( updatedCollection, fxs, Effects.none )
 
+    ChangeName id name ->
+      let
+        updatedCollectionWithFxs =
+          changeName collection id name
+
+        updatedCollection =
+          List.map fst updatedCollectionWithFxs
+
+        fxs =
+          List.map snd updatedCollectionWithFxs
+            |> Effects.batch
+      in
+        ( updatedCollection, fxs, Effects.none )
+
     _ ->
       ( collection, Effects.none, Effects.none )
 
@@ -61,6 +75,22 @@ changeLevel players playerId howMuch =
 
           updatedPlayer =
             { player | level = newLevel }
+        in
+          ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
+      else
+        ( player, Effects.none )
+  in
+    List.map updater players
+
+
+changeName : List Player -> Id -> String -> List ( Player, Effects Action )
+changeName players playerId name =
+  let
+    updater player =
+      if player.id == playerId then
+        let
+          updatedPlayer =
+            { player | name = name }
         in
           ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
       else

@@ -44,8 +44,6 @@ Open http://localhost:3000
 - Edit player name
   - Validation for player name
   - Save player edit to server
-- Edit player level
-  - Save player level to server
 - Add perk to player
   - Save perk-player to server
 - Delete perk from player
