@@ -24,14 +24,27 @@ fetchAllUrl =
 
 saveOne : Player -> Effects Actions.Action
 saveOne player =
+  saveOneTask player
+    |> Http.fromJson memberDecoder
+    |> Task.toResult
+    |> Task.map Actions.SaveOneDone
+    |> Effects.task
+
+
+saveOneTask : Player -> Task.Task Http.RawError Http.Response
+saveOneTask player =
   let
     body =
       Http.string (memberEncoder player)
+
+    config =
+      { verb = "PATCH"
+      , headers = [ ( "Content-Type", "application/json" ) ]
+      , url = saveOneUrl player.id
+      , body = body
+      }
   in
-    Http.post memberDecoder (saveOneUrl player.id) body
-      |> Task.toResult
-      |> Task.map Actions.SaveOneDone
-      |> Effects.task
+    Http.send Http.defaultSettings config
 
 
 saveOneUrl : Int -> String
@@ -57,7 +70,8 @@ memberEncoder : Player -> String
 memberEncoder player =
   let
     list =
-      [ ( "name", Encode.string player.name )
+      [ ( "id", Encode.int player.id )
+      , ( "name", Encode.string player.name )
       , ( "level", Encode.int player.level )
       ]
   in
