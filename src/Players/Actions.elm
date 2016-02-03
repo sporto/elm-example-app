@@ -14,3 +14,5 @@ type Action
   | EditPlayer Int
   | ChangeLevel Id Int
   | ChangeName Id String
+  | CreatePlayer
+  | CreatePlayerDone (Result Http.Error Player)

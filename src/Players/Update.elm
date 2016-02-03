@@ -3,7 +3,7 @@ module Players.Update (..) where
 import Hop
 import Effects exposing (Effects)
 import Players.Actions exposing (..)
-import Players.Models exposing (Id, Player)
+import Players.Models exposing (Id, Player, new)
 import Players.Effects
 import CommonEffects
 import Actions as MainActions
@@ -30,6 +30,21 @@ update action collection =
           "/players/" ++ (toString id) ++ "/edit"
       in
         ( collection, Effects.map HopAction (Hop.navigateTo path), Effects.none )
+
+    CreatePlayer ->
+      ( collection, Players.Effects.create new, Effects.none )
+
+    CreatePlayerDone result ->
+      case result of
+        Ok player ->
+          ( player :: collection, Effects.none, Effects.none )
+
+        Err error ->
+          let
+            message =
+              toString error
+          in
+            ( [], Effects.none, CommonEffects.showError message )
 
     ChangeLevel id howMuch ->
       let

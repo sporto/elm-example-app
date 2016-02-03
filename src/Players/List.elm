@@ -18,21 +18,28 @@ type alias ViewModel =
 
 view : Signal.Address PlayersActions.Action -> ViewModel -> H.Html
 view address model =
-  H.table
-    [ class "table-light" ]
-    [ H.thead
-        []
-        [ H.tr
-            []
-            [ H.th [] [ H.text "Id" ]
-            , H.th [] [ H.text "Name" ]
-            , H.th [] [ H.text "Level" ]
-            , H.th [] [ H.text "Bonus" ]
-            , H.th [] [ H.text "Strengh" ]
-            , H.th [] [ H.text "Actions" ]
-            ]
+  H.div
+    []
+    [ H.div
+        [ class "right-align" ]
+        [ H.button [ class "btn", onClick address (PlayersActions.CreatePlayer) ] [ H.text "Add player" ]
         ]
-    , H.tbody [] (List.map (playerRow address model) model.players)
+    , H.table
+        [ class "table-light" ]
+        [ H.thead
+            []
+            [ H.tr
+                []
+                [ H.th [] [ H.text "Id" ]
+                , H.th [] [ H.text "Name" ]
+                , H.th [] [ H.text "Level" ]
+                , H.th [] [ H.text "Bonus" ]
+                , H.th [] [ H.text "Strengh" ]
+                , H.th [] [ H.text "Actions" ]
+                ]
+            ]
+        , H.tbody [] (List.map (playerRow address model) model.players)
+        ]
     ]
 
 

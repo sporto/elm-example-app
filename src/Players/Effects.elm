@@ -22,6 +22,25 @@ fetchAllUrl =
   "http://localhost:4000/players"
 
 
+create : Player -> Effects Actions.Action
+create player =
+  let
+    body =
+      memberEncoder player
+        |> Encode.encode 0
+        |> Http.string
+  in
+    Http.post memberDecoder createUrl body
+      |> Task.toResult
+      |> Task.map Actions.CreatePlayerDone
+      |> Effects.task
+
+
+createUrl : String
+createUrl =
+  "http://localhost:4000/players"
+
+
 saveOne : Player -> Effects Actions.Action
 saveOne player =
   saveOneTask player
@@ -35,7 +54,9 @@ saveOneTask : Player -> Task.Task Http.RawError Http.Response
 saveOneTask player =
   let
     body =
-      Http.string (memberEncoder player)
+      memberEncoder player
+        |> Encode.encode 0
+        |> Http.string
 
     config =
       { verb = "PATCH"
@@ -66,7 +87,7 @@ memberDecoder =
     ("level" := Decode.int)
 
 
-memberEncoder : Player -> String
+memberEncoder : Player -> Encode.Value
 memberEncoder player =
   let
     list =
@@ -77,4 +98,3 @@ memberEncoder player =
   in
     list
       |> Encode.object
-      |> Encode.encode 0

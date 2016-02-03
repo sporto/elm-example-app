@@ -41,9 +41,8 @@ Open http://localhost:3000
 
 ## TODO
 
-- Edit player name
-  - Validation for player name
-  - Save player edit to server
+- Validation for player name
+
 - Add perk to player
   - Save perk-player to server
 - Delete perk from player
