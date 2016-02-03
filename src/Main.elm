@@ -9,7 +9,9 @@ import View
 import Models exposing (Model)
 import Perks.Effects
 import Perks.List
+import Perks.Update
 import PerksPlayers.Effects
+import PerksPlayers.Update
 import Players.Effects
 import Players.Update
 import Routing exposing (router)
@@ -37,6 +39,26 @@ update action model =
           Effects.batch [ (Effects.map Actions.PlayersAction fx), fx2 ]
       in
         ( { model | players = updatedPlayers }, allFx )
+
+    Actions.PerksAction subAction ->
+      let
+        ( updatedPerks, fx, fx2 ) =
+          Perks.Update.update subAction model.perks
+
+        allFx =
+          Effects.batch [ (Effects.map Actions.PerksAction fx), fx2 ]
+      in
+        ( { model | perks = updatedPerks }, allFx )
+
+    Actions.PerksPlayersAction subAction ->
+      let
+        ( updatedPerksPlayers, fx, fx2 ) =
+          PerksPlayers.Update.update subAction model.perksPlayers
+
+        allFx =
+          Effects.batch [ (Effects.map Actions.PerksPlayersAction fx), fx2 ]
+      in
+        ( { model | perksPlayers = updatedPerksPlayers }, allFx )
 
     Actions.PerksListAction subAction ->
       let

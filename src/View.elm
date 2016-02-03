@@ -88,12 +88,19 @@ page address model =
       in
         case maybePlayer of
           Just player ->
-            Players.Edit.view (Signal.forwardTo address Actions.PlayersAction) { player = player }
+            let
+              viewModel =
+                { player = player
+                , perks = model.perks
+                , perksPlayers = model.perksPlayers
+                }
+            in
+              Players.Edit.view (Signal.forwardTo address Actions.PlayersAction) viewModel
 
           _ ->
             notFoundView
 
-    -- TODO change to PerksView
+    -- TODO change to Routing.PerksView
     Routing.Perks ->
       let
         perksListModel =
@@ -108,6 +115,7 @@ page address model =
       notFoundView
 
 
+notFoundView : H.Html
 notFoundView =
   H.div
     []

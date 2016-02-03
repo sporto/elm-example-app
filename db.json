@@ -47,7 +47,7 @@
       "description": ""
     }
   ],
-  "perksPlayers": [
+  "perks_players": [
     {
       "id": 1,
       "perkId": 1,
