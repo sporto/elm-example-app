@@ -2,6 +2,7 @@ module Players.Edit (..) where
 
 import Html as H
 import Html.Attributes exposing (class)
+import Html.Events exposing (onClick)
 import Players.Models exposing (Player)
 import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
@@ -19,6 +20,9 @@ type alias ViewModel =
 view : Signal.Address PlayersActions.Action -> ViewModel -> H.Html
 view address model =
   let
+    player =
+      model.player
+
     bonuses =
       Utils.bonusesForPlayerId model.perksPlayers model.perks model.player.id
 
@@ -34,9 +38,9 @@ view address model =
           [ H.div [ class "col col-5" ] [ H.text "Level" ]
           , H.div
               [ class "col col-7" ]
-              [ H.span [ class "h2 bold" ] [ H.text (toString model.player.level) ]
-              , H.a [ class "btn btn-outline ml1" ] [ H.text "-" ]
-              , H.a [ class "btn btn-outline ml1" ] [ H.text "+" ]
+              [ H.span [ class "h2 bold" ] [ H.text (toString player.level) ]
+              , H.a [ class "btn btn-outline ml1", onClick address (PlayersActions.DecreaseLevel player.id) ] [ H.text "-" ]
+              , H.a [ class "btn btn-outline ml1", onClick address (PlayersActions.IncreaseLevel player.id) ] [ H.text "+" ]
               ]
           ]
       , H.div

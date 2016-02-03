@@ -30,5 +30,28 @@ update action collection =
       in
         ( collection, Effects.map HopAction (Hop.navigateTo path), Effects.none )
 
+    IncreaseLevel id ->
+      ( changeLevel collection id 1, Effects.none, Effects.none )
+
+    DecreaseLevel id ->
+      ( changeLevel collection id -1, Effects.none, Effects.none )
+
     _ ->
       ( collection, Effects.none, Effects.none )
+
+
+changeLevel : List Player -> Int -> Int -> List Player
+changeLevel players playerId howMuch =
+  let
+    updater player =
+      if player.id == playerId then
+        let
+          newLevel =
+            List.maximum [ 1, player.level + howMuch ]
+              |> Maybe.withDefault 1
+        in
+          { player | level = newLevel }
+      else
+        player
+  in
+    List.map updater players
