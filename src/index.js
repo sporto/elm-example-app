@@ -8,12 +8,13 @@ require('./index.html');
 var Elm = require('./Main.elm');
 var mountNode = document.getElementById('main');
 
-var app = Elm.embed(Elm.Main, mountNode, {getConfirmation: false});
+var app = Elm.embed(Elm.Main, mountNode, {getDeleteConfirmation: 0});
 
-app.ports.askForConfirmation.subscribe(function (message) {
+app.ports.askForDeleteConfirmation.subscribe(function (args) {
+  var id = args[0];
+  var message = args[1];
   var response = window.confirm(message);
   if (response) {
-    console.log('response true')
-    app.ports.getConfirmation.send(true)
+    app.ports.getDeleteConfirmation.send(id);
   }
 })

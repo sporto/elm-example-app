@@ -14,7 +14,6 @@ import PerksPlayers.Effects
 import PerksPlayers.Update
 import Players.Effects
 import Players.Update
-import Players.Actions
 import Routing exposing (router)
 
 
@@ -71,16 +70,16 @@ update action model =
     Actions.ShowError message ->
       ( { model | errorMessage = message }, Effects.none )
 
-    Actions.AskForConfirmation message ->
+    Actions.AskForDeleteConfirmation playerId message ->
       let
         fx =
-          Signal.send confirmationMailbox.address message
-            |> (flip Task.andThen) (\_ -> Task.succeed Actions.NoOp)
+          Signal.send deleteConfirmationMailbox.address ( playerId, message )
+            |> Task.map (always Actions.NoOp)
             |> Effects.task
       in
         ( model, fx )
 
-    Actions.GetConfirmation ->
+    Actions.GetDeleteConfirmation id ->
       ( model, Effects.none )
 
     _ ->
@@ -111,7 +110,7 @@ app : StartApp.App Model
 app =
   StartApp.start
     { init = init
-    , inputs = [ routerSignal, getConfirmationSignal ]
+    , inputs = [ routerSignal, getDeleteConfirmationSignal ]
     , update = update
     , view = View.view
     }
@@ -132,18 +131,19 @@ port routeRunTask =
   router.run
 
 
-confirmationMailbox =
-  Signal.mailbox ""
+deleteConfirmationMailbox : Signal.Mailbox ( Int, String )
+deleteConfirmationMailbox =
+  Signal.mailbox ( 0, "" )
 
 
-port askForConfirmation : Signal String
-port askForConfirmation =
-  confirmationMailbox.signal
+port askForDeleteConfirmation : Signal ( Int, String )
+port askForDeleteConfirmation =
+  deleteConfirmationMailbox.signal
 
 
-getConfirmationSignal : Signal Actions.Action
-getConfirmationSignal =
-  Signal.map (always Actions.GetConfirmation) getConfirmation
+getDeleteConfirmationSignal : Signal Actions.Action
+getDeleteConfirmationSignal =
+  Signal.map (\id -> Actions.GetDeleteConfirmation id) getDeleteConfirmation
 
 
-port getConfirmation : Signal Bool
+port getDeleteConfirmation : Signal Int

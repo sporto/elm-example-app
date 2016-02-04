@@ -49,9 +49,11 @@ update action collection =
 
     AskToDeletePlayer player ->
       let
+        msg =
+          "Are you sure you want to delete " ++ player.name ++ "?"
+
         fx =
-          Task.succeed ("Are you sure you want to delete " ++ player.name ++ "?")
-            |> Task.map MainActions.AskForConfirmation
+          Task.succeed (MainActions.AskForDeleteConfirmation player.id msg)
             |> Effects.task
       in
         ( collection, Effects.none, fx )

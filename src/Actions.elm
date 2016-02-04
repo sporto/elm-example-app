@@ -15,5 +15,5 @@ type Action
   | PerksPlayersAction PerksPlayers.Actions.Action
   | PerksListAction Perks.List.Action
   | ShowError String
-  | AskForConfirmation String
-  | GetConfirmation
+  | AskForDeleteConfirmation Int String
+  | GetDeleteConfirmation Int
