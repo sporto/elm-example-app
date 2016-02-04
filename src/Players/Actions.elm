@@ -18,5 +18,4 @@ type Action
   | CreatePlayerDone (Result Http.Error Player)
   | AskForDeletePlayerConfirmation Player
   | GetDeleteConfirmation Id
-  | DeletePlayer Id
   | DeletePlayerDone (Result Http.Error Player)

@@ -5,7 +5,7 @@ import Http
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import Task
-import Players.Models exposing (Player)
+import Players.Models exposing (Id, Player)
 import Players.Actions as Actions
 
 
@@ -79,6 +79,37 @@ saveOneTask player =
 saveOneUrl : Int -> String
 saveOneUrl playerId =
   "http://localhost:4000/players/" ++ (toString playerId)
+
+
+delete : Id -> Effects Actions.Action
+delete playerId =
+  deleteTask playerId
+    |> Http.fromJson memberDecoder
+    |> Task.toResult
+    |> Task.map Actions.DeletePlayerDone
+    |> Effects.task
+
+
+deleteTask : Id -> Task.Task Http.RawError Http.Response
+deleteTask playerId =
+  let
+    config =
+      { verb = "DELETE"
+      , headers = [ ( "Content-Type", "application/json" ) ]
+      , url = deleteUrl playerId
+      , body = Http.empty
+      }
+  in
+    Http.send Http.defaultSettings config
+
+
+deleteUrl : Id -> String
+deleteUrl playerId =
+  "http://localhost:4000/players/" ++ (toString playerId)
+
+
+
+-- DECODERS
 
 
 collectionDecoder : Decode.Decoder (List Player)

@@ -60,12 +60,14 @@ update action collection =
 
     GetDeleteConfirmation playerId ->
       let
-        updated =
+        updatedCollection =
           List.filter (\player -> player.id /= playerId) collection
-      in
-        ( updated, Effects.none, Effects.none )
 
-    -- TODO: remove player from server
+        fx =
+          Players.Effects.delete playerId
+      in
+        ( updatedCollection, fx, Effects.none )
+
     ChangeLevel id howMuch ->
       let
         updatedCollectionWithFxs =
