@@ -8,6 +8,7 @@ import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
 import Players.Actions as PlayersActions
 import Players.Utils as Utils
+import Players.Edit.Perks
 
 
 type alias ViewModel =
@@ -79,9 +80,24 @@ view address model =
           [ class "clearfix py1"
           ]
           [ H.div [ class "col col-5" ] [ H.text "Perks" ]
-          , H.div [ class "col col-7" ] []
+          , H.div
+              [ class "col col-7" ]
+              [ perksList address model
+              ]
           ]
       ]
+
+
+perksList : Signal.Address PlayersActions.Action -> ViewModel -> H.Html
+perksList address model =
+  let
+    viewModel =
+      { playerId = model.player.id
+      , perks = model.perks
+      , perksPlayers = model.perksPlayers
+      }
+  in
+    Players.Edit.Perks.view address viewModel
 
 
 onChange : Signal.Address a -> (String -> a) -> H.Attribute

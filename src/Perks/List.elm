@@ -9,6 +9,7 @@ import PerksPlayers.Models exposing (PerkPlayer)
 
 
 -- MODEL
+-- TODO change to ViewModel
 
 
 type alias Model =
