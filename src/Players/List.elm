@@ -61,8 +61,16 @@ playerRow address model player =
       , H.td [] [ H.text (toString strength) ]
       , H.td
           []
-          [ H.button [ class "btn btn-outline mr1" ] [ H.text "Delete" ]
-          , H.button [ class "btn btn-outline", onClick address (PlayersActions.EditPlayer player.id) ] [ H.text "Edit" ]
+          [ H.button
+              [ class "btn btn-outline mr1"
+              , onClick address (PlayersActions.AskToDeletePlayer player)
+              ]
+              [ H.text "Delete" ]
+          , H.button
+              [ class "btn btn-outline"
+              , onClick address (PlayersActions.EditPlayer player.id)
+              ]
+              [ H.text "Edit" ]
           ]
       ]
 

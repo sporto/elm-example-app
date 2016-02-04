@@ -2,6 +2,7 @@ module Players.Update (..) where
 
 import Hop
 import Effects exposing (Effects)
+import Task
 import Players.Actions exposing (..)
 import Players.Models exposing (Id, Player, new)
 import Players.Effects
@@ -45,6 +46,15 @@ update action collection =
               toString error
           in
             ( [], Effects.none, CommonEffects.showError message )
+
+    AskToDeletePlayer player ->
+      let
+        fx =
+          Task.succeed ("Are you sure you want to delete " ++ player.name ++ "?")
+            |> Task.map MainActions.AskForConfirmation
+            |> Effects.task
+      in
+        ( collection, Effects.none, fx )
 
     ChangeLevel id howMuch ->
       let

@@ -14,6 +14,7 @@ import PerksPlayers.Effects
 import PerksPlayers.Update
 import Players.Effects
 import Players.Update
+import Players.Actions
 import Routing exposing (router)
 
 
@@ -70,6 +71,18 @@ update action model =
     Actions.ShowError message ->
       ( { model | errorMessage = message }, Effects.none )
 
+    Actions.AskForConfirmation message ->
+      let
+        fx =
+          Signal.send confirmationMailbox.address message
+            |> (flip Task.andThen) (\_ -> Task.succeed Actions.NoOp)
+            |> Effects.task
+      in
+        ( model, fx )
+
+    Actions.GetConfirmation ->
+      ( model, Effects.none )
+
     _ ->
       ( model, Effects.none )
 
@@ -98,7 +111,7 @@ app : StartApp.App Model
 app =
   StartApp.start
     { init = init
-    , inputs = [ routerSignal ]
+    , inputs = [ routerSignal, getConfirmationSignal ]
     , update = update
     , view = View.view
     }
@@ -117,3 +130,20 @@ port runner =
 port routeRunTask : Task () ()
 port routeRunTask =
   router.run
+
+
+confirmationMailbox =
+  Signal.mailbox ""
+
+
+port askForConfirmation : Signal String
+port askForConfirmation =
+  confirmationMailbox.signal
+
+
+getConfirmationSignal : Signal Actions.Action
+getConfirmationSignal =
+  Signal.map (always Actions.GetConfirmation) getConfirmation
+
+
+port getConfirmation : Signal Bool

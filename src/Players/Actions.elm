@@ -16,3 +16,6 @@ type Action
   | ChangeName Id String
   | CreatePlayer
   | CreatePlayerDone (Result Http.Error Player)
+  | AskToDeletePlayer Player
+  | DeletePlayer Id
+  | DeletePlayerDone (Result Http.Error Player)
