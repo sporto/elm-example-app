@@ -47,7 +47,7 @@ update action collection =
           in
             ( [], Effects.none, CommonEffects.showError message )
 
-    AskToDeletePlayer player ->
+    AskForDeletePlayerConfirmation player ->
       let
         msg =
           "Are you sure you want to delete " ++ player.name ++ "?"
@@ -58,6 +58,14 @@ update action collection =
       in
         ( collection, Effects.none, fx )
 
+    GetDeleteConfirmation playerId ->
+      let
+        updated =
+          List.filter (\player -> player.id /= playerId) collection
+      in
+        ( updated, Effects.none, Effects.none )
+
+    -- TODO: remove player from server
     ChangeLevel id howMuch ->
       let
         updatedCollectionWithFxs =

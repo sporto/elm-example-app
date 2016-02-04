@@ -63,7 +63,7 @@ playerRow address model player =
           []
           [ H.button
               [ class "btn btn-outline mr1"
-              , onClick address (PlayersActions.AskToDeletePlayer player)
+              , onClick address (PlayersActions.AskForDeletePlayerConfirmation player)
               ]
               [ H.text "Delete" ]
           , H.button

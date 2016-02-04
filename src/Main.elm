@@ -12,6 +12,7 @@ import Perks.List
 import Perks.Update
 import PerksPlayers.Effects
 import PerksPlayers.Update
+import Players.Actions
 import Players.Effects
 import Players.Update
 import Routing exposing (router)
@@ -79,8 +80,12 @@ update action model =
       in
         ( model, fx )
 
-    Actions.GetDeleteConfirmation id ->
-      ( model, Effects.none )
+    Actions.GetDeleteConfirmation playerId ->
+      let
+        ( updatedPlayers, fx, fx2 ) =
+          Players.Update.update (Players.Actions.GetDeleteConfirmation playerId) model.players
+      in
+        ( { model | players = updatedPlayers }, Effects.map Actions.PlayersAction fx )
 
     _ ->
       ( model, Effects.none )
