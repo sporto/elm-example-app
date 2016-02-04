@@ -45,13 +45,10 @@ Open http://localhost:3000
 - When creating a new player go to edit view
 - Add perk to player
   - Save perk-player to server
-- Delete perk from player
-  - Save perk-player deletion to server
 - Search box for perks
 - More server fixtures
 - Tests?
 - Add FA icons
-- Add player
 
 Guide:
 

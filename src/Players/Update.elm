@@ -38,7 +38,15 @@ update action collection =
     CreatePlayerDone result ->
       case result of
         Ok player ->
-          ( player :: collection, Effects.none, Effects.none )
+          let
+            updatedCollection =
+              player :: collection
+
+            fx =
+              Task.succeed (EditPlayer player.id)
+                |> Effects.task
+          in
+            ( updatedCollection, fx, Effects.none )
 
         Err error ->
           let
