@@ -52,9 +52,8 @@ createUrl =
 delete : Int -> Effects Actions.Action
 delete id =
   deleteTask id
-    |> Http.fromJson memberDecoder
     |> Task.toResult
-    |> Task.map Actions.DeletePerkPlayerDone
+    |> Task.map (Actions.DeletePerkPlayerDone id)
     |> Effects.task
 
 

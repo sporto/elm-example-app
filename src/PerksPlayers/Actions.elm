@@ -18,4 +18,4 @@ type Action
   | FetchAllDone (Result Http.Error (List PerkPlayer))
   | TogglePlayerPerk PlayerId PerkId Bool
   | CreatePerkPlayerDone (Result Http.Error PerkPlayer)
-  | DeletePerkPlayerDone (Result Http.Error PerkPlayer)
+  | DeletePerkPlayerDone Int (Result Http.RawError Http.Response)

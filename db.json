@@ -64,11 +64,6 @@
   ],
   "perks_players": [
     {
-      "id": 1,
-      "perkId": 1,
-      "playerId": 1
-    },
-    {
       "id": 2,
       "perkId": 2,
       "playerId": 2
@@ -82,6 +77,21 @@
       "id": 4,
       "perkId": 4,
       "playerId": 4
+    },
+    {
+      "id": 5,
+      "perkId": 3,
+      "playerId": 1
+    },
+    {
+      "id": 6,
+      "perkId": 2,
+      "playerId": 1
+    },
+    {
+      "id": 7,
+      "perkId": 1,
+      "playerId": 1
     }
   ]
 }

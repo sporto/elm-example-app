@@ -25,21 +25,14 @@ update action collection =
             ( [], Effects.none, CommonEffects.showError message )
 
     TogglePlayerPerk playerId perkId val ->
-      if val then
-        let
-          ( perkPlayer, fx ) =
-            addPerkPlayer playerId perkId
-
-          updatedCollection =
-            perkPlayer :: collection
-        in
-          ( updatedCollection, fx, Effects.none )
-      else
-        let
-          ( updatedCollection, fx ) =
-            removePerkPlayer playerId perkId collection
-        in
-          ( updatedCollection, Effects.batch fx, Effects.none )
+      let
+        fx =
+          if val then
+            addPerkPlayerFx playerId perkId
+          else
+            removePerkPlayerFx playerId perkId collection
+      in
+        ( collection, fx, Effects.none )
 
     CreatePerkPlayerDone result ->
       case result of
@@ -57,42 +50,45 @@ update action collection =
           in
             ( collection, Effects.none, CommonEffects.showError message )
 
+    DeletePerkPlayerDone perkPlayerId result ->
+      case result of
+        Ok _ ->
+          let
+            updatedCollection =
+              List.filter (\item -> item.id /= perkPlayerId) collection
+          in
+            ( updatedCollection, Effects.none, Effects.none )
+
+        Err error ->
+          let
+            message =
+              toString error
+          in
+            ( collection, Effects.none, CommonEffects.showError message )
+
     _ ->
       ( collection, Effects.none, Effects.none )
 
 
-removePerkPlayer : Int -> Int -> List PerkPlayer -> ( List PerkPlayer, List (Effects Action) )
-removePerkPlayer playerId perkId collection =
+removePerkPlayerFx : Int -> Int -> List PerkPlayer -> Effects Action
+removePerkPlayerFx playerId perkId collection =
   let
-    mapper perkPlayer =
-      if perkPlayer.playerId == playerId && perkPlayer.perkId == perkId then
-        -- TODO, send the fx
-        ( perkPlayer, PerksPlayers.Effects.delete perkPlayer.id )
-      else
-        ( perkPlayer, Effects.none )
-
-    updatedCollectionAndFx =
-      List.map mapper collection
-
-    updatedCollection =
-      List.map fst updatedCollectionAndFx
-
-    fxs =
-      List.map snd updatedCollectionAndFx
+    filter perkPlayer =
+      perkPlayer.playerId == playerId && perkPlayer.perkId == perkId
   in
-    ( updatedCollection, fxs )
+    collection
+      |> List.filter filter
+      |> List.map (\perkPlayer -> PerksPlayers.Effects.delete perkPlayer.id)
+      |> Effects.batch
 
 
-addPerkPlayer : Int -> Int -> ( PerkPlayer, Effects Action )
-addPerkPlayer playerId perkId =
+addPerkPlayerFx : Int -> Int -> Effects Action
+addPerkPlayerFx playerId perkId =
   let
     perkPlayer =
       { id = 0
       , playerId = playerId
       , perkId = perkId
       }
-
-    fx =
-      PerksPlayers.Effects.create perkPlayer
   in
-    ( perkPlayer, fx )
+    PerksPlayers.Effects.create perkPlayer
