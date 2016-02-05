@@ -7,6 +7,7 @@ import Players.Models exposing (Id)
 import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
 import PerksPlayers.Actions
+import PerksPlayers.Utils
 import Players.Actions as PlayersActions
 import Players.Utils as Utils
 
@@ -59,7 +60,7 @@ perkRow address model perk =
       perk.id
 
     hasPerk =
-      Utils.isPerkIdOnPlayerId model.perksPlayers perkId playerId
+      PerksPlayers.Utils.doesPlayerIdHasPerkId playerId perkId model.perksPlayers
   in
     H.tr
       []

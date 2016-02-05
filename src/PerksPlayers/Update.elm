@@ -6,6 +6,7 @@ import PerksPlayers.Models exposing (PerkPlayer)
 import CommonEffects
 import Actions as MainActions
 import PerksPlayers.Effects
+import PerksPlayers.Utils
 
 
 update : Action -> List PerkPlayer -> ( List PerkPlayer, Effects Action, Effects MainActions.Action )
@@ -38,7 +39,7 @@ update action collection =
           ( updatedCollection, fx ) =
             removePerkPlayer playerId perkId collection
         in
-          ( updatedCollection, fx, Effects.none )
+          ( updatedCollection, Effects.batch fx, Effects.none )
 
     CreatePerkPlayerDone result ->
       case result of
@@ -60,40 +61,26 @@ update action collection =
       ( collection, Effects.none, Effects.none )
 
 
-
--- TODO move to utils perkPlayerIdFor
-
-
-perkPlayerIdFor : Int -> Int -> List PerkPlayer -> Maybe Int
-perkPlayerIdFor playerId perkId collection =
-  collection
-    |> List.filter (\perkPlayer -> perkPlayer.playerId == playerId && perkPlayer.perkId == perkId)
-    |> List.map (\perkPlayer -> perkPlayer.id)
-    |> List.head
-
-
-removePerkPlayer : Int -> Int -> List PerkPlayer -> ( List PerkPlayer, Effects Action )
+removePerkPlayer : Int -> Int -> List PerkPlayer -> ( List PerkPlayer, List (Effects Action) )
 removePerkPlayer playerId perkId collection =
   let
-    maybePerkPlayerId =
-      perkPlayerIdFor playerId perkId collection
+    mapper perkPlayer =
+      if perkPlayer.playerId == playerId && perkPlayer.perkId == perkId then
+        -- TODO, send the fx
+        ( perkPlayer, PerksPlayers.Effects.delete perkPlayer.id )
+      else
+        ( perkPlayer, Effects.none )
 
     updatedCollectionAndFx =
-      case maybePerkPlayerId of
-        Just perkPlayerId ->
-          let
-            updatedCollection =
-              List.filter (\perkPlayer -> perkPlayer.id /= perkPlayerId) collection
+      List.map mapper collection
 
-            fx =
-              PerksPlayers.Effects.delete perkPlayerId
-          in
-            ( updatedCollection, fx )
+    updatedCollection =
+      List.map fst updatedCollectionAndFx
 
-        Nothing ->
-          ( collection, Effects.none )
+    fxs =
+      List.map snd updatedCollectionAndFx
   in
-    updatedCollectionAndFx
+    ( updatedCollection, fxs )
 
 
 addPerkPlayer : Int -> Int -> ( PerkPlayer, Effects Action )

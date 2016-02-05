@@ -31,11 +31,12 @@ perkIdsForPlayerId perksPlayers playerId =
     |> List.map (\perkPlayer -> perkPlayer.perkId)
 
 
-isPerkIdOnPlayerId : List PerkPlayer -> Int -> Id -> Bool
-isPerkIdOnPlayerId perksPlayers perkId playerId =
-  let
-    filter perkPlayer =
-      perkPlayer.perkId == perkId && perkPlayer.playerId == playerId
-  in
-    perksPlayers
-      |> List.any filter
+
+--isPerkIdOnPlayerId : List PerkPlayer -> Int -> Id -> Bool
+--isPerkIdOnPlayerId perksPlayers perkId playerId =
+--  let
+--    filter perkPlayer =
+--      perkPlayer.perkId == perkId && perkPlayer.playerId == playerId
+--  in
+--    perksPlayers
+--      |> List.any filter

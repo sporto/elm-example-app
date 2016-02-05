@@ -91,7 +91,7 @@ memberDecoder =
     PerkPlayer
     ("id" := Decode.int)
     ("perkId" := Decode.int)
-    ("id" := Decode.int)
+    ("playerId" := Decode.int)
 
 
 memberEncoder : PerkPlayer -> Encode.Value
