@@ -79,11 +79,6 @@
       "playerId": 4
     },
     {
-      "id": 5,
-      "perkId": 3,
-      "playerId": 1
-    },
-    {
       "id": 6,
       "perkId": 2,
       "playerId": 1
@@ -91,6 +86,11 @@
     {
       "id": 7,
       "perkId": 1,
+      "playerId": 1
+    },
+    {
+      "id": 8,
+      "perkId": 4,
       "playerId": 1
     }
   ]

@@ -5,6 +5,7 @@ import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Players.Models exposing (Player)
 import Players.Actions as PlayersActions
+import Players.Utils
 import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
 
@@ -47,7 +48,7 @@ playerRow : Signal.Address PlayersActions.Action -> ViewModel -> Player -> H.Htm
 playerRow address model player =
   let
     bonuses =
-      bonusesForPlayer model player
+      Players.Utils.bonusesForPlayerId model.perksPlayers model.perks player.id
 
     strength =
       bonuses + player.level
@@ -73,21 +74,3 @@ playerRow address model player =
               [ H.text "Edit" ]
           ]
       ]
-
-
-bonusesForPlayer : ViewModel -> Player -> Int
-bonusesForPlayer model player =
-  perksForPlayer model player
-    |> List.foldl (\perk acc -> acc + perk.bonus) 0
-
-
-perksForPlayer : ViewModel -> Player -> List Perk
-perksForPlayer model player =
-  let
-    perkIds =
-      model.perksPlayers
-        |> List.filter (\perkPlayer -> perkPlayer.perkId == player.id)
-        |> List.map (\perkPlayer -> perkPlayer.perkId)
-  in
-    model.perks
-      |> List.filter (\perk -> List.any (\id -> id == perk.id) perkIds)
