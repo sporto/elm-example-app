@@ -1,11 +1,6 @@
 {
   "players": [
     {
-      "id": 1,
-      "name": "Sally",
-      "level": 2
-    },
-    {
       "id": 2,
       "name": "Lance",
       "level": 1
@@ -39,27 +34,39 @@
   "perks": [
     {
       "id": 1,
-      "name": "Steel armor",
+      "name": "Amulet of Luck",
       "bonus": 2,
-      "description": ""
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi interdum tincidunt laoreet. Sed commodo augue ut lectus condimentum pretium. Nullam venenatis lobortis diam sed placerat."
     },
     {
       "id": 2,
-      "name": "Scroll of protection",
+      "name": "Amulet of Courage",
       "bonus": 2,
-      "description": ""
+      "description": "Donec iaculis dui at nisl facilisis pulvinar. Quisque interdum, lacus at placerat faucibus, velit elit maximus leo, a mattis nibh libero ut odio. "
     },
     {
       "id": 3,
       "name": "Steel sword",
       "bonus": 1,
-      "description": ""
+      "description": "Fusce accumsan in justo sit amet luctus. Nam pulvinar lorem nibh, in pulvinar sapien tincidunt in. "
     },
     {
       "id": 4,
-      "name": "Amulet of luck",
+      "name": "Steel shield",
       "bonus": 1,
-      "description": ""
+      "description": "Aliquam eu tristique tortor, sit amet pharetra turpis. Cras ac bibendum ipsum, sit amet pellentesque arcu. Suspendisse eleifend ornare vestibulum. Nunc mattis nisl ut convallis sagittis."
+    },
+    {
+      "id": 5,
+      "name": "Scroll of protection",
+      "bonus": 1,
+      "description": "Phasellus id quam id dui viverra lacinia sed sed sapien. Pellentesque egestas bibendum augue a commodo. "
+    },
+    {
+      "id": 6,
+      "name": "Scroll of fire",
+      "bonus": 1,
+      "description": "Ut aliquam id ante et molestie. Vivamus convallis vestibulum diam, quis sagittis dui. Etiam eget cursus erat. Curabitur sollicitudin tempor porta. "
     }
   ],
   "perks_players": [
@@ -77,21 +84,6 @@
       "id": 4,
       "perkId": 4,
       "playerId": 4
-    },
-    {
-      "id": 6,
-      "perkId": 2,
-      "playerId": 1
-    },
-    {
-      "id": 7,
-      "perkId": 1,
-      "playerId": 1
-    },
-    {
-      "id": 8,
-      "perkId": 4,
-      "playerId": 1
     }
   ]
 }

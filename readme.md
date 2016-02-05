@@ -10,12 +10,13 @@ An example Elm single page application built for http://www.elm-tutorial.org/
 - Basscss for css styles
 - JsonServer for fake api
 
-## This application demonstrate
+## This application demonstrates
 
 - Elm architecture
 - Routing
 - Ajax requests and json parsing
 - External CSS
+- Ports
 
 ## Setup
 
@@ -41,31 +42,11 @@ Open http://localhost:3000
 
 ## TODO
 
-- Validation for player name
-- Add perk to player
-  - Save perk-player to server
+- Validation for player name when empty
 - Search box for perks
-- More server fixtures
 - Tests?
 - Add FA icons
 - When deleting a player delete associated perksPlayers
-
-Guide:
-
-## Installing Webpack
-
-- packages to install
-
-npm install -S webpack
-npm i -S webpack-dev-server
-file-loader
-css-loader
-style-loader
-extract-text-webpack-plugin
-npm install -S elm-webpack-loader
-basscss
-
-- change 'src' in elm-package
 
 
 

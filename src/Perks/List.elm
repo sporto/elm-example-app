@@ -1,7 +1,7 @@
 module Perks.List (..) where
 
 import Html as H
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, colspan)
 import Html.Events exposing (onClick)
 import Effects exposing (Effects, Never)
 import Perks.Models exposing (Perk)
@@ -127,7 +127,8 @@ perkRowDescription model perk =
   if isPerkExpanded model.expanded perk then
     H.tr
       []
-      [ H.td [] [ H.text "Des" ]
+      [ H.td [] []
+      , H.td [ colspan 3, class "py2" ] [ H.text perk.description ]
       ]
   else
     H.span [] []
