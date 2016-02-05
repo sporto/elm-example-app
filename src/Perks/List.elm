@@ -8,18 +8,14 @@ import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
 
 
--- MODEL
--- TODO change to ViewModel
-
-
-type alias Model =
+type alias ViewModel =
   { expanded : List Int
   , perks : List Perk
   , perksPlayers : List PerkPlayer
   }
 
 
-initialModel : Model
+initialModel : ViewModel
 initialModel =
   { expanded = []
   , perks = []
@@ -49,7 +45,7 @@ isPerkExpanded expanded perk =
 -- UPDATE
 
 
-update : Action -> Model -> ( Model, Effects.Effects Action )
+update : Action -> ViewModel -> ( ViewModel, Effects.Effects Action )
 update action model =
   case action of
     Expand id ->
@@ -71,7 +67,7 @@ update action model =
 -- VIEW
 
 
-view : Signal.Address Action -> Model -> H.Html
+view : Signal.Address Action -> ViewModel -> H.Html
 view address model =
   let
     rows =
@@ -103,7 +99,7 @@ tableHead =
     ]
 
 
-perkRow : Signal.Address Action -> Model -> Perk -> H.Html
+perkRow : Signal.Address Action -> ViewModel -> Perk -> H.Html
 perkRow address model perk =
   H.tbody
     []
@@ -122,7 +118,7 @@ perkRow address model perk =
     ]
 
 
-perkRowDescription : Model -> Perk -> H.Html
+perkRowDescription : ViewModel -> Perk -> H.Html
 perkRowDescription model perk =
   if isPerkExpanded model.expanded perk then
     H.tr
@@ -134,7 +130,7 @@ perkRowDescription model perk =
     H.span [] []
 
 
-toggle : Signal.Address Action -> Model -> Perk -> H.Html
+toggle : Signal.Address Action -> ViewModel -> Perk -> H.Html
 toggle address model perk =
   if isPerkExpanded model.expanded perk then
     H.button [ class "btn btn-outline", onClick address (Collapse perk.id) ] [ H.text "Collapse" ]
