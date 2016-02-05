@@ -5,6 +5,10 @@ import Players.Models exposing (Id, Player)
 import Hop
 
 
+type alias PerkId =
+  Int
+
+
 type Action
   = NoOp
   | FetchAll
@@ -19,3 +23,4 @@ type Action
   | AskForDeletePlayerConfirmation Player
   | GetDeleteConfirmation Id
   | DeletePlayerDone (Result Http.Error Player)
+  | TogglePlayerPerk Id PerkId Bool

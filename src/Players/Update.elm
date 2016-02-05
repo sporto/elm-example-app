@@ -104,6 +104,9 @@ update action collection =
       in
         ( updatedCollection, fxs, Effects.none )
 
+    TogglePlayerPerk playerId perkId value ->
+      ( collection, Effects.none, CommonEffects.togglePlayerPerk playerId perkId value )
+
     _ ->
       ( collection, Effects.none, Effects.none )
 

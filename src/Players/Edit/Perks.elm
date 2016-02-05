@@ -1,11 +1,14 @@
 module Players.Edit.Perks (..) where
 
 import Html as H
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, type', checked)
+import Html.Events exposing (on, targetChecked)
 import Players.Models exposing (Id)
 import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
+import PerksPlayers.Actions
 import Players.Actions as PlayersActions
+import Players.Utils as Utils
 
 
 type alias ViewModel =
@@ -31,6 +34,7 @@ view address model =
                   []
                   [ H.th [] []
                   , H.th [] [ H.text "Perk" ]
+                  , H.th [] [ H.text "Bonus" ]
                   ]
               ]
           , H.tbody
@@ -47,8 +51,28 @@ perkRows address model =
 
 perkRow : Signal.Address PlayersActions.Action -> ViewModel -> Perk -> H.Html
 perkRow address model perk =
-  H.tr
-    []
-    [ H.td [] []
-    , H.td [] [ H.text perk.name ]
-    ]
+  let
+    playerId =
+      model.playerId
+
+    perkId =
+      perk.id
+
+    hasPerk =
+      Utils.isPerkIdOnPlayerId model.perksPlayers perkId playerId
+  in
+    H.tr
+      []
+      [ H.td
+          []
+          [ H.input
+              [ type' "checkbox"
+              , checked hasPerk
+              , on "change" targetChecked (Signal.message address << (PlayersActions.TogglePlayerPerk playerId perkId))
+              , class ""
+              ]
+              []
+          ]
+      , H.td [] [ H.text perk.name ]
+      , H.td [] [ H.text (toString perk.bonus) ]
+      ]

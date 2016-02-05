@@ -12,6 +12,7 @@ import Perks.List
 import Perks.Update
 import PerksPlayers.Effects
 import PerksPlayers.Update
+import PerksPlayers.Actions
 import Players.Actions
 import Players.Effects
 import Players.Update
@@ -86,6 +87,15 @@ update action model =
           Players.Update.update (Players.Actions.GetDeleteConfirmation playerId) model.players
       in
         ( { model | players = updatedPlayers }, Effects.map Actions.PlayersAction fx )
+
+    Actions.TogglePlayerPerk playerId perkId value ->
+      let
+        fx =
+          Task.succeed (PerksPlayers.Actions.TogglePlayerPerk playerId perkId value)
+            |> Effects.task
+            |> Effects.map Actions.PerksPlayersAction
+      in
+        ( model, fx )
 
     _ ->
       ( model, Effects.none )

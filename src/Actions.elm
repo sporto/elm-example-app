@@ -7,6 +7,14 @@ import PerksPlayers.Actions
 import Players.Actions
 
 
+type alias PlayerId =
+  Int
+
+
+type alias PerkId =
+  Int
+
+
 type Action
   = NoOp
   | RoutingAction Routing.Action
@@ -17,3 +25,4 @@ type Action
   | ShowError String
   | AskForDeleteConfirmation Int String
   | GetDeleteConfirmation Int
+  | TogglePlayerPerk PlayerId PerkId Bool

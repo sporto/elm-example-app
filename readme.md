@@ -48,6 +48,7 @@ Open http://localhost:3000
 - More server fixtures
 - Tests?
 - Add FA icons
+- When deleting a player delete associated perksPlayers
 
 Guide:
 

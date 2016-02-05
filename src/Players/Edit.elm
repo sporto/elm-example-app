@@ -100,6 +100,10 @@ perksList address model =
     Players.Edit.Perks.view address viewModel
 
 
+
+-- TODO change to address << Action
+
+
 onChange : Signal.Address a -> (String -> a) -> H.Attribute
 onChange address action =
   on "change" targetValue (\str -> Signal.message address (action str))
