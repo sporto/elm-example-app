@@ -1,12 +1,12 @@
 module Players.Models (..) where
 
 
-type alias Id =
+type alias PlayerId =
   Int
 
 
 type alias Player =
-  { id : Id
+  { id : PlayerId
   , name : String
   , level : Int
   }

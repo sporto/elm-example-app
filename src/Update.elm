@@ -1,21 +1,15 @@
 module Update (..) where
 
 import Effects exposing (Effects, Never)
-import Html as H
-import StartApp
 import Task exposing (Task)
 import Actions
-import View
 import Mailboxes exposing (deleteConfirmationMailbox)
 import Models exposing (Model)
-import Perks.Effects
 import Perks.List
 import Perks.Update
-import PerksPlayers.Effects
 import PerksPlayers.Update
 import PerksPlayers.Actions
 import Players.Actions
-import Players.Effects
 import Players.Update
 import Routing exposing (router)
 
@@ -23,9 +17,7 @@ import Routing exposing (router)
 update : Actions.Action -> Model -> ( Model, Effects.Effects Actions.Action )
 update action model =
   case Debug.log "action" action of
-    {-
-    Send all routing actions to the Routing module
-    -}
+    -- Send all routing actions to the Routing module
     Actions.RoutingAction subAction ->
       let
         ( updatedRouting, fx ) =
@@ -33,6 +25,9 @@ update action model =
       in
         ( { model | routing = updatedRouting }, Effects.map Actions.RoutingAction fx )
 
+    -- Send Player actions to the Players module
+    -- Some modules return a tuple with three values
+    -- The third value is a root level effect to perform
     Actions.PlayersAction subAction ->
       let
         ( updatedPlayers, fx, fx2 ) =
@@ -43,6 +38,7 @@ update action model =
       in
         ( { model | players = updatedPlayers }, allFx )
 
+    -- Send Perk actions to the Perks module
     Actions.PerksAction subAction ->
       let
         ( updatedPerks, fx, fx2 ) =
@@ -53,6 +49,7 @@ update action model =
       in
         ( { model | perks = updatedPerks }, allFx )
 
+    -- Send PerkPlayer actions to the PerksPlayers module
     Actions.PerksPlayersAction subAction ->
       let
         ( updatedPerksPlayers, fx, fx2 ) =
@@ -63,6 +60,7 @@ update action model =
       in
         ( { model | perksPlayers = updatedPerksPlayers }, allFx )
 
+    -- Specific actions for the Perk List component
     Actions.PerksListAction subAction ->
       let
         ( updatedPerkListModel, fx ) =

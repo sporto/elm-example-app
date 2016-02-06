@@ -1,8 +1,12 @@
 module Perks.Models (..) where
 
 
+type alias PerkId =
+  Int
+
+
 type alias Perk =
-  { id : Int
+  { id : PerkId
   , name : String
   , bonus : Int
   , description : String

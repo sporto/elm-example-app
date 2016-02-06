@@ -5,27 +5,48 @@ import Hop
 import Debug
 
 
-type Action
+{-
+All Actions related to routing
+-}
+
+
+type
+  Action
+  -- Actions performed by Hop e.g. changing the location
   = HopAction Hop.Action
+    -- Actions that happend after a location change, there are called by Hop
   | ShowPlayers Hop.Payload
-  | ShowPlayer Hop.Payload
   | EditPlayer Hop.Payload
   | ShowPerks Hop.Payload
   | ShowNotFound Hop.Payload
+    -- Action to ask for route change
   | NavigateTo String
   | NoOp
 
 
-type View
+
+{-
+All available views in our application
+-}
+
+
+type AvailableViews
   = Players
   | Perks
   | EditPlayerView
   | NotFound
 
 
+
+{-
+Model related to routing, this holds the router payload given by Hop
+and the current view
+-}
+
+
 type alias Model =
   { routerPayload : Hop.Payload
-  , view : View
+  , view : AvailableViews
   }
 
 
@@ -39,9 +60,13 @@ initialModel =
 update : Action -> Model -> ( Model, Effects Action )
 update action model =
   case action of
+    -- Called from our application views e.g. by clicking on a button
+    -- Asks Hop to change the page location
     NavigateTo path ->
       ( model, Effects.map HopAction (Hop.navigateTo path) )
 
+    -- Actions called after a location change happens
+    -- These are triggered by Hop
     ShowPlayers payload ->
       ( { model | view = Players, routerPayload = payload }, Effects.none )
 
@@ -55,6 +80,13 @@ update action model =
       ( model, Effects.none )
 
 
+
+{-
+Routes in our application
+Each route maps to a view
+-}
+
+
 routes : List ( String, Hop.Payload -> Action )
 routes =
   [ ( "/", ShowPlayers )
@@ -62,6 +94,12 @@ routes =
   , ( "/players/:id/edit", EditPlayer )
   , ( "/perks", ShowPerks )
   ]
+
+
+
+{-
+Create a Hop router
+-}
 
 
 router : Hop.Router Action

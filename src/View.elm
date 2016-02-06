@@ -1,6 +1,8 @@
 module View (..) where
 
-import Html as H
+--TODO docs
+
+import Html exposing (div, button, text, span)
 import Html.Events as Events
 import Html.Attributes exposing (class)
 import Dict
@@ -13,9 +15,12 @@ import Routing
 import String
 
 
-view : Signal.Address Actions.Action -> Models.Model -> H.Html
+{- Main View for the application -}
+
+
+view : Signal.Address Actions.Action -> Models.Model -> Html.Html
 view address model =
-  H.div
+  div
     []
     [ nav address model
     , flash address model
@@ -23,7 +28,7 @@ view address model =
     ]
 
 
-nav : Signal.Address Actions.Action -> Models.Model -> H.Html
+nav : Signal.Address Actions.Action -> Models.Model -> Html.Html
 nav address model =
   let
     activeClass view =
@@ -32,36 +37,39 @@ nav address model =
       else
         ""
   in
-    H.div
+    div
       [ class "clearfix mb2 bg-blue white"
       ]
-      [ H.div
+      [ div
           [ class "left" ]
-          [ H.button
+          [ button
               [ class ("btn py2 button-narrow mr1 " ++ activeClass Routing.Players)
               , Events.onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/players")
               ]
-              [ H.text "Players"
+              [ text "Players"
               ]
-          , H.button
+          , button
               [ class ("btn py2 button-narrow " ++ activeClass Routing.Perks)
               , Events.onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/perks")
               ]
-              [ H.text "Perks"
+              [ text "Perks"
               ]
           ]
       ]
 
 
-flash : Signal.Address Actions.Action -> Models.Model -> H.Html
+flash : Signal.Address Actions.Action -> Models.Model -> Html.Html
 flash address model =
   if String.isEmpty model.errorMessage then
-    H.span [] []
+    span [] []
   else
-    H.div [ class "bold center p2 mb2 white bg-red rounded" ] [ H.text model.errorMessage ]
+    div
+      [ class "bold center p2 mb2 white bg-red rounded"
+      ]
+      [ text model.errorMessage ]
 
 
-page : Signal.Address Actions.Action -> Models.Model -> H.Html
+page : Signal.Address Actions.Action -> Models.Model -> Html.Html
 page address model =
   case model.routing.view of
     Routing.Players ->
@@ -115,9 +123,9 @@ page address model =
       notFoundView
 
 
-notFoundView : H.Html
+notFoundView : Html.Html
 notFoundView =
-  H.div
+  div
     []
-    [ H.text "Not found"
+    [ text "Not found"
     ]

@@ -1,8 +1,12 @@
 module PerksPlayers.Models (..) where
 
 
+type alias PerkPlayerId =
+  Int
+
+
 type alias PerkPlayer =
-  { id : Int
+  { id : PerkPlayerId
   , perkId : Int
   , playerId : Int
   }
