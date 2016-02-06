@@ -21,6 +21,10 @@ fetchAllUrl =
   "http://localhost:4000/perks"
 
 
+
+-- DECODERS
+
+
 collectionDecoder : Decode.Decoder (List Perk)
 collectionDecoder =
   Decode.list memberDecoder

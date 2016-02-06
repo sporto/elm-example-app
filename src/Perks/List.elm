@@ -1,15 +1,15 @@
 module Perks.List (..) where
 
-import Html as H
+import Html exposing (..)
 import Html.Attributes exposing (class, colspan)
 import Html.Events exposing (onClick)
 import Effects exposing (Effects, Never)
-import Perks.Models exposing (Perk)
+import Perks.Models exposing (PerkId, Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
 
 
 type alias ViewModel =
-  { expanded : List Int
+  { expandedPerkIds : List PerkId
   , perks : List Perk
   , perksPlayers : List PerkPlayer
   }
@@ -17,7 +17,7 @@ type alias ViewModel =
 
 initialModel : ViewModel
 initialModel =
-  { expanded = []
+  { expandedPerkIds = []
   , perks = []
   , perksPlayers = []
   }
@@ -28,8 +28,8 @@ initialModel =
 
 
 type Action
-  = Expand Int
-  | Collapse Int
+  = Expand PerkId
+  | Collapse PerkId
 
 
 
@@ -51,29 +51,29 @@ update action model =
     Expand id ->
       let
         updateExanded =
-          id :: model.expanded
+          id :: model.expandedPerkIds
       in
-        ( { model | expanded = updateExanded }, Effects.none )
+        ( { model | expandedPerkIds = updateExanded }, Effects.none )
 
     Collapse id ->
       let
         updateExanded =
-          List.filter (\i -> i /= id) model.expanded
+          List.filter (\i -> i /= id) model.expandedPerkIds
       in
-        ( { model | expanded = updateExanded }, Effects.none )
+        ( { model | expandedPerkIds = updateExanded }, Effects.none )
 
 
 
 -- VIEW
 
 
-view : Signal.Address Action -> ViewModel -> H.Html
+view : Signal.Address Action -> ViewModel -> Html.Html
 view address model =
   let
     rows =
       List.map (perkRow address model) model.perks
   in
-    H.table
+    table
       [ class "table-light" ]
       (tableHead
         :: rows
@@ -84,32 +84,32 @@ view address model =
 --:: (List.map (perkRow address model) model.perks)
 
 
-tableHead : H.Html
+tableHead : Html.Html
 tableHead =
-  H.thead
+  thead
     []
-    [ H.tr
+    [ tr
         []
-        [ H.th [] [ H.text "Id" ]
-        , H.th [] [ H.text "Name" ]
-        , H.th [] [ H.text "Bonus" ]
-        , H.th [] [ H.text "Player count" ]
-        , H.th [] [ H.text "Actions" ]
+        [ th [] [ text "Id" ]
+        , th [] [ text "Name" ]
+        , th [] [ text "Bonus" ]
+        , th [] [ text "Player count" ]
+        , th [] [ text "Actions" ]
         ]
     ]
 
 
-perkRow : Signal.Address Action -> ViewModel -> Perk -> H.Html
+perkRow : Signal.Address Action -> ViewModel -> Perk -> Html.Html
 perkRow address model perk =
-  H.tbody
+  tbody
     []
-    [ H.tr
+    [ tr
         []
-        [ H.td [] [ H.text (toString perk.id) ]
-        , H.td [] [ H.text perk.name ]
-        , H.td [] [ H.text (toString perk.bonus) ]
-        , H.td [] [ H.text (toString (userCountForPerk model.perksPlayers perk)) ]
-        , H.td
+        [ td [] [ text (toString perk.id) ]
+        , td [] [ text perk.name ]
+        , td [] [ text (toString perk.bonus) ]
+        , td [] [ text (toString (userCountForPerk model.perksPlayers perk)) ]
+        , td
             []
             [ toggle address model perk
             ]
@@ -118,24 +118,24 @@ perkRow address model perk =
     ]
 
 
-perkRowDescription : ViewModel -> Perk -> H.Html
+perkRowDescription : ViewModel -> Perk -> Html.Html
 perkRowDescription model perk =
-  if isPerkExpanded model.expanded perk then
-    H.tr
+  if isPerkExpanded model.expandedPerkIds perk then
+    tr
       []
-      [ H.td [] []
-      , H.td [ colspan 3, class "py2" ] [ H.text perk.description ]
+      [ td [] []
+      , td [ colspan 3, class "py2" ] [ text perk.description ]
       ]
   else
-    H.span [] []
+    span [] []
 
 
-toggle : Signal.Address Action -> ViewModel -> Perk -> H.Html
+toggle : Signal.Address Action -> ViewModel -> Perk -> Html.Html
 toggle address model perk =
-  if isPerkExpanded model.expanded perk then
-    H.button [ class "btn btn-outline", onClick address (Collapse perk.id) ] [ H.text "Collapse" ]
+  if isPerkExpanded model.expandedPerkIds perk then
+    button [ class "btn btn-outline", onClick address (Collapse perk.id) ] [ text "Collapse" ]
   else
-    H.button [ class "btn btn-outline", onClick address (Expand perk.id) ] [ H.text "Expand" ]
+    button [ class "btn btn-outline", onClick address (Expand perk.id) ] [ text "Expand" ]
 
 
 userCountForPerk : List PerkPlayer -> Perk -> Int

@@ -31,10 +31,10 @@ All available views in our application
 
 
 type AvailableViews
-  = Players
-  | Perks
+  = PlayersView
+  | PerksView
   | EditPlayerView
-  | NotFound
+  | NotFoundView
 
 
 
@@ -53,7 +53,7 @@ type alias Model =
 initialModel : Model
 initialModel =
   { routerPayload = router.payload
-  , view = Players
+  , view = PlayersView
   }
 
 
@@ -68,13 +68,13 @@ update action model =
     -- Actions called after a location change happens
     -- These are triggered by Hop
     ShowPlayers payload ->
-      ( { model | view = Players, routerPayload = payload }, Effects.none )
+      ( { model | view = PlayersView, routerPayload = payload }, Effects.none )
 
     EditPlayer payload ->
       ( { model | view = EditPlayerView, routerPayload = payload }, Effects.none )
 
     ShowPerks payload ->
-      ( { model | view = Perks, routerPayload = (Debug.log "" payload) }, Effects.none )
+      ( { model | view = PerksView, routerPayload = (Debug.log "" payload) }, Effects.none )
 
     _ ->
       ( model, Effects.none )

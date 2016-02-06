@@ -4,7 +4,7 @@ import Hop
 import Effects exposing (Effects)
 import Task
 import Players.Actions exposing (..)
-import Players.Models exposing (Id, Player, new)
+import Players.Models exposing (PlayerId, Player, new)
 import Players.Effects
 import CommonEffects
 import Actions as MainActions
@@ -124,7 +124,7 @@ updatePlayerLevel howMuch player =
     ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
 
 
-changeLevelForPlayerId : Int -> List Player -> Id -> List ( Player, Effects Action )
+changeLevelForPlayerId : Int -> List Player -> PlayerId -> List ( Player, Effects Action )
 changeLevelForPlayerId howMuch =
   changeAttribute (updatePlayerLevel howMuch)
 
@@ -138,12 +138,12 @@ updatePlayerName name player =
     ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
 
 
-changeNameForPlayerId : String -> List Player -> Id -> List ( Player, Effects Action )
+changeNameForPlayerId : String -> List Player -> PlayerId -> List ( Player, Effects Action )
 changeNameForPlayerId name =
   changeAttribute (updatePlayerName name)
 
 
-changeAttribute : (Player -> ( Player, Effects Action )) -> List Player -> Id -> List ( Player, Effects Action )
+changeAttribute : (Player -> ( Player, Effects Action )) -> List Player -> PlayerId -> List ( Player, Effects Action )
 changeAttribute callback players playerId =
   let
     mapper player =

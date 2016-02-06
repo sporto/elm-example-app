@@ -1,7 +1,5 @@
 module View (..) where
 
---TODO docs
-
 import Html exposing (div, button, text, span)
 import Html.Events as Events
 import Html.Attributes exposing (class)
@@ -28,6 +26,10 @@ view address model =
     ]
 
 
+
+{- Navigation -}
+
+
 nav : Signal.Address Actions.Action -> Models.Model -> Html.Html
 nav address model =
   let
@@ -43,13 +45,13 @@ nav address model =
       [ div
           [ class "left" ]
           [ button
-              [ class ("btn py2 button-narrow mr1 " ++ activeClass Routing.Players)
+              [ class ("btn py2 button-narrow mr1 " ++ activeClass Routing.PlayersView)
               , Events.onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/players")
               ]
               [ text "Players"
               ]
           , button
-              [ class ("btn py2 button-narrow " ++ activeClass Routing.Perks)
+              [ class ("btn py2 button-narrow " ++ activeClass Routing.PerksView)
               , Events.onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/perks")
               ]
               [ text "Perks"
@@ -69,10 +71,16 @@ flash address model =
       [ text model.errorMessage ]
 
 
+
+{-
+Show the correct page according to the current route
+-}
+
+
 page : Signal.Address Actions.Action -> Models.Model -> Html.Html
 page address model =
   case model.routing.view of
-    Routing.Players ->
+    Routing.PlayersView ->
       let
         viewModel =
           { players = model.players
@@ -84,6 +92,7 @@ page address model =
 
     Routing.EditPlayerView ->
       let
+        -- Find the player we are editing using the parameters provided by the router
         playerId =
           model.routing.routerPayload.params
             |> Dict.get "id"
@@ -108,8 +117,7 @@ page address model =
           _ ->
             notFoundView
 
-    -- TODO change to Routing.PerksView
-    Routing.Perks ->
+    Routing.PerksView ->
       let
         perksListModel =
           model.perksListModel
