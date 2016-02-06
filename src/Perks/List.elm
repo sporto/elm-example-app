@@ -33,15 +33,6 @@ type Action
 
 
 
--- UTILS
-
-
-isPerkExpanded : List Int -> Perk -> Bool
-isPerkExpanded expanded perk =
-  List.any (\i -> i == perk.id) expanded
-
-
-
 -- UPDATE
 
 
@@ -78,10 +69,6 @@ view address model =
       (tableHead
         :: rows
       )
-
-
-
---:: (List.map (perkRow address model) model.perks)
 
 
 tableHead : Html.Html
@@ -136,6 +123,26 @@ toggle address model perk =
     button [ class "btn btn-outline", onClick address (Collapse perk.id) ] [ text "Collapse" ]
   else
     button [ class "btn btn-outline", onClick address (Expand perk.id) ] [ text "Expand" ]
+
+
+
+-- UTILS
+{-
+Given a list of expanded perk ids
+And a perk
+Determine if that perk should be expanded
+-}
+
+
+isPerkExpanded : List PerkId -> Perk -> Bool
+isPerkExpanded expanded perk =
+  List.any (\i -> i == perk.id) expanded
+
+
+
+{-
+Get the number of users for a perk
+-}
 
 
 userCountForPerk : List PerkPlayer -> Perk -> Int

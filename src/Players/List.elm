@@ -1,6 +1,6 @@
 module Players.List (..) where
 
-import Html as H
+import Html exposing (..)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Players.Models exposing (Player)
@@ -17,34 +17,34 @@ type alias ViewModel =
   }
 
 
-view : Signal.Address PlayersActions.Action -> ViewModel -> H.Html
+view : Signal.Address PlayersActions.Action -> ViewModel -> Html.Html
 view address model =
-  H.div
+  div
     []
-    [ H.div
+    [ div
         [ class "right-align" ]
-        [ H.button [ class "btn", onClick address (PlayersActions.CreatePlayer) ] [ H.text "Add player" ]
+        [ button [ class "btn", onClick address (PlayersActions.CreatePlayer) ] [ text "Add player" ]
         ]
-    , H.table
+    , table
         [ class "table-light" ]
-        [ H.thead
+        [ thead
             []
-            [ H.tr
+            [ tr
                 []
-                [ H.th [] [ H.text "Id" ]
-                , H.th [] [ H.text "Name" ]
-                , H.th [] [ H.text "Level" ]
-                , H.th [] [ H.text "Bonus" ]
-                , H.th [] [ H.text "Strengh" ]
-                , H.th [] [ H.text "Actions" ]
+                [ th [] [ text "Id" ]
+                , th [] [ text "Name" ]
+                , th [] [ text "Level" ]
+                , th [] [ text "Bonus" ]
+                , th [] [ text "Strengh" ]
+                , th [] [ text "Actions" ]
                 ]
             ]
-        , H.tbody [] (List.map (playerRow address model) model.players)
+        , tbody [] (List.map (playerRow address model) model.players)
         ]
     ]
 
 
-playerRow : Signal.Address PlayersActions.Action -> ViewModel -> Player -> H.Html
+playerRow : Signal.Address PlayersActions.Action -> ViewModel -> Player -> Html.Html
 playerRow address model player =
   let
     bonuses =
@@ -53,24 +53,24 @@ playerRow address model player =
     strength =
       bonuses + player.level
   in
-    H.tr
+    tr
       []
-      [ H.td [] [ H.text (toString player.id) ]
-      , H.td [] [ H.text player.name ]
-      , H.td [] [ H.text (toString player.level) ]
-      , H.td [] [ H.text (toString bonuses) ]
-      , H.td [] [ H.text (toString strength) ]
-      , H.td
+      [ td [] [ text (toString player.id) ]
+      , td [] [ text player.name ]
+      , td [] [ text (toString player.level) ]
+      , td [] [ text (toString bonuses) ]
+      , td [] [ text (toString strength) ]
+      , td
           []
-          [ H.button
+          [ button
               [ class "btn btn-outline mr1"
               , onClick address (PlayersActions.AskForDeletePlayerConfirmation player)
               ]
-              [ H.text "Delete" ]
-          , H.button
+              [ text "Delete" ]
+          , button
               [ class "btn btn-outline"
               , onClick address (PlayersActions.EditPlayer player.id)
               ]
-              [ H.text "Edit" ]
+              [ text "Edit" ]
           ]
       ]

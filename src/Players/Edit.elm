@@ -1,6 +1,6 @@
 module Players.Edit (..) where
 
-import Html as H
+import Html exposing (..)
 import Html.Attributes exposing (class, value)
 import Html.Events exposing (on, onClick, onKeyPress, targetValue)
 import Players.Models exposing (Player)
@@ -18,7 +18,7 @@ type alias ViewModel =
   }
 
 
-view : Signal.Address PlayersActions.Action -> ViewModel -> H.Html
+view : Signal.Address PlayersActions.Action -> ViewModel -> Html.Html
 view address model =
   let
     player =
@@ -30,45 +30,45 @@ view address model =
     strength =
       model.player.level + bonuses
   in
-    H.div
+    div
       [ class "m2" ]
-      [ H.h1 [] [ H.text model.player.name ]
-      , H.div
+      [ h1 [] [ text model.player.name ]
+      , div
           [ class "clearfix py1"
           ]
-          [ H.div [ class "col col-5" ] [ H.text "Level" ]
-          , H.div
+          [ div [ class "col col-5" ] [ text "Level" ]
+          , div
               [ class "col col-7" ]
-              [ H.span [ class "h2 bold" ] [ H.text (toString player.level) ]
-              , H.a
+              [ span [ class "h2 bold" ] [ text (toString player.level) ]
+              , a
                   [ class "btn btn-outline ml1"
                   , onClick address (PlayersActions.ChangeLevel player.id -1)
                   ]
-                  [ H.text "-" ]
-              , H.a
+                  [ text "-" ]
+              , a
                   [ class "btn btn-outline ml1"
                   , onClick address (PlayersActions.ChangeLevel player.id 1)
                   ]
-                  [ H.text "+" ]
+                  [ text "+" ]
               ]
           ]
-      , H.div
+      , div
           [ class "clearfix py1" ]
-          [ H.div [ class "col col-5" ] [ H.text "Bonuses" ]
-          , H.div [ class "col col-7 h2" ] [ H.text (toString bonuses) ]
+          [ div [ class "col col-5" ] [ text "Bonuses" ]
+          , div [ class "col col-7 h2" ] [ text (toString bonuses) ]
           ]
-      , H.div
+      , div
           [ class "clearfix py1" ]
-          [ H.div [ class "col col-5" ] [ H.text "Strength" ]
-          , H.div [ class "col col-7 h2 bold" ] [ H.text (toString strength) ]
+          [ div [ class "col col-5" ] [ text "Strength" ]
+          , div [ class "col col-7 h2 bold" ] [ text (toString strength) ]
           ]
-      , H.div
+      , div
           [ class "clearfix py1"
           ]
-          [ H.div [ class "col col-5" ] [ H.text "Name" ]
-          , H.div
+          [ div [ class "col col-5" ] [ text "Name" ]
+          , div
               [ class "col col-7" ]
-              [ H.input
+              [ input
                   [ class "field-light"
                   , value player.name
                   , onChange address (PlayersActions.ChangeName player.id)
@@ -76,11 +76,11 @@ view address model =
                   []
               ]
           ]
-      , H.div
+      , div
           [ class "clearfix py1"
           ]
-          [ H.div [ class "col col-5" ] [ H.text "Perks" ]
-          , H.div
+          [ div [ class "col col-5" ] [ text "Perks" ]
+          , div
               [ class "col col-7" ]
               [ perksList address model
               ]
@@ -88,7 +88,7 @@ view address model =
       ]
 
 
-perksList : Signal.Address PlayersActions.Action -> ViewModel -> H.Html
+perksList : Signal.Address PlayersActions.Action -> ViewModel -> Html.Html
 perksList address model =
   let
     viewModel =
@@ -104,6 +104,6 @@ perksList address model =
 -- TODO change to address << Action
 
 
-onChange : Signal.Address a -> (String -> a) -> H.Attribute
+onChange : Signal.Address a -> (String -> a) -> Attribute
 onChange address action =
   on "change" targetValue (\str -> Signal.message address (action str))

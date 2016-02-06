@@ -1,12 +1,9 @@
 module Players.Actions (..) where
 
 import Http
-import Players.Models exposing (Id, Player)
+import Perks.Models exposing (PerkId)
+import Players.Models exposing (PlayerId, Player)
 import Hop
-
-
-type alias PerkId =
-  Int
 
 
 type Action
@@ -16,11 +13,11 @@ type Action
   | SaveOneDone (Result Http.Error Player)
   | HopAction Hop.Action
   | EditPlayer Int
-  | ChangeLevel Id Int
-  | ChangeName Id String
+  | ChangeLevel PlayerId Int
+  | ChangeName PlayerId String
   | CreatePlayer
   | CreatePlayerDone (Result Http.Error Player)
   | AskForDeletePlayerConfirmation Player
-  | GetDeleteConfirmation Id
+  | GetDeleteConfirmation PlayerId
   | DeletePlayerDone (Result Http.Error Player)
-  | TogglePlayerPerk Id PerkId Bool
+  | TogglePlayerPerk PlayerId PerkId Bool

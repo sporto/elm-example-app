@@ -2,7 +2,7 @@ module PerksPlayers.Update (..) where
 
 import Effects exposing (Effects)
 import PerksPlayers.Actions exposing (..)
-import PerksPlayers.Models exposing (PerkPlayer)
+import PerksPlayers.Models exposing (PerkPlayerId, PerkPlayer)
 import CommonEffects
 import Actions as MainActions
 import PerksPlayers.Effects
