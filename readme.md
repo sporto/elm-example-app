@@ -45,6 +45,15 @@ npm run api
 
 Open http://localhost:3000
 
+## Screenshots
+
+![Players](./assets/screens/players.png "Players")
+
+![Edit Player](./assets/screens/edit.png "Edit Player")
+
+![Perks](./assets/screens/perks.png "Perks")
+
+
 ## TODO
 
 - Validation for player name when empty

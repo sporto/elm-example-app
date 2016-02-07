@@ -81,7 +81,7 @@ tableHead =
         , th [] [ text "Name" ]
         , th [] [ text "Bonus" ]
         , th [] [ text "Player count" ]
-        , th [] [ text "Actions" ]
+        , th [ class "col-3" ] [ text "Actions" ]
         ]
     ]
 
@@ -111,7 +111,13 @@ perkRowDescription model perk =
     tr
       []
       [ td [] []
-      , td [ colspan 3, class "py2" ] [ text perk.description ]
+      , td
+          [ colspan 4 ]
+          [ div
+              [ class "mb2 mr3" ]
+              [ text perk.description
+              ]
+          ]
       ]
   else
     span [] []
@@ -120,9 +126,9 @@ perkRowDescription model perk =
 toggle : Signal.Address Action -> ViewModel -> Perk -> Html.Html
 toggle address model perk =
   if isPerkExpanded model.expandedPerkIds perk then
-    button [ class "btn btn-outline", onClick address (Collapse perk.id) ] [ i [ class "fa fa-chevron-down mr1" ] [], text "Collapse" ]
+    button [ class "btn regular", onClick address (Collapse perk.id) ] [ i [ class "fa fa-chevron-down mr1" ] [], text "Collapse" ]
   else
-    button [ class "btn btn-outline", onClick address (Expand perk.id) ] [ i [ class "fa fa-chevron-right mr1" ] [], text "Expand" ]
+    button [ class "btn regular", onClick address (Expand perk.id) ] [ i [ class "fa fa-chevron-right mr1" ] [], text "Expand" ]
 
 
 
