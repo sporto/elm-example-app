@@ -41,15 +41,15 @@ view address model =
               [ class "col col-7" ]
               [ span [ class "h2 bold" ] [ text (toString player.level) ]
               , a
-                  [ class "btn btn-outline ml1"
+                  [ class "btn ml1 h1"
                   , onClick address (PlayersActions.ChangeLevel player.id -1)
                   ]
-                  [ text "-" ]
+                  [ i [ class "fa fa-minus-circle" ] [] ]
               , a
-                  [ class "btn btn-outline ml1"
+                  [ class "btn ml1 h1"
                   , onClick address (PlayersActions.ChangeLevel player.id 1)
                   ]
-                  [ text "+" ]
+                  [ i [ class "fa fa-plus-circle" ] [] ]
               ]
           ]
       , div

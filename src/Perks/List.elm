@@ -120,9 +120,9 @@ perkRowDescription model perk =
 toggle : Signal.Address Action -> ViewModel -> Perk -> Html.Html
 toggle address model perk =
   if isPerkExpanded model.expandedPerkIds perk then
-    button [ class "btn btn-outline", onClick address (Collapse perk.id) ] [ text "Collapse" ]
+    button [ class "btn btn-outline", onClick address (Collapse perk.id) ] [ i [ class "fa fa-chevron-down mr1" ] [], text "Collapse" ]
   else
-    button [ class "btn btn-outline", onClick address (Expand perk.id) ] [ text "Expand" ]
+    button [ class "btn btn-outline", onClick address (Expand perk.id) ] [ i [ class "fa fa-chevron-right mr1" ] [], text "Expand" ]
 
 
 

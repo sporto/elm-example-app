@@ -23,7 +23,11 @@ view address model =
     []
     [ div
         [ class "right-align" ]
-        [ button [ class "btn", onClick address (PlayersActions.CreatePlayer) ] [ text "Add player" ]
+        [ button
+            [ class "btn", onClick address (PlayersActions.CreatePlayer) ]
+            [ i [ class "fa fa-user-plus mr1" ] []
+            , text "Add player"
+            ]
         ]
     , table
         [ class "table-light" ]
@@ -63,14 +67,14 @@ playerRow address model player =
       , td
           []
           [ button
-              [ class "btn btn-outline mr1"
+              [ class "btn regular mr1"
               , onClick address (PlayersActions.AskForDeletePlayerConfirmation player)
               ]
               [ i [ class "fa fa-trash mr1" ] [], text "Delete" ]
           , button
-              [ class "btn btn-outline"
+              [ class "btn regular"
               , onClick address (PlayersActions.EditPlayer player.id)
               ]
-              [ text "Edit" ]
+              [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]
           ]
       ]

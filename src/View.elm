@@ -1,6 +1,6 @@
 module View (..) where
 
-import Html exposing (div, button, text, span)
+import Html exposing (..)
 import Html.Events as Events
 import Html.Attributes exposing (class)
 import Dict
@@ -48,13 +48,15 @@ nav address model =
               [ class ("btn py2 button-narrow mr1 " ++ activeClass Routing.PlayersView)
               , Events.onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/players")
               ]
-              [ text "Players"
+              [ i [ class "fa fa-users mr1" ] []
+              , text "Players"
               ]
           , button
               [ class ("btn py2 button-narrow " ++ activeClass Routing.PerksView)
               , Events.onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/perks")
               ]
-              [ text "Perks"
+              [ i [ class "fa fa-bookmark mr1" ] []
+              , text "Perks"
               ]
           ]
       ]

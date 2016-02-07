@@ -8,9 +8,8 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(__dirname + './dist'),
-    filename: 'index.js',
-    publicPath: '/',
+    path: path.resolve(__dirname + '/dist'),
+    filename: '[name].js',
   },
 
   module: {
@@ -46,9 +45,10 @@ module.exports = {
   },
 
   devServer: {
-    inline: false,
+    inline: true,
     stats: 'errors-only',
     port: 3000,
   },
+
 
 };
