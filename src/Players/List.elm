@@ -66,7 +66,7 @@ playerRow address model player =
               [ class "btn btn-outline mr1"
               , onClick address (PlayersActions.AskForDeletePlayerConfirmation player)
               ]
-              [ i [ class "fa fa-trash" ] [], text "Delete" ]
+              [ i [ class "fa fa-trash mr1" ] [], text "Delete" ]
           , button
               [ class "btn btn-outline"
               , onClick address (PlayersActions.EditPlayer player.id)
