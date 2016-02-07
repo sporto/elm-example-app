@@ -4,7 +4,7 @@ module.exports = {
   entry: './src/index.js',
 
   output: {
-    path: './dist',
+    path: __dirname + './dist',
     filename: 'index.js'
   },
 
@@ -26,16 +26,20 @@ module.exports = {
         test:    /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
         loader:  'elm-webpack',
-      }
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?limit=10000&minetype=application/font-woff',
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader',
+      },
     ],
 
     noParse: /\.elm$/,
   },
 
-  devServer: {
-    inline: true,
-    stats: 'errors-only'
-  },
 
   plugins: [
     // extract CSS into a separate file
