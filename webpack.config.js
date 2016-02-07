@@ -1,11 +1,16 @@
-var ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
+var path = require("path");
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    app: [
+      './src/index.js'
+    ]
+  },
 
   output: {
-    path: __dirname + './dist',
-    filename: 'index.js'
+    path: path.resolve(__dirname + './dist'),
+    filename: 'index.js',
+    publicPath: '/',
   },
 
   module: {
@@ -27,22 +32,23 @@ module.exports = {
         exclude: [/elm-stuff/, /node_modules/],
         loader:  'elm-webpack',
       },
-      {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&minetype=application/font-woff',
-      },
-      {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader',
-      },
+      // {
+      //   test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      //   loader: 'url-loader?limit=10000&minetype=application/font-woff',
+      // },
+      // {
+      //   test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      //   loader: 'file-loader',
+      // },
     ],
 
     noParse: /\.elm$/,
   },
 
+  devServer: {
+    inline: false,
+    stats: 'errors-only',
+    port: 3000,
+  },
 
-  plugins: [
-    // extract CSS into a separate file
-    new ExtractTextPlugin( './css/stylesheet.css', { allChunks: true } )
-  ]
 };

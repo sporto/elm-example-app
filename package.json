@@ -7,7 +7,7 @@
     "api": "node api.js",
     "build": "webpack",
     "watch": "webpack --watch",
-    "dev": "node dev.js"
+    "dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -20,16 +20,14 @@
   },
   "homepage": "https://github.com/sporto/elm-tutorial-app#readme",
   "dependencies": {
-    "basscss": "^7.1.0",
+    "basscss": "^7.1.1",
     "css-loader": "^0.23.1",
     "elm-webpack-loader": "^2.0.0",
-    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
-    "font-awesome": "^4.5.0",
-    "json-server": "^0.8.6",
+    "json-server": "^0.8.7",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
-    "webpack": "^1.12.12",
+    "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
   }
 }
