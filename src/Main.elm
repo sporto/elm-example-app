@@ -12,6 +12,7 @@ import Models exposing (Model)
 import Perks.Effects
 import PerksPlayers.Effects
 import Players.Effects
+import Players.Actions
 import Routing exposing (router)
 
 
@@ -104,14 +105,16 @@ port askForDeleteConfirmation =
 
 {- Map message comming from getDeleteConfirmation port
 to the right action i.e. GetDeleteConfirmation
-
-Question: Can this be done more generic? i.e. map to different actions
 -}
 
 
 getDeleteConfirmationSignal : Signal Actions.Action
 getDeleteConfirmationSignal =
-  Signal.map (\id -> Actions.GetDeleteConfirmation id) getDeleteConfirmation
+  let
+    mapper =
+      (\id -> id |> Players.Actions.GetDeleteConfirmation |> Actions.PlayersAction)
+  in
+    Signal.map mapper getDeleteConfirmation
 
 
 

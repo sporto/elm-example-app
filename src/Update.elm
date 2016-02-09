@@ -9,7 +9,6 @@ import Perks.List
 import Perks.Update
 import PerksPlayers.Update
 import PerksPlayers.Actions
-import Players.Actions
 import Players.Update
 import Routing exposing (router)
 
@@ -90,22 +89,6 @@ update action model =
             |> Effects.task
       in
         ( model, fx )
-
-    GetDeleteConfirmation playerId ->
-      let
-        -- TODO: this is repeated
-        -- TODO, this should flow through PlayersActions
-        updateModel =
-          { players = model.players
-          , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
-          , perksPlayersChangeAddress = Signal.forwardTo eventsMailbox.address TogglePlayerPerk
-          , askForDeleteConfirmationAddress = Signal.forwardTo eventsMailbox.address AskForDeleteConfirmation
-          }
-
-        ( updatedPlayers, fx ) =
-          Players.Update.update (Players.Actions.GetDeleteConfirmation playerId) updateModel
-      in
-        ( { model | players = updatedPlayers }, Effects.map PlayersAction fx )
 
     TogglePlayerPerk toggle ->
       let
