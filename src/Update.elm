@@ -16,7 +16,7 @@ import Routing exposing (router)
 
 update : Action -> Model -> ( Model, Effects.Effects Action )
 update action model =
-  case Debug.log "action" action of
+  case (Debug.log "action" action) of
     -- Send all routing actions to the Routing module
     RoutingAction subAction ->
       let
@@ -36,13 +36,10 @@ update action model =
           , perksPlayersChangeAddress = Signal.forwardTo eventsMailbox.address TogglePlayerPerk
           }
 
-        ( updatedPlayers, fx, fx2 ) =
+        ( updatedPlayers, fx ) =
           Players.Update.update subAction modelForUpdate
-
-        allFx =
-          Effects.batch [ (Effects.map PlayersAction fx), fx2 ]
       in
-        ( { model | players = updatedPlayers }, allFx )
+        ( { model | players = updatedPlayers }, Effects.map PlayersAction fx )
 
     -- Send Perk actions to the Perks module
     PerksAction subAction ->
@@ -106,7 +103,7 @@ update action model =
           , perksPlayersChangeAddress = Signal.forwardTo eventsMailbox.address TogglePlayerPerk
           }
 
-        ( updatedPlayers, fx, fx2 ) =
+        ( updatedPlayers, fx ) =
           Players.Update.update (Players.Actions.GetDeleteConfirmation playerId) updateModel
       in
         ( { model | players = updatedPlayers }, Effects.map PlayersAction fx )

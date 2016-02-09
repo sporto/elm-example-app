@@ -7,7 +7,6 @@ import Models exposing (PlayerPerkToggle)
 import Players.Actions exposing (..)
 import Players.Models exposing (PlayerId, Player, new)
 import Players.Effects
-import CommonEffects
 import Actions as MainActions
 
 
@@ -18,30 +17,35 @@ type alias UpdateModel =
   }
 
 
-update : Action -> UpdateModel -> ( List Player, Effects Action, Effects MainActions.Action )
+update : Action -> UpdateModel -> ( List Player, Effects Action )
 update action model =
   case action of
     FetchAllDone result ->
       case result of
         Ok players ->
-          ( players, Effects.none, Effects.none )
+          ( players, Effects.none )
 
         Err error ->
           let
             message =
               toString error
+
+            fx =
+              Signal.send model.showErrorAddress message
+                |> Effects.task
+                |> Effects.map TaskDone
           in
-            ( [], Effects.none, CommonEffects.showError message )
+            ( [], fx )
 
     EditPlayer id ->
       let
         path =
           "/players/" ++ (toString id) ++ "/edit"
       in
-        ( model.players, Effects.map HopAction (Hop.navigateTo path), Effects.none )
+        ( model.players, Effects.map HopAction (Hop.navigateTo path) )
 
     CreatePlayer ->
-      ( model.players, Players.Effects.create new, Effects.none )
+      ( model.players, Players.Effects.create new )
 
     CreatePlayerDone result ->
       case result of
@@ -54,14 +58,19 @@ update action model =
               Task.succeed (EditPlayer player.id)
                 |> Effects.task
           in
-            ( updatedCollection, fx, Effects.none )
+            ( updatedCollection, fx )
 
         Err error ->
           let
             message =
               toString error
+
+            fx =
+              Signal.send model.showErrorAddress message
+                |> Effects.task
+                |> Effects.map TaskDone
           in
-            ( [], Effects.none, CommonEffects.showError message )
+            ( [], fx )
 
     AskForDeletePlayerConfirmation player ->
       let
@@ -71,8 +80,10 @@ update action model =
         fx =
           Task.succeed (MainActions.AskForDeleteConfirmation player.id msg)
             |> Effects.task
+
+        -- TODO fix, use mailbox provided
       in
-        ( model.players, Effects.none, fx )
+        ( model.players, Effects.none )
 
     GetDeleteConfirmation playerId ->
       let
@@ -82,7 +93,7 @@ update action model =
         fx =
           Players.Effects.delete playerId
       in
-        ( updatedCollection, fx, Effects.none )
+        ( updatedCollection, fx )
 
     ChangeLevel id howMuch ->
       let
@@ -96,7 +107,7 @@ update action model =
           List.map snd updatedCollectionWithFxs
             |> Effects.batch
       in
-        ( updatedCollection, fxs, Effects.none )
+        ( updatedCollection, fxs )
 
     ChangeName id name ->
       let
@@ -110,7 +121,7 @@ update action model =
           List.map snd updatedCollectionWithFxs
             |> Effects.batch
       in
-        ( updatedCollection, fxs, Effects.none )
+        ( updatedCollection, fxs )
 
     TogglePlayerPerk playerId perkId value ->
       let
@@ -125,10 +136,10 @@ update action model =
             |> Effects.task
             |> Effects.map TaskDone
       in
-        ( model.players, fx, Effects.none )
+        ( model.players, fx )
 
     _ ->
-      ( model.players, Effects.none, Effects.none )
+      ( model.players, Effects.none )
 
 
 updatePlayerLevel : Int -> Player -> ( Player, Effects Action )
