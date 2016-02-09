@@ -5,7 +5,7 @@ import Http
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import Task
-import Players.Models exposing (Id, Player)
+import Players.Models exposing (PlayerId, Player)
 import Players.Actions as Actions
 
 
@@ -81,7 +81,7 @@ saveOneUrl playerId =
   "http://localhost:4000/players/" ++ (toString playerId)
 
 
-delete : Id -> Effects Actions.Action
+delete : PlayerId -> Effects Actions.Action
 delete playerId =
   deleteTask playerId
     |> Http.fromJson memberDecoder
@@ -90,7 +90,7 @@ delete playerId =
     |> Effects.task
 
 
-deleteTask : Id -> Task.Task Http.RawError Http.Response
+deleteTask : PlayerId -> Task.Task Http.RawError Http.Response
 deleteTask playerId =
   let
     config =
@@ -103,7 +103,7 @@ deleteTask playerId =
     Http.send Http.defaultSettings config
 
 
-deleteUrl : Id -> String
+deleteUrl : PlayerId -> String
 deleteUrl playerId =
   "http://localhost:4000/players/" ++ (toString playerId)
 
