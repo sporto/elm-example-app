@@ -14,6 +14,7 @@ type alias UpdateModel =
   { players : List Player
   , perksPlayersChangeAddress : Signal.Address PlayerPerkToggle
   , showErrorAddress : Signal.Address String
+  , askForDeleteConfirmationAddress : Signal.Address ( PlayerId, String )
   }
 
 
@@ -78,12 +79,11 @@ update action model =
           "Are you sure you want to delete " ++ player.name ++ "?"
 
         fx =
-          Task.succeed (MainActions.AskForDeleteConfirmation player.id msg)
+          Signal.send model.askForDeleteConfirmationAddress ( player.id, msg )
             |> Effects.task
-
-        -- TODO fix, use mailbox provided
+            |> Effects.map TaskDone
       in
-        ( model.players, Effects.none )
+        ( model.players, fx )
 
     GetDeleteConfirmation playerId ->
       let

@@ -34,6 +34,7 @@ update action model =
           { players = model.players
           , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
           , perksPlayersChangeAddress = Signal.forwardTo eventsMailbox.address TogglePlayerPerk
+          , askForDeleteConfirmationAddress = Signal.forwardTo eventsMailbox.address AskForDeleteConfirmation
           }
 
         ( updatedPlayers, fx ) =
@@ -81,7 +82,7 @@ update action model =
     ShowError message ->
       ( { model | errorMessage = message }, Effects.none )
 
-    AskForDeleteConfirmation playerId message ->
+    AskForDeleteConfirmation ( playerId, message ) ->
       let
         fx =
           Signal.send deleteConfirmationMailbox.address ( playerId, message )
@@ -98,6 +99,7 @@ update action model =
           { players = model.players
           , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
           , perksPlayersChangeAddress = Signal.forwardTo eventsMailbox.address TogglePlayerPerk
+          , askForDeleteConfirmationAddress = Signal.forwardTo eventsMailbox.address AskForDeleteConfirmation
           }
 
         ( updatedPlayers, fx ) =

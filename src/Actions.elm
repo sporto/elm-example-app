@@ -6,6 +6,7 @@ import Perks.Actions
 import Perks.List
 import PerksPlayers.Actions
 import Players.Actions
+import Players.Models exposing (PlayerId)
 
 
 {-
@@ -28,7 +29,7 @@ type Action
     -- A general action to show flash errors when something bad happens
   | ShowError String
     -- When we delete a player we want to ask for confirmation from the user
-  | AskForDeleteConfirmation Int String
+  | AskForDeleteConfirmation ( PlayerId, String )
     -- Action triggered when the user confirm deletion of a player
   | GetDeleteConfirmation Int
     -- Add or remove a perk from a player
