@@ -7,7 +7,7 @@ import Task exposing (Task)
 import Actions
 import View
 import Update
-import Mailboxes exposing (deleteConfirmationMailbox)
+import Mailboxes exposing (..)
 import Models exposing (Model)
 import Perks.Effects
 import PerksPlayers.Effects
@@ -61,7 +61,7 @@ app : StartApp.App Model
 app =
   StartApp.start
     { init = init
-    , inputs = [ routerSignal, getDeleteConfirmationSignal ]
+    , inputs = [ routerSignal, getDeleteConfirmationSignal, perksPlayersChangeMailbox.signal ]
     , update = Update.update
     , view = View.view
     }

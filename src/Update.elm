@@ -3,7 +3,7 @@ module Update (..) where
 import Effects exposing (Effects, Never)
 import Task exposing (Task)
 import Actions exposing (..)
-import Mailboxes exposing (deleteConfirmationMailbox)
+import Mailboxes exposing (deleteConfirmationMailbox, perksPlayersChangeMailbox)
 import Models exposing (Model)
 import Perks.List
 import Perks.Update
@@ -30,8 +30,13 @@ update action model =
     -- The third value is a root level effect to perform
     PlayersAction subAction ->
       let
+        modelForUpdate =
+          { players = model.players
+          , perksPlayersChangeAddress = Signal.forwardTo perksPlayersChangeMailbox.address TogglePlayerPerk
+          }
+
         ( updatedPlayers, fx, fx2 ) =
-          Players.Update.update subAction model.players
+          Players.Update.update subAction modelForUpdate
 
         allFx =
           Effects.batch [ (Effects.map PlayersAction fx), fx2 ]
@@ -82,15 +87,22 @@ update action model =
 
     GetDeleteConfirmation playerId ->
       let
+        -- TODO: this is repeated
+        -- TODO, this should flow through PlayersActions
+        updateModel =
+          { players = model.players
+          , perksPlayersChangeAddress = Signal.forwardTo perksPlayersChangeMailbox.address TogglePlayerPerk
+          }
+
         ( updatedPlayers, fx, fx2 ) =
-          Players.Update.update (Players.Actions.GetDeleteConfirmation playerId) model.players
+          Players.Update.update (Players.Actions.GetDeleteConfirmation playerId) updateModel
       in
         ( { model | players = updatedPlayers }, Effects.map PlayersAction fx )
 
-    TogglePlayerPerk playerId perkId value ->
+    TogglePlayerPerk toggle ->
       let
         fx =
-          Task.succeed (PerksPlayers.Actions.TogglePlayerPerk playerId perkId value)
+          Task.succeed (PerksPlayers.Actions.TogglePlayerPerk toggle)
             |> Effects.task
             |> Effects.map PerksPlayersAction
       in

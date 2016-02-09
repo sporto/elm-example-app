@@ -21,3 +21,4 @@ type Action
   | GetDeleteConfirmation PlayerId
   | DeletePlayerDone (Result Http.Error Player)
   | TogglePlayerPerk PlayerId PerkId Bool
+  | TaskDone ()

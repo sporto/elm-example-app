@@ -3,6 +3,7 @@ module Players.Update (..) where
 import Hop
 import Effects exposing (Effects)
 import Task
+import Models exposing (PlayerPerkToggle)
 import Players.Actions exposing (..)
 import Players.Models exposing (PlayerId, Player, new)
 import Players.Effects
@@ -10,8 +11,14 @@ import CommonEffects
 import Actions as MainActions
 
 
-update : Action -> List Player -> ( List Player, Effects Action, Effects MainActions.Action )
-update action collection =
+type alias UpdateModel =
+  { players : List Player
+  , perksPlayersChangeAddress : Signal.Address PlayerPerkToggle
+  }
+
+
+update : Action -> UpdateModel -> ( List Player, Effects Action, Effects MainActions.Action )
+update action model =
   case action of
     FetchAllDone result ->
       case result of
@@ -30,17 +37,17 @@ update action collection =
         path =
           "/players/" ++ (toString id) ++ "/edit"
       in
-        ( collection, Effects.map HopAction (Hop.navigateTo path), Effects.none )
+        ( model.players, Effects.map HopAction (Hop.navigateTo path), Effects.none )
 
     CreatePlayer ->
-      ( collection, Players.Effects.create new, Effects.none )
+      ( model.players, Players.Effects.create new, Effects.none )
 
     CreatePlayerDone result ->
       case result of
         Ok player ->
           let
             updatedCollection =
-              player :: collection
+              player :: model.players
 
             fx =
               Task.succeed (EditPlayer player.id)
@@ -64,12 +71,12 @@ update action collection =
           Task.succeed (MainActions.AskForDeleteConfirmation player.id msg)
             |> Effects.task
       in
-        ( collection, Effects.none, fx )
+        ( model.players, Effects.none, fx )
 
     GetDeleteConfirmation playerId ->
       let
         updatedCollection =
-          List.filter (\player -> player.id /= playerId) collection
+          List.filter (\player -> player.id /= playerId) model.players
 
         fx =
           Players.Effects.delete playerId
@@ -79,7 +86,7 @@ update action collection =
     ChangeLevel id howMuch ->
       let
         updatedCollectionWithFxs =
-          changeLevelForPlayerId howMuch collection id
+          changeLevelForPlayerId howMuch model.players id
 
         updatedCollection =
           List.map fst updatedCollectionWithFxs
@@ -93,7 +100,7 @@ update action collection =
     ChangeName id name ->
       let
         updatedCollectionWithFxs =
-          changeNameForPlayerId name collection id
+          changeNameForPlayerId name model.players id
 
         updatedCollection =
           List.map fst updatedCollectionWithFxs
@@ -105,10 +112,22 @@ update action collection =
         ( updatedCollection, fxs, Effects.none )
 
     TogglePlayerPerk playerId perkId value ->
-      ( collection, Effects.none, CommonEffects.togglePlayerPerk playerId perkId value )
+      let
+        toggle =
+          { playerId = playerId
+          , perkId = perkId
+          , value = value
+          }
+
+        fx =
+          Signal.send model.perksPlayersChangeAddress toggle
+            |> Effects.task
+            |> Effects.map TaskDone
+      in
+        ( model.players, fx, Effects.none )
 
     _ ->
-      ( collection, Effects.none, Effects.none )
+      ( model.players, Effects.none, Effects.none )
 
 
 updatePlayerLevel : Int -> Player -> ( Player, Effects Action )

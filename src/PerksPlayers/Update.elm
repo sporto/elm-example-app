@@ -6,7 +6,6 @@ import PerksPlayers.Models exposing (PerkPlayerId, PerkPlayer)
 import CommonEffects
 import Actions as MainActions
 import PerksPlayers.Effects
-import PerksPlayers.Utils
 
 
 update : Action -> List PerkPlayer -> ( List PerkPlayer, Effects Action, Effects MainActions.Action )
@@ -24,13 +23,13 @@ update action collection =
           in
             ( [], Effects.none, CommonEffects.showError message )
 
-    TogglePlayerPerk playerId perkId val ->
+    TogglePlayerPerk toggle ->
       let
         fx =
-          if val then
-            addPerkPlayerFx playerId perkId
+          if toggle.value then
+            addPerkPlayerFx toggle.playerId toggle.perkId
           else
-            removePerkPlayerFx playerId perkId collection
+            removePerkPlayerFx toggle.playerId toggle.perkId collection
       in
         ( collection, fx, Effects.none )
 

@@ -58,8 +58,7 @@ Open http://localhost:3000
 
 - Validation for player name when empty
 - Search box for perks
-- Tests?
-- Add FA icons
+- Tests
 - When deleting a player delete associated perksPlayers
 
 

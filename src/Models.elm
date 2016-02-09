@@ -1,8 +1,8 @@
 module Models (..) where
 
-import Perks.Models
-import Players.Models
-import PerksPlayers.Models
+import Perks.Models exposing (..)
+import Players.Models exposing (..)
+import PerksPlayers.Models exposing (..)
 import Perks.List
 import Routing
 
@@ -18,12 +18,19 @@ e.g. routing, currentPlay, errorMessage
 
 type alias Model =
   { routing : Routing.Model
-  , perks : List Perks.Models.Perk
-  , perksPlayers : List PerksPlayers.Models.PerkPlayer
-  , players : List Players.Models.Player
+  , perks : List Perk
+  , perksPlayers : List PerkPlayer
+  , players : List Player
   , perksListModel : Perks.List.ViewModel
-  , currentPlayer : Int
+  , currentPlayer : PlayerId
   , errorMessage : String
+  }
+
+
+type alias PlayerPerkToggle =
+  { playerId : PlayerId
+  , perkId : PerkId
+  , value : Bool
   }
 
 

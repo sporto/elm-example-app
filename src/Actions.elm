@@ -1,12 +1,11 @@
 module Actions (..) where
 
 import Routing
+import Models exposing (PlayerPerkToggle)
 import Perks.Actions
-import Perks.Models exposing (PerkId)
 import Perks.List
 import PerksPlayers.Actions
 import Players.Actions
-import Players.Models exposing (PlayerId)
 
 
 {-
@@ -33,4 +32,4 @@ type Action
     -- Action triggered when the user confirm deletion of a player
   | GetDeleteConfirmation Int
     -- Add or remove a perk from a player
-  | TogglePlayerPerk PlayerId PerkId Bool
+  | TogglePlayerPerk PlayerPerkToggle
