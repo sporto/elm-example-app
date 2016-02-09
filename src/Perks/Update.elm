@@ -3,8 +3,6 @@ module Perks.Update (..) where
 import Effects exposing (Effects)
 import Perks.Actions exposing (..)
 import Perks.Models exposing (Perk)
-import CommonEffects
-import Actions as MainActions
 
 
 type alias UpdateModel =
@@ -13,20 +11,25 @@ type alias UpdateModel =
   }
 
 
-update : Action -> UpdateModel -> ( List Perk, Effects Action, Effects MainActions.Action )
+update : Action -> UpdateModel -> ( List Perk, Effects Action )
 update action model =
   case action of
     FetchAllDone result ->
       case result of
         Ok perks ->
-          ( perks, Effects.none, Effects.none )
+          ( perks, Effects.none )
 
         Err error ->
           let
             message =
               toString error
+
+            fx =
+              Signal.send model.showErrorAddress message
+                |> Effects.task
+                |> Effects.map TaskDone
           in
-            ( [], Effects.none, CommonEffects.showError message )
+            ( [], fx )
 
     _ ->
-      ( model.perks, Effects.none, Effects.none )
+      ( model.perks, Effects.none )

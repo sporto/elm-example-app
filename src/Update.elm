@@ -49,11 +49,11 @@ update action model =
           , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
           }
 
-        ( updatedPerks, fx, fx2 ) =
+        ( updatedPerks, fx ) =
           Perks.Update.update subAction modelForUpdate
 
         allFx =
-          Effects.batch [ (Effects.map PerksAction fx), fx2 ]
+          Effects.batch [ (Effects.map PerksAction fx) ]
       in
         ( { model | perks = updatedPerks }, allFx )
 
@@ -65,13 +65,10 @@ update action model =
           , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
           }
 
-        ( updatedPerksPlayers, fx, fx2 ) =
+        ( updatedPerksPlayers, fx ) =
           PerksPlayers.Update.update subAction modelForUpdate
-
-        allFx =
-          Effects.batch [ (Effects.map PerksPlayersAction fx), fx2 ]
       in
-        ( { model | perksPlayers = updatedPerksPlayers }, allFx )
+        ( { model | perksPlayers = updatedPerksPlayers }, (Effects.map PerksPlayersAction fx) )
 
     -- Specific actions for the Perk List component
     PerksListAction subAction ->

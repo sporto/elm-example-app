@@ -8,3 +8,4 @@ type Action
   = NoOp
   | FetchAll
   | FetchAllDone (Result Http.Error (List Perk))
+  | TaskDone ()

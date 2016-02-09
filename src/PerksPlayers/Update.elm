@@ -3,8 +3,6 @@ module PerksPlayers.Update (..) where
 import Effects exposing (Effects)
 import PerksPlayers.Actions exposing (..)
 import PerksPlayers.Models exposing (PerkPlayerId, PerkPlayer)
-import CommonEffects
-import Actions as MainActions
 import PerksPlayers.Effects
 
 
@@ -14,20 +12,25 @@ type alias UpdateModel =
   }
 
 
-update : Action -> UpdateModel -> ( List PerkPlayer, Effects Action, Effects MainActions.Action )
+update : Action -> UpdateModel -> ( List PerkPlayer, Effects Action )
 update action model =
   case action of
     FetchAllDone result ->
       case result of
         Ok perksPlayers ->
-          ( perksPlayers, Effects.none, Effects.none )
+          ( perksPlayers, Effects.none )
 
         Err error ->
           let
             message =
               toString error
+
+            fx =
+              Signal.send model.showErrorAddress message
+                |> Effects.task
+                |> Effects.map TaskDone
           in
-            ( [], Effects.none, CommonEffects.showError message )
+            ( [], fx )
 
     TogglePlayerPerk toggle ->
       let
@@ -37,7 +40,7 @@ update action model =
           else
             removePerkPlayerFx toggle.playerId toggle.perkId model.perksPlayers
       in
-        ( model.perksPlayers, fx, Effects.none )
+        ( model.perksPlayers, fx )
 
     CreatePerkPlayerDone result ->
       case result of
@@ -46,14 +49,19 @@ update action model =
             updatedCollection =
               perkPlayer :: model.perksPlayers
           in
-            ( updatedCollection, Effects.none, Effects.none )
+            ( updatedCollection, Effects.none )
 
         Err error ->
           let
             message =
               toString error
+
+            fx =
+              Signal.send model.showErrorAddress message
+                |> Effects.task
+                |> Effects.map TaskDone
           in
-            ( model.perksPlayers, Effects.none, CommonEffects.showError message )
+            ( model.perksPlayers, fx )
 
     DeletePerkPlayerDone perkPlayerId result ->
       case result of
@@ -62,17 +70,22 @@ update action model =
             updatedCollection =
               List.filter (\item -> item.id /= perkPlayerId) model.perksPlayers
           in
-            ( updatedCollection, Effects.none, Effects.none )
+            ( updatedCollection, Effects.none )
 
         Err error ->
           let
             message =
               toString error
+
+            fx =
+              Signal.send model.showErrorAddress message
+                |> Effects.task
+                |> Effects.map TaskDone
           in
-            ( model.perksPlayers, Effects.none, CommonEffects.showError message )
+            ( model.perksPlayers, fx )
 
     _ ->
-      ( model.perksPlayers, Effects.none, Effects.none )
+      ( model.perksPlayers, Effects.none )
 
 
 removePerkPlayerFx : Int -> Int -> List PerkPlayer -> Effects Action

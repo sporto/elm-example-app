@@ -20,3 +20,4 @@ type Action
   | TogglePlayerPerk PlayerPerkToggle
   | CreatePerkPlayerDone (Result Http.Error PerkPlayer)
   | DeletePerkPlayerDone Int (Result Http.RawError Http.Response)
+  | TaskDone ()
