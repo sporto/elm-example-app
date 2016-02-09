@@ -1,0 +1,22 @@
+{
+  "name": "elm-tutorial-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sporto/elm-tutorial-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sporto/elm-tutorial-app/issues"
+  },
+  "homepage": "https://github.com/sporto/elm-tutorial-app#readme",
+  "dependencies": {
+    "json-server": "^0.8.7"
+  }
+}
