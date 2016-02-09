@@ -142,6 +142,14 @@ update action model =
       ( model.players, Effects.none )
 
 
+
+{-
+Given an amount to increase or decrease
+And a player
+Return a tuple with the updated player and effect to run (Save the player)
+-}
+
+
 updatePlayerLevel : Int -> Player -> ( Player, Effects Action )
 updatePlayerLevel howMuch player =
   let
@@ -155,9 +163,23 @@ updatePlayerLevel howMuch player =
     ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
 
 
+
+{-
+Change the level for the given player
+Return list of (updated player, fx to run)
+-}
+
+
 changeLevelForPlayerId : Int -> List Player -> PlayerId -> List ( Player, Effects Action )
 changeLevelForPlayerId howMuch =
   changeAttribute (updatePlayerLevel howMuch)
+
+
+
+{-
+Given a new name and a player
+Return an tuple with (updated player, fx to run)
+-}
 
 
 updatePlayerName : String -> Player -> ( Player, Effects Action )
@@ -169,9 +191,28 @@ updatePlayerName name player =
     ( updatedPlayer, Players.Effects.saveOne updatedPlayer )
 
 
+
+{-
+Change the name for the given player
+Return list of (updated player, fx to run)
+-}
+
+
 changeNameForPlayerId : String -> List Player -> PlayerId -> List ( Player, Effects Action )
 changeNameForPlayerId name =
   changeAttribute (updatePlayerName name)
+
+
+
+{-
+Given:
+  - A callback function
+  - A list of players
+  - A a relevant player
+
+Run the callback for the relevant player
+Return the list tuples (updated player, fx)
+-}
 
 
 changeAttribute : (Player -> ( Player, Effects Action )) -> List Player -> PlayerId -> List ( Player, Effects Action )

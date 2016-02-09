@@ -30,7 +30,5 @@ type Action
   | ShowError String
     -- When we delete a player we want to ask for confirmation from the user
   | AskForDeleteConfirmation ( PlayerId, String )
-    -- Action triggered when the user confirm deletion of a player
-  | GetDeleteConfirmation Int
     -- Add or remove a perk from a player
   | TogglePlayerPerk PlayerPerkToggle
