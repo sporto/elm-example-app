@@ -16,12 +16,6 @@ deleteConfirmationMailbox =
   Signal.mailbox ( 0, "" )
 
 
-
---perksPlayersChangeMailbox : Signal.Mailbox ( PerkId, PlayerId, Bool )
---perksPlayersChangeMailbox =
---  Signal.mailbox ( 0, 0, False )
-
-
-perksPlayersChangeMailbox : Signal.Mailbox Action
-perksPlayersChangeMailbox =
+eventsMailbox : Signal.Mailbox Action
+eventsMailbox =
   Signal.mailbox NoOp

@@ -7,8 +7,14 @@ import CommonEffects
 import Actions as MainActions
 
 
-update : Action -> List Perk -> ( List Perk, Effects Action, Effects MainActions.Action )
-update action collection =
+type alias UpdateModel =
+  { perks : List Perk
+  , showErrorAddress : Signal.Address String
+  }
+
+
+update : Action -> UpdateModel -> ( List Perk, Effects Action, Effects MainActions.Action )
+update action model =
   case action of
     FetchAllDone result ->
       case result of
@@ -23,4 +29,4 @@ update action collection =
             ( [], Effects.none, CommonEffects.showError message )
 
     _ ->
-      ( collection, Effects.none, Effects.none )
+      ( model.perks, Effects.none, Effects.none )

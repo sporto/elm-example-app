@@ -8,8 +8,14 @@ import Actions as MainActions
 import PerksPlayers.Effects
 
 
-update : Action -> List PerkPlayer -> ( List PerkPlayer, Effects Action, Effects MainActions.Action )
-update action collection =
+type alias UpdateModel =
+  { perksPlayers : List PerkPlayer
+  , showErrorAddress : Signal.Address String
+  }
+
+
+update : Action -> UpdateModel -> ( List PerkPlayer, Effects Action, Effects MainActions.Action )
+update action model =
   case action of
     FetchAllDone result ->
       case result of
@@ -29,16 +35,16 @@ update action collection =
           if toggle.value then
             addPerkPlayerFx toggle.playerId toggle.perkId
           else
-            removePerkPlayerFx toggle.playerId toggle.perkId collection
+            removePerkPlayerFx toggle.playerId toggle.perkId model.perksPlayers
       in
-        ( collection, fx, Effects.none )
+        ( model.perksPlayers, fx, Effects.none )
 
     CreatePerkPlayerDone result ->
       case result of
         Ok perkPlayer ->
           let
             updatedCollection =
-              perkPlayer :: collection
+              perkPlayer :: model.perksPlayers
           in
             ( updatedCollection, Effects.none, Effects.none )
 
@@ -47,14 +53,14 @@ update action collection =
             message =
               toString error
           in
-            ( collection, Effects.none, CommonEffects.showError message )
+            ( model.perksPlayers, Effects.none, CommonEffects.showError message )
 
     DeletePerkPlayerDone perkPlayerId result ->
       case result of
         Ok _ ->
           let
             updatedCollection =
-              List.filter (\item -> item.id /= perkPlayerId) collection
+              List.filter (\item -> item.id /= perkPlayerId) model.perksPlayers
           in
             ( updatedCollection, Effects.none, Effects.none )
 
@@ -63,10 +69,10 @@ update action collection =
             message =
               toString error
           in
-            ( collection, Effects.none, CommonEffects.showError message )
+            ( model.perksPlayers, Effects.none, CommonEffects.showError message )
 
     _ ->
-      ( collection, Effects.none, Effects.none )
+      ( model.perksPlayers, Effects.none, Effects.none )
 
 
 removePerkPlayerFx : Int -> Int -> List PerkPlayer -> Effects Action

@@ -56,6 +56,12 @@ Open http://localhost:3000
 
 ## TODO
 
+- Show Message should use the mailbox way
+- Remove GetDeleteConfirmation from Main update, channel through player actions
+- Remove three tuple returns from Players update
+- Remove three tuple returns from Perks update
+- Remove three tuple returns from PerksPlayers update
+
 - Validation for player name when empty
 - Search box for perks
 - Tests

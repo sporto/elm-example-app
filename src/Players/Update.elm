@@ -14,6 +14,7 @@ import Actions as MainActions
 type alias UpdateModel =
   { players : List Player
   , perksPlayersChangeAddress : Signal.Address PlayerPerkToggle
+  , showErrorAddress : Signal.Address String
   }
 
 

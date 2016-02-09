@@ -61,7 +61,7 @@ app : StartApp.App Model
 app =
   StartApp.start
     { init = init
-    , inputs = [ routerSignal, getDeleteConfirmationSignal, perksPlayersChangeMailbox.signal ]
+    , inputs = [ routerSignal, getDeleteConfirmationSignal, eventsMailbox.signal ]
     , update = Update.update
     , view = View.view
     }

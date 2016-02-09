@@ -3,7 +3,7 @@ module Update (..) where
 import Effects exposing (Effects, Never)
 import Task exposing (Task)
 import Actions exposing (..)
-import Mailboxes exposing (deleteConfirmationMailbox, perksPlayersChangeMailbox)
+import Mailboxes exposing (deleteConfirmationMailbox, eventsMailbox)
 import Models exposing (Model)
 import Perks.List
 import Perks.Update
@@ -32,7 +32,8 @@ update action model =
       let
         modelForUpdate =
           { players = model.players
-          , perksPlayersChangeAddress = Signal.forwardTo perksPlayersChangeMailbox.address TogglePlayerPerk
+          , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
+          , perksPlayersChangeAddress = Signal.forwardTo eventsMailbox.address TogglePlayerPerk
           }
 
         ( updatedPlayers, fx, fx2 ) =
@@ -46,8 +47,13 @@ update action model =
     -- Send Perk actions to the Perks module
     PerksAction subAction ->
       let
+        modelForUpdate =
+          { perks = model.perks
+          , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
+          }
+
         ( updatedPerks, fx, fx2 ) =
-          Perks.Update.update subAction model.perks
+          Perks.Update.update subAction modelForUpdate
 
         allFx =
           Effects.batch [ (Effects.map PerksAction fx), fx2 ]
@@ -57,8 +63,13 @@ update action model =
     -- Send PerkPlayer actions to the PerksPlayers module
     PerksPlayersAction subAction ->
       let
+        modelForUpdate =
+          { perksPlayers = model.perksPlayers
+          , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
+          }
+
         ( updatedPerksPlayers, fx, fx2 ) =
-          PerksPlayers.Update.update subAction model.perksPlayers
+          PerksPlayers.Update.update subAction modelForUpdate
 
         allFx =
           Effects.batch [ (Effects.map PerksPlayersAction fx), fx2 ]
@@ -91,7 +102,8 @@ update action model =
         -- TODO, this should flow through PlayersActions
         updateModel =
           { players = model.players
-          , perksPlayersChangeAddress = Signal.forwardTo perksPlayersChangeMailbox.address TogglePlayerPerk
+          , showErrorAddress = Signal.forwardTo eventsMailbox.address ShowError
+          , perksPlayersChangeAddress = Signal.forwardTo eventsMailbox.address TogglePlayerPerk
           }
 
         ( updatedPlayers, fx, fx2 ) =
