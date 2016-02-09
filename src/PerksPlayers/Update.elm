@@ -1,9 +1,11 @@
 module PerksPlayers.Update (..) where
 
 import Effects exposing (Effects)
+import Perks.Models exposing (PerkId)
 import PerksPlayers.Actions exposing (..)
-import PerksPlayers.Models exposing (PerkPlayerId, PerkPlayer)
 import PerksPlayers.Effects
+import PerksPlayers.Models exposing (PerkPlayerId, PerkPlayer)
+import Players.Models exposing (PlayerId)
 
 
 type alias UpdateModel =
@@ -88,7 +90,17 @@ update action model =
       ( model.perksPlayers, Effects.none )
 
 
-removePerkPlayerFx : Int -> Int -> List PerkPlayer -> Effects Action
+
+{-
+Given
+- A player id
+- A perk id
+- List of perksPlayers
+Return an effect to delete the perkPlayer(s) from api
+-}
+
+
+removePerkPlayerFx : PlayerId -> PerkId -> List PerkPlayer -> Effects Action
 removePerkPlayerFx playerId perkId collection =
   let
     filter perkPlayer =
@@ -100,7 +112,16 @@ removePerkPlayerFx playerId perkId collection =
       |> Effects.batch
 
 
-addPerkPlayerFx : Int -> Int -> Effects Action
+
+{-
+Given
+- A player id
+- A perk id
+Return an effect to create a perkPlayer
+-}
+
+
+addPerkPlayerFx : PlayerId -> PerkId -> Effects Action
 addPerkPlayerFx playerId perkId =
   let
     perkPlayer =
