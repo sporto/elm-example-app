@@ -47,7 +47,6 @@ module.exports = {
   devServer: {
     inline: true,
     stats: { colors: true },
-    port: 3000,
   },
 
 
