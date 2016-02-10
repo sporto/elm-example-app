@@ -4,6 +4,17 @@ import Effects exposing (Effects, Never)
 import Hop
 
 
+{-
+Routing Actions
+
+HopAction : is called after Hop has changed the location, we usually don't care about this action
+ShowPlayers : Action that instructs to show the players page
+EditPlayer : Action to show the Edit player page
+ShowNotFound : Action that triggers when the browser location doesn't match any of our routes
+NavigateTo : Action to change the browser location
+-}
+
+
 type Action
   = HopAction Hop.Action
   | ShowPlayers Hop.Payload
@@ -13,10 +24,24 @@ type Action
   | NoOp
 
 
+
+{-
+Available views in our application
+NotFoundView is necessary when no route matches the location
+-}
+
+
 type AvailableViews
   = PlayersView
   | EditPlayerView
   | NotFoundView
+
+
+
+{-
+We need to store the payload given by Hop
+And we store the current view
+-}
 
 
 type alias Model =
@@ -35,13 +60,19 @@ initialModel =
 update : Action -> Model -> ( Model, Effects Action )
 update action model =
   case action of
-    -- Called from our application views e.g. by clicking on a button
-    -- Asks Hop to change the page location
+    {-
+    NavigateTo
+    Called from our application views e.g. by clicking on a button
+    asks Hop to change the page location
+    -}
     NavigateTo path ->
       ( model, Effects.map HopAction (Hop.navigateTo path) )
 
-    -- Actions called after a location change happens
-    -- These are triggered by Hop
+    {-
+    ShowPlayers and EditPlayer
+    Actions called after a location change happens
+    these are triggered by Hop
+    -}
     ShowPlayers payload ->
       ( { model | view = PlayersView, routerPayload = payload }, Effects.none )
 
@@ -70,6 +101,7 @@ routes =
 
 {-
 Create a Hop router
+Hop expects the a list of routes and an action for a location doesn't match
 -}
 
 
