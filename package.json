@@ -17,6 +17,13 @@
   },
   "homepage": "https://github.com/sporto/elm-tutorial-app#readme",
   "dependencies": {
-    "json-server": "^0.8.7"
+    "css-loader": "^0.23.1",
+    "elm-webpack-loader": "^2.0.0",
+    "file-loader": "^0.8.5",
+    "json-server": "^0.8.7",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.13",
+    "webpack-dev-middleware": "^1.5.1"
   }
 }
