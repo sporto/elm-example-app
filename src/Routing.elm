@@ -9,7 +9,7 @@ Routing Actions
 
 HopAction : is called after Hop has changed the location, we usually don't care about this action
 ShowPlayers : Action that instructs to show the players page
-EditPlayer : Action to show the Edit player page
+ShowPlayerEdit : Action to show the Edit player page
 ShowNotFound : Action that triggers when the browser location doesn't match any of our routes
 NavigateTo : Action to change the browser location
 -}
@@ -18,7 +18,7 @@ NavigateTo : Action to change the browser location
 type Action
   = HopAction Hop.Action
   | ShowPlayers Hop.Payload
-  | EditPlayer Hop.Payload
+  | ShowPlayerEdit Hop.Payload
   | ShowNotFound Hop.Payload
   | NavigateTo String
   | NoOp
@@ -33,7 +33,7 @@ NotFoundView is necessary when no route matches the location
 
 type AvailableViews
   = PlayersView
-  | EditPlayerView
+  | PlayerEditView
   | NotFoundView
 
 
@@ -69,15 +69,15 @@ update action model =
       ( model, Effects.map HopAction (Hop.navigateTo path) )
 
     {-
-    ShowPlayers and EditPlayer
+    ShowPlayers and ShowPlayerEdit
     Actions called after a location change happens
     these are triggered by Hop
     -}
     ShowPlayers payload ->
       ( { model | view = PlayersView, routerPayload = payload }, Effects.none )
 
-    EditPlayer payload ->
-      ( { model | view = EditPlayerView, routerPayload = payload }, Effects.none )
+    ShowPlayerEdit payload ->
+      ( { model | view = PlayerEditView, routerPayload = payload }, Effects.none )
 
     _ ->
       ( model, Effects.none )
@@ -94,7 +94,7 @@ routes : List ( String, Hop.Payload -> Action )
 routes =
   [ ( "/", ShowPlayers )
   , ( "/players", ShowPlayers )
-  , ( "/players/:id/edit", EditPlayer )
+  , ( "/players/:id/edit", ShowPlayerEdit )
   ]
 
 
