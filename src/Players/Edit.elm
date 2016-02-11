@@ -23,8 +23,8 @@ view address model =
 nav : Signal.Address Action -> ViewModel -> Html.Html
 nav address model =
   div
-    []
-    [ a [ class "btn button-narrow", href "#/players" ] [ text "< Players" ]
+    [ class "clearfix mb2 white bg-black p1" ]
+    [ a [ class "btn button-narrow", href "#/players" ] [ i [ class "fa fa-chevron-left" ] [], text " Players" ]
     ]
 
 
@@ -38,7 +38,7 @@ form address model =
       model.player.level + bonuses
   in
     div
-      [ class "m2" ]
+      [ class "m3" ]
       [ h1 [] [ text model.player.name ]
       , formLevel address model
       , formBonuses bonuses
