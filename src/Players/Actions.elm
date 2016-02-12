@@ -7,3 +7,4 @@ import Players.Models exposing (PlayerId, Player)
 type Action
   = NoOp
   | HopAction Hop.Action
+  | EditPlayer PlayerId

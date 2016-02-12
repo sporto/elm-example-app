@@ -17,5 +17,12 @@ update action model =
     HopAction payload ->
       ( model.players, Effects.none )
 
+    EditPlayer id ->
+      let
+        path =
+          "/players/" ++ (toString id) ++ "/edit"
+      in
+        ( model.players, Effects.map HopAction (Hop.navigateTo path) )
+
     NoOp ->
       ( model.players, Effects.none )
