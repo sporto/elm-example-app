@@ -31,5 +31,13 @@ update action model =
       in
         ( model.players, Effects.map HopAction (Hop.navigateTo path) )
 
+    FetchAllDone result ->
+      case result of
+        Ok players ->
+          ( players, Effects.none )
+
+        Err error ->
+          ( model.players, Effects.none )
+
     NoOp ->
       ( model.players, Effects.none )

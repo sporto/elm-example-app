@@ -9,11 +9,20 @@ import Models exposing (..)
 import Update exposing (..)
 import View exposing (..)
 import Routing exposing (router)
+import Players.Effects
 
 
 init : ( AppModel, Effects Action )
 init =
-  ( initialModel, Effects.none )
+  let
+    fxs =
+      [ Effects.map PlayersAction Players.Effects.fetchAll
+      ]
+
+    fx =
+      Effects.batch fxs
+  in
+    ( Models.initialModel, fx )
 
 
 routerSignal : Signal Action
