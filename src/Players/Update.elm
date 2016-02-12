@@ -14,13 +14,6 @@ type alias UpdateModel =
 update : Action -> UpdateModel -> ( List Player, Effects Action )
 update action model =
   case action of
-    EditPlayer id ->
-      let
-        path =
-          "/players/" ++ (toString id) ++ "/edit"
-      in
-        ( model.players, Effects.map HopAction (Hop.navigateTo path) )
-
     HopAction payload ->
       ( model.players, Effects.none )
 

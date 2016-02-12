@@ -24,8 +24,7 @@ nav : Signal.Address Action -> ViewModel -> Html.Html
 nav address model =
   div
     [ class "clearfix mb2 white bg-black p1" ]
-    [ a [ class "btn button-narrow", href "#/players" ] [ i [ class "fa fa-chevron-left" ] [], text " Players" ]
-    ]
+    []
 
 
 form : Signal.Address Action -> ViewModel -> Html.Html
