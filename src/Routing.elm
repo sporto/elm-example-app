@@ -79,6 +79,9 @@ update action model =
     ShowPlayerEdit payload ->
       ( { model | view = PlayerEditView, routerPayload = payload }, Effects.none )
 
+    ShowNotFound payload ->
+      ( { model | view = NotFoundView, routerPayload = payload }, Effects.none )
+
     _ ->
       ( model, Effects.none )
 
