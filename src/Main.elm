@@ -10,6 +10,7 @@ import Update exposing (..)
 import View exposing (..)
 import Routing exposing (router)
 import Players.Effects
+import Mailboxes exposing (..)
 
 
 init : ( AppModel, Effects Action )
@@ -34,7 +35,7 @@ app : StartApp.App AppModel
 app =
   StartApp.start
     { init = init
-    , inputs = [ routerSignal ]
+    , inputs = [ routerSignal, actionsMailbox.signal ]
     , update = update
     , view = view
     }
