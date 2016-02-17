@@ -49,6 +49,46 @@ createUrl =
   "http://localhost:4000/players"
 
 
+deleteUrl : PlayerId -> String
+deleteUrl playerId =
+  "http://localhost:4000/players/" ++ (toString playerId)
+
+
+
+{-
+Http.send Http.defaultSettings config
+returns Task.Task Http.RawError Http.Response
+-}
+
+
+deleteTask : PlayerId -> Task.Task Http.Error ()
+deleteTask playerId =
+  let
+    config =
+      { verb = "DELETE"
+      , headers = [ ( "Content-Type", "application/json" ) ]
+      , url = deleteUrl playerId
+      , body = Http.empty
+      }
+  in
+    Http.send Http.defaultSettings config
+      |> Http.fromJson (Decode.succeed ())
+
+
+
+{-
+Task.toResult = Task.Task x a -> Task.Task y (Result.Result x a)
+-}
+
+
+delete : PlayerId -> Effects Action
+delete playerId =
+  deleteTask playerId
+    |> Task.toResult
+    |> Task.map (DeletePlayerDone playerId)
+    |> Effects.task
+
+
 
 -- DECODERS
 

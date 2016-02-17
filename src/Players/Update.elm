@@ -11,6 +11,7 @@ import Players.Effects exposing (..)
 type alias UpdateModel =
   { players : List Player
   , showErrorAddress : Signal.Address String
+  , deleteConfirmationAddress : Signal.Address ( PlayerId, String )
   }
 
 
@@ -66,6 +67,45 @@ update action model =
                 |> Effects.task
           in
             ( updatedCollection, fx )
+
+        Err error ->
+          let
+            message =
+              toString error
+
+            fx =
+              Signal.send model.showErrorAddress message
+                |> Effects.task
+                |> Effects.map TaskDone
+          in
+            ( model.players, fx )
+
+    DeletePlayerIntent player ->
+      let
+        msg =
+          "Are you sure you want to delete " ++ player.name ++ "?"
+
+        fx =
+          Signal.send model.deleteConfirmationAddress ( player.id, msg )
+            |> Effects.task
+            |> Effects.map TaskDone
+      in
+        ( model.players, fx )
+
+    DeletePlayer playerId ->
+      ( model.players, delete playerId )
+
+    DeletePlayerDone playerId result ->
+      case result of
+        Ok _ ->
+          let
+            notDeleted player =
+              player.id /= playerId
+
+            updatedCollection =
+              List.filter notDeleted model.players
+          in
+            ( updatedCollection, Effects.none )
 
         Err error ->
           let

@@ -14,3 +14,6 @@ type Action
   | TaskDone ()
   | CreatePlayer
   | CreatePlayerDone (Result Http.Error Player)
+  | DeletePlayerIntent Player
+  | DeletePlayer PlayerId
+  | DeletePlayerDone PlayerId (Result Http.Error ())

@@ -76,7 +76,9 @@ playerRow address model player =
       , td [] [ text (toString strength) ]
       , td
           []
-          [ editBtn address player ]
+          [ editBtn address player
+          , deleteBtn address player
+          ]
       ]
 
 
@@ -87,6 +89,15 @@ editBtn address player =
     , onClick address (EditPlayer player.id)
     ]
     [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]
+
+
+deleteBtn : Signal.Address Action -> Player -> Html.Html
+deleteBtn address player =
+  button
+    [ class "btn regular mr1"
+    , onClick address (DeletePlayerIntent player)
+    ]
+    [ i [ class "fa fa-trash mr1" ] [], text "Delete" ]
 
 
 addBtn : Signal.Address Action -> ViewModel -> Html.Html
