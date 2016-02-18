@@ -119,6 +119,54 @@ update action model =
           in
             ( model.players, fx )
 
+    ChangeLevel playerId howMuch ->
+      let
+        fxForPlayer player =
+          if player.id /= playerId then
+            Effects.none
+          else
+            let
+              updatedPlayer =
+                { player | level = player.level + howMuch }
+            in
+              if updatedPlayer.level > 0 then
+                save updatedPlayer
+              else
+                Effects.none
+
+        fx =
+          List.map fxForPlayer model.players
+            |> Effects.batch
+      in
+        ( model.players, fx )
+
+    SaveDone result ->
+      case result of
+        Ok player ->
+          let
+            updatedPlayer existing =
+              if existing.id == player.id then
+                player
+              else
+                existing
+
+            updatedCollection =
+              List.map updatedPlayer model.players
+          in
+            ( updatedCollection, Effects.none )
+
+        Err error ->
+          let
+            message =
+              toString error
+
+            fx =
+              Signal.send model.showErrorAddress message
+                |> Effects.task
+                |> Effects.map TaskDone
+          in
+            ( model.players, fx )
+
     TaskDone () ->
       ( model.players, Effects.none )
 

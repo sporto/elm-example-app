@@ -57,14 +57,24 @@ btnLevelDecrease : Signal.Address Action -> ViewModel -> Html.Html
 btnLevelDecrease address model =
   a
     [ class "btn ml1 h1" ]
-    [ i [ class "fa fa-minus-circle" ] [] ]
+    [ i
+        [ class "fa fa-minus-circle"
+        , onClick address (ChangeLevel model.player.id -1)
+        ]
+        []
+    ]
 
 
 btnLevelIncrease : Signal.Address Action -> ViewModel -> Html.Html
 btnLevelIncrease address model =
   a
     [ class "btn ml1 h1" ]
-    [ i [ class "fa fa-plus-circle" ] [] ]
+    [ i
+        [ class "fa fa-plus-circle"
+        , onClick address (ChangeLevel model.player.id 1)
+        ]
+        []
+    ]
 
 
 formName : Signal.Address Action -> ViewModel -> Html.Html

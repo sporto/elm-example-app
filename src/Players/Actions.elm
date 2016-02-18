@@ -17,3 +17,5 @@ type Action
   | DeletePlayerIntent Player
   | DeletePlayer PlayerId
   | DeletePlayerDone PlayerId (Result Http.Error ())
+  | ChangeLevel PlayerId Int
+  | SaveDone (Result Http.Error Player)

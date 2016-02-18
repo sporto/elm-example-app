@@ -89,6 +89,38 @@ delete playerId =
     |> Effects.task
 
 
+saveTask : Player -> Task.Task Http.Error Player
+saveTask player =
+  let
+    body =
+      memberEncoded player
+        |> Encode.encode 0
+        |> Http.string
+
+    config =
+      { verb = "PATCH"
+      , headers = [ ( "Content-Type", "application/json" ) ]
+      , url = saveUrl player.id
+      , body = body
+      }
+  in
+    Http.send Http.defaultSettings config
+      |> Http.fromJson memberDecoder
+
+
+saveUrl : Int -> String
+saveUrl playerId =
+  "http://localhost:4000/players/" ++ (toString playerId)
+
+
+save : Player -> Effects Action
+save player =
+  saveTask player
+    |> Task.toResult
+    |> Task.map SaveDone
+    |> Effects.task
+
+
 
 -- DECODERS
 
