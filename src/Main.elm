@@ -11,8 +11,6 @@ import View exposing (..)
 import Routing exposing (router)
 import Players.Effects
 import Players.Actions
-import Perks.Effects
-import PerksPlayers.Effects
 import Mailboxes exposing (..)
 
 
@@ -21,8 +19,6 @@ init =
   let
     fxs =
       [ Effects.map PlayersAction Players.Effects.fetchAll
-      , Effects.map PerksAction Perks.Effects.fetchAll
-      , Effects.map PerksPlayersAction PerksPlayers.Effects.fetchAll
       ]
 
     fx =

@@ -5,15 +5,10 @@ import Html.Events exposing (onClick)
 import Html.Attributes exposing (class, value, href)
 import Players.Models exposing (..)
 import Players.Actions exposing (..)
-import Perks.Models exposing (Perk)
-import PerksPlayers.Models exposing (PerkPlayer)
-import PerksPlayers.Utils exposing (bonusesForPlayerId)
 
 
 type alias ViewModel =
   { player : Player
-  , perks : List Perk
-  , perksPlayers : List PerkPlayer
   }
 
 
@@ -35,22 +30,12 @@ nav address model =
 
 form : Signal.Address Action -> ViewModel -> Html.Html
 form address model =
-  let
-    bonuses =
-      bonusesForPlayerId model.perksPlayers model.perks model.player.id
-
-    strength =
-      model.player.level + bonuses
-  in
-    div
-      [ class "m3" ]
-      [ h1 [] [ text model.player.name ]
-      , formLevel address model
-      , formBonuses bonuses
-      , formStrength strength
-      , formName address model
-      , formPerks address model
-      ]
+  div
+    [ class "m3" ]
+    [ h1 [] [ text model.player.name ]
+    , formLevel address model
+    , formName address model
+    ]
 
 
 formLevel : Signal.Address Action -> ViewModel -> Html.Html
@@ -82,24 +67,6 @@ btnLevelIncrease address model =
     [ i [ class "fa fa-plus-circle" ] [] ]
 
 
-formBonuses : Int -> Html.Html
-formBonuses bonuses =
-  div
-    [ class "clearfix py1" ]
-    [ div [ class "col col-5" ] [ text "Bonuses" ]
-    , div [ class "col col-7 h2" ] [ text (toString bonuses) ]
-    ]
-
-
-formStrength : Int -> Html.Html
-formStrength strength =
-  div
-    [ class "clearfix py1" ]
-    [ div [ class "col col-5" ] [ text "Strength" ]
-    , div [ class "col col-7 h2 bold" ] [ text (toString strength) ]
-    ]
-
-
 formName : Signal.Address Action -> ViewModel -> Html.Html
 formName address model =
   div
@@ -120,18 +87,6 @@ inputName address model =
     , value model.player.name
     ]
     []
-
-
-formPerks : Signal.Address Action -> ViewModel -> Html.Html
-formPerks address model =
-  div
-    [ class "clearfix py1"
-    ]
-    [ div [ class "col col-5" ] [ text "Perks" ]
-    , div
-        [ class "col col-7" ]
-        []
-    ]
 
 
 listBtn : Signal.Address Action -> ViewModel -> Html.Html
