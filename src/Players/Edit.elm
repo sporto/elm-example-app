@@ -1,7 +1,7 @@
 module Players.Edit (..) where
 
 import Html exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (on, onClick, targetValue)
 import Html.Attributes exposing (class, value, href)
 import Players.Models exposing (..)
 import Players.Actions exposing (..)
@@ -95,6 +95,7 @@ inputName address model =
   input
     [ class "field-light"
     , value model.player.name
+    , onChange address (ChangeName model.player.id)
     ]
     []
 
@@ -106,3 +107,8 @@ listBtn address model =
     , onClick address ListPlayers
     ]
     [ i [ class "fa fa-chevron-left mr1" ] [], text "List" ]
+
+
+onChange : Signal.Address a -> (String -> a) -> Attribute
+onChange address action =
+  on "change" targetValue (\str -> Signal.message address (action str))
