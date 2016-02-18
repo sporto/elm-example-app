@@ -29,22 +29,12 @@ nav address model =
 
 form : Signal.Address Action -> ViewModel -> Html.Html
 form address model =
-  let
-    bonuses =
-      999
-
-    strength =
-      model.player.level + bonuses
-  in
-    div
-      [ class "m3" ]
-      [ h1 [] [ text model.player.name ]
-      , formLevel address model
-      , formBonuses bonuses
-      , formStrength strength
-      , formName address model
-      , formPerks address model
-      ]
+  div
+    [ class "m3" ]
+    [ h1 [] [ text model.player.name ]
+    , formLevel address model
+    , formName address model
+    ]
 
 
 formLevel : Signal.Address Action -> ViewModel -> Html.Html
@@ -76,24 +66,6 @@ btnLevelIncrease address model =
     [ i [ class "fa fa-plus-circle" ] [] ]
 
 
-formBonuses : Int -> Html.Html
-formBonuses bonuses =
-  div
-    [ class "clearfix py1" ]
-    [ div [ class "col col-5" ] [ text "Bonuses" ]
-    , div [ class "col col-7 h2" ] [ text (toString bonuses) ]
-    ]
-
-
-formStrength : Int -> Html.Html
-formStrength strength =
-  div
-    [ class "clearfix py1" ]
-    [ div [ class "col col-5" ] [ text "Strength" ]
-    , div [ class "col col-7 h2 bold" ] [ text (toString strength) ]
-    ]
-
-
 formName : Signal.Address Action -> ViewModel -> Html.Html
 formName address model =
   div
@@ -114,15 +86,3 @@ inputName address model =
     , value model.player.name
     ]
     []
-
-
-formPerks : Signal.Address Action -> ViewModel -> Html.Html
-formPerks address model =
-  div
-    [ class "clearfix py1"
-    ]
-    [ div [ class "col col-5" ] [ text "Perks" ]
-    , div
-        [ class "col col-7" ]
-        []
-    ]
