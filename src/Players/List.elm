@@ -41,8 +41,6 @@ list address model =
                 [ th [] [ text "Id" ]
                 , th [] [ text "Name" ]
                 , th [] [ text "Level" ]
-                , th [] [ text "Bonus" ]
-                , th [] [ text "Strengh" ]
                 , th [] [ text "Actions" ]
                 ]
             ]
@@ -53,24 +51,15 @@ list address model =
 
 playerRow : Signal.Address Action -> ViewModel -> Player -> Html.Html
 playerRow address model player =
-  let
-    bonuses =
-      999
-
-    strength =
-      bonuses + player.level
-  in
-    tr
-      []
-      [ td [] [ text (toString player.id) ]
-      , td [] [ text player.name ]
-      , td [] [ text (toString player.level) ]
-      , td [] [ text (toString bonuses) ]
-      , td [] [ text (toString strength) ]
-      , td
-          []
-          [ editBtn address player ]
-      ]
+  tr
+    []
+    [ td [] [ text (toString player.id) ]
+    , td [] [ text player.name ]
+    , td [] [ text (toString player.level) ]
+    , td
+        []
+        [ editBtn address player ]
+    ]
 
 
 editBtn : Signal.Address Action -> Player -> Html.Html
