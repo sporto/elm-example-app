@@ -5,10 +5,14 @@ import Html.Events exposing (on, onClick, targetValue)
 import Html.Attributes exposing (class, value, href)
 import Players.Models exposing (..)
 import Players.Actions exposing (..)
+import Perks.Models exposing (Perk)
+import PerksPlayers.Models exposing (PerkPlayer)
 
 
 type alias ViewModel =
   { player : Player
+  , perks : List Perk
+  , perksPlayers : List PerkPlayer
   }
 
 
