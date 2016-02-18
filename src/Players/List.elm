@@ -7,6 +7,7 @@ import Players.Actions exposing (..)
 import Players.Models exposing (Player)
 import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
+import PerksPlayers.Utils exposing (bonusesForPlayerId)
 
 
 type alias ViewModel =
@@ -61,7 +62,7 @@ playerRow : Signal.Address Action -> ViewModel -> Player -> Html.Html
 playerRow address model player =
   let
     bonuses =
-      999
+      bonusesForPlayerId model.perksPlayers model.perks player.id
 
     strength =
       bonuses + player.level
