@@ -7,6 +7,7 @@ import Actions exposing (..)
 import Routing
 import Players.Update
 import Perks.Update
+import Perks.List
 import PerksPlayers.Update
 import Mailboxes exposing (..)
 
@@ -57,6 +58,14 @@ update action model =
           PerksPlayers.Update.update subAction updateModel
       in
         ( { model | perksPlayers = updatedPerksPlayers }, Effects.map PerksPlayersAction fx )
+
+    -- Specific actions for the Perk List component
+    PerksListAction subAction ->
+      let
+        ( updatedPerkListModel, fx ) =
+          Perks.List.update subAction model.perksListModel
+      in
+        ( { model | perksListModel = updatedPerkListModel }, Effects.map PerksListAction fx )
 
     ShowError message ->
       ( { model | errorMessage = message }, Effects.none )

@@ -2,12 +2,14 @@ module View (..) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import Dict
 import Actions exposing (..)
 import Models exposing (..)
 import Routing
 import Players.List
 import Players.Edit
+import Perks.List
 import String
 
 
@@ -19,8 +21,41 @@ view address model =
   in
     div
       []
-      [ flash address model
+      [ nav address model
+      , flash address model
       , page address model
+      ]
+
+
+nav : Signal.Address Action -> AppModel -> Html.Html
+nav address model =
+  let
+    activeClass view =
+      if model.routing.view == view then
+        "bg-white black"
+      else
+        ""
+  in
+    div
+      [ class "clearfix bg-blue white"
+      ]
+      [ div
+          [ class "left" ]
+          [ button
+              [ class ("btn py2 button-narrow mr1 " ++ activeClass Routing.PlayersView)
+              , onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/players")
+              ]
+              [ i [ class "fa fa-users mr1" ] []
+              , text "Players"
+              ]
+          , button
+              [ class ("btn py2 button-narrow " ++ activeClass Routing.PerksView)
+              , onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/perks")
+              ]
+              [ i [ class "fa fa-bookmark mr1" ] []
+              , text "Perks"
+              ]
+          ]
       ]
 
 
@@ -32,6 +67,9 @@ page address model =
 
     Routing.PlayerEditView ->
       playerEditPage address model
+
+    Routing.PerksView ->
+      perksPage address model
 
     Routing.NotFoundView ->
       notFoundView
@@ -75,6 +113,18 @@ playerEditPage address model =
 
       Nothing ->
         notFoundView
+
+
+perksPage : Signal.Address Action -> AppModel -> Html.Html
+perksPage address model =
+  let
+    perksListModel =
+      model.perksListModel
+
+    updatedPerksListModel =
+      { perksListModel | perks = model.perks, perksPlayers = model.perksPlayers }
+  in
+    Perks.List.view (Signal.forwardTo address PerksListAction) updatedPerksListModel
 
 
 notFoundView : Html.Html

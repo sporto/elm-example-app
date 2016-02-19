@@ -19,6 +19,7 @@ type Action
   = HopAction Hop.Action
   | ShowPlayers Hop.Payload
   | ShowPlayerEdit Hop.Payload
+  | ShowPerks Hop.Payload
   | ShowNotFound Hop.Payload
   | NavigateTo String
   | NoOp
@@ -34,6 +35,7 @@ NotFoundView is necessary when no route matches the location
 type AvailableViews
   = PlayersView
   | PlayerEditView
+  | PerksView
   | NotFoundView
 
 
@@ -82,6 +84,9 @@ update action model =
     ShowNotFound payload ->
       ( { model | view = NotFoundView, routerPayload = payload }, Effects.none )
 
+    ShowPerks payload ->
+      ( { model | view = PerksView, routerPayload = (Debug.log "" payload) }, Effects.none )
+
     _ ->
       ( model, Effects.none )
 
@@ -98,6 +103,7 @@ routes =
   [ ( "/", ShowPlayers )
   , ( "/players", ShowPlayers )
   , ( "/players/:id/edit", ShowPlayerEdit )
+  , ( "/perks", ShowPerks )
   ]
 
 
