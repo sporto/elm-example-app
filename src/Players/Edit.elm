@@ -95,7 +95,7 @@ inputName address model =
   input
     [ class "field-light"
     , value model.player.name
-    , onChange address (ChangeName model.player.id)
+    , on "change" targetValue (\str -> Signal.message address (ChangeName model.player.id str))
     ]
     []
 
@@ -107,8 +107,3 @@ listBtn address model =
     , onClick address ListPlayers
     ]
     [ i [ class "fa fa-chevron-left mr1" ] [], text "List" ]
-
-
-onChange : Signal.Address a -> (String -> a) -> Attribute
-onChange address action =
-  on "change" targetValue (\str -> Signal.message address (action str))
