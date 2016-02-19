@@ -29,3 +29,9 @@ bonusesForPlayerId : List PerkPlayer -> List Perk -> PlayerId -> Int
 bonusesForPlayerId perksPlayers perks playerId =
   perksForPlayerId perksPlayers perks playerId
     |> List.foldl (\perk acc -> acc + perk.bonus) 0
+
+
+doesPlayerIdHasPerkId : List PerkPlayer -> PerkId -> PlayerId -> Bool
+doesPlayerIdHasPerkId perksPlayers perkId playerId =
+  perkIdsForPlayerId perksPlayers playerId
+    |> List.any (\id -> id == perkId)

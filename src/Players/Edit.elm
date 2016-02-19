@@ -5,6 +5,7 @@ import Html.Events exposing (on, onClick, targetValue)
 import Html.Attributes exposing (class, value, href)
 import Players.Models exposing (..)
 import Players.Actions exposing (..)
+import Players.Edit.Perks
 import Perks.Models exposing (Perk)
 import PerksPlayers.Models exposing (PerkPlayer)
 import PerksPlayers.Utils exposing (bonusesForPlayerId)
@@ -125,14 +126,21 @@ formStrength strength =
 
 formPerks : Signal.Address Action -> ViewModel -> Html.Html
 formPerks address model =
-  div
-    [ class "clearfix py1"
-    ]
-    [ div [ class "col col-5" ] [ text "Perks" ]
-    , div
-        [ class "col col-7" ]
-        []
-    ]
+  let
+    viewModel =
+      { playerId = model.player.id
+      , perks = model.perks
+      , perksPlayers = model.perksPlayers
+      }
+  in
+    div
+      [ class "clearfix py1"
+      ]
+      [ div [ class "col col-5" ] [ text "Perks" ]
+      , div
+          [ class "col col-7" ]
+          [ Players.Edit.Perks.view address viewModel ]
+      ]
 
 
 inputName : Signal.Address Action -> ViewModel -> Html.Html

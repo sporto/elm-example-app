@@ -2,6 +2,7 @@ module Update (..) where
 
 import Effects exposing (Effects)
 import Debug
+import Task
 import Models exposing (..)
 import Actions exposing (..)
 import Routing
@@ -9,6 +10,7 @@ import Players.Update
 import Perks.Update
 import Perks.List
 import PerksPlayers.Update
+import PerksPlayers.Actions
 import Mailboxes exposing (..)
 
 
@@ -27,6 +29,7 @@ update action model =
         updateModel =
           { players = model.players
           , showErrorAddress = Signal.forwardTo actionsMailbox.address ShowError
+          , perksPlayersChangeAddress = Signal.forwardTo actionsMailbox.address TogglePlayerPerk
           , deleteConfirmationAddress = askDeleteConfirmationMailbox.address
           }
 
@@ -66,6 +69,15 @@ update action model =
           Perks.List.update subAction model.perksListModel
       in
         ( { model | perksListModel = updatedPerkListModel }, Effects.map PerksListAction fx )
+
+    TogglePlayerPerk toggle ->
+      let
+        fx =
+          Task.succeed (PerksPlayers.Actions.TogglePlayerPerk toggle)
+            |> Effects.task
+            |> Effects.map PerksPlayersAction
+      in
+        ( model, fx )
 
     ShowError message ->
       ( { model | errorMessage = message }, Effects.none )

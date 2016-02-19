@@ -3,6 +3,7 @@ module Players.Update (..) where
 import Task
 import Hop
 import Effects exposing (Effects)
+import Models exposing (PlayerPerkToggle)
 import Players.Actions exposing (..)
 import Players.Models exposing (..)
 import Players.Effects exposing (..)
@@ -12,6 +13,7 @@ type alias UpdateModel =
   { players : List Player
   , showErrorAddress : Signal.Address String
   , deleteConfirmationAddress : Signal.Address ( PlayerId, String )
+  , perksPlayersChangeAddress : Signal.Address PlayerPerkToggle
   }
 
 
@@ -184,6 +186,21 @@ update action model =
                 |> Effects.map TaskDone
           in
             ( model.players, fx )
+
+    TogglePlayerPerk playerId perkId value ->
+      let
+        toggle =
+          { playerId = playerId
+          , perkId = perkId
+          , value = value
+          }
+
+        fx =
+          Signal.send model.perksPlayersChangeAddress toggle
+            |> Effects.task
+            |> Effects.map TaskDone
+      in
+        ( model.players, fx )
 
     TaskDone () ->
       ( model.players, Effects.none )

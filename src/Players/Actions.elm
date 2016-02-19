@@ -3,6 +3,7 @@ module Players.Actions (..) where
 import Http
 import Hop
 import Players.Models exposing (PlayerId, Player)
+import Perks.Models exposing (PerkId)
 
 
 type Action
@@ -19,4 +20,5 @@ type Action
   | DeletePlayerDone PlayerId (Result Http.Error ())
   | ChangeLevel PlayerId Int
   | SaveDone (Result Http.Error Player)
+  | TogglePlayerPerk PlayerId PerkId Bool
   | ChangeName PlayerId String
