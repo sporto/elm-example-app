@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/sporto/elm-tutorial-app#readme",
   "dependencies": {
-    "basscss": "^8.0.0",
+    "basscss": "^7.1.1",
     "css-loader": "^0.23.1",
     "elm-webpack-loader": "^2.0.0",
     "file-loader": "^0.8.5",
