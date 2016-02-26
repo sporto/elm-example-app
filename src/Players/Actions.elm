@@ -8,3 +8,4 @@ type Action
   = NoOp
   | HopAction Hop.Action
   | EditPlayer PlayerId
+  | ListPlayers

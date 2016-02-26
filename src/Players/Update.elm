@@ -21,6 +21,13 @@ update action model =
       in
         ( model.players, Effects.map HopAction (Hop.navigateTo path) )
 
+    ListPlayers ->
+      let
+        path =
+          "/players/"
+      in
+        ( model.players, Effects.map HopAction (Hop.navigateTo path) )
+
     HopAction _ ->
       ( model.players, Effects.none )
 
