@@ -12,4 +12,6 @@ type alias UpdateModel =
 
 update : Action -> UpdateModel -> ( List Player, Effects Action )
 update action model =
-  ( model.players, Effects.none )
+  case action of
+    NoOp ->
+      ( model.players, Effects.none )
