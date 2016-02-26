@@ -1,9 +1,9 @@
 module Players.Update (..) where
 
-import Hop
 import Effects exposing (Effects)
 import Players.Actions exposing (..)
 import Players.Models exposing (..)
+import Hop
 
 
 type alias UpdateModel =
@@ -14,9 +14,6 @@ type alias UpdateModel =
 update : Action -> UpdateModel -> ( List Player, Effects Action )
 update action model =
   case action of
-    HopAction payload ->
-      ( model.players, Effects.none )
-
     EditPlayer id ->
       let
         path =
@@ -38,6 +35,9 @@ update action model =
 
         Err error ->
           ( model.players, Effects.none )
+
+    HopAction _ ->
+      ( model.players, Effects.none )
 
     NoOp ->
       ( model.players, Effects.none )
