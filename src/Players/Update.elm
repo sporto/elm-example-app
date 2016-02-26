@@ -3,6 +3,7 @@ module Players.Update (..) where
 import Effects exposing (Effects)
 import Players.Actions exposing (..)
 import Players.Models exposing (..)
+import Hop
 
 
 type alias UpdateModel =
@@ -13,5 +14,15 @@ type alias UpdateModel =
 update : Action -> UpdateModel -> ( List Player, Effects Action )
 update action model =
   case action of
+    EditPlayer id ->
+      let
+        path =
+          "/players/" ++ (toString id) ++ "/edit"
+      in
+        ( model.players, Effects.map HopAction (Hop.navigateTo path) )
+
+    HopAction _ ->
+      ( model.players, Effects.none )
+
     NoOp ->
       ( model.players, Effects.none )
