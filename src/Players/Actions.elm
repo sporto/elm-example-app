@@ -7,7 +7,7 @@ import Hop
 
 type Action
   = NoOp
-  | HopAction Hop.Action
+  | HopAction ()
   | EditPlayer PlayerId
   | ListPlayers
   | FetchAllDone (Result Http.Error (List Player))
