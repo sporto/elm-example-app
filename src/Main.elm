@@ -8,7 +8,7 @@ import Actions exposing (..)
 import Models exposing (..)
 import Update exposing (..)
 import View exposing (..)
-import Routing exposing (router)
+import Routing
 import Players.Effects
 
 
@@ -27,7 +27,7 @@ init =
 
 routerSignal : Signal Action
 routerSignal =
-  Signal.map RoutingAction router.signal
+  Signal.map RoutingAction Routing.signal
 
 
 app : StartApp.App AppModel
@@ -52,4 +52,4 @@ port runner =
 
 port routeRunTask : Task.Task () ()
 port routeRunTask =
-  router.run
+  Routing.run
