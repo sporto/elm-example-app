@@ -1,12 +1,12 @@
 module View (..) where
 
 import Html exposing (..)
-import Dict
 import Actions exposing (..)
 import Models exposing (..)
 import Routing
 import Players.List
 import Players.Edit
+import Players.Models exposing (PlayerId)
 
 
 view : Signal.Address Action -> AppModel -> Html
@@ -22,14 +22,14 @@ view address model =
 
 page : Signal.Address Action -> AppModel -> Html.Html
 page address model =
-  case model.routing.view of
-    Routing.PlayersView ->
+  case model.routing.route of
+    Routing.PlayersRoute ->
       playersPage address model
 
-    Routing.PlayerEditView ->
-      playerEditPage address model
+    Routing.PlayerEditRoute playerId ->
+      playerEditPage address model playerId
 
-    Routing.NotFoundView ->
+    Routing.NotFoundRoute ->
       notFoundView
 
 
@@ -43,17 +43,12 @@ playersPage address model =
     Players.List.view (Signal.forwardTo address PlayersAction) viewModel
 
 
-playerEditPage : Signal.Address Action -> AppModel -> Html.Html
-playerEditPage address model =
+playerEditPage : Signal.Address Action -> AppModel -> PlayerId -> Html.Html
+playerEditPage address model playerId =
   let
-    playerId =
-      model.routing.routerPayload.params
-        |> Dict.get "id"
-        |> Maybe.withDefault ""
-
     maybePlayer =
       model.players
-        |> List.filter (\player -> (toString player.id) == playerId)
+        |> List.filter (\player -> player.id == playerId)
         |> List.head
   in
     case maybePlayer of
