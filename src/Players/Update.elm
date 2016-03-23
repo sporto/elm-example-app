@@ -7,6 +7,7 @@ import Models exposing (PlayerPerkToggle)
 import Players.Actions exposing (..)
 import Players.Models exposing (..)
 import Players.Effects exposing (..)
+import Hop.Navigate exposing (navigateTo)
 
 
 type alias UpdateModel =
@@ -20,22 +21,19 @@ type alias UpdateModel =
 update : Action -> UpdateModel -> ( List Player, Effects Action )
 update action model =
   case action of
-    HopAction payload ->
-      ( model.players, Effects.none )
-
     EditPlayer id ->
       let
         path =
           "/players/" ++ (toString id) ++ "/edit"
       in
-        ( model.players, Effects.map HopAction (Hop.navigateTo path) )
+        ( model.players, Effects.map HopAction (navigateTo path) )
 
     ListPlayers ->
       let
         path =
-          "/players/"
+          "/players"
       in
-        ( model.players, Effects.map HopAction (Hop.navigateTo path) )
+        ( model.players, Effects.map HopAction (navigateTo path) )
 
     FetchAllDone result ->
       case result of
@@ -203,6 +201,9 @@ update action model =
         ( model.players, fx )
 
     TaskDone () ->
+      ( model.players, Effects.none )
+
+    HopAction _ ->
       ( model.players, Effects.none )
 
     NoOp ->

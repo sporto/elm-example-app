@@ -3,7 +3,6 @@ module View (..) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
-import Dict
 import Actions exposing (..)
 import Models exposing (..)
 import Routing
@@ -11,6 +10,7 @@ import Players.List
 import Players.Edit
 import Perks.List
 import String
+import Players.Models exposing (PlayerId)
 
 
 view : Signal.Address Action -> AppModel -> Html
@@ -30,8 +30,8 @@ view address model =
 nav : Signal.Address Action -> AppModel -> Html.Html
 nav address model =
   let
-    activeClass view =
-      if model.routing.view == view then
+    activeClass route =
+      if model.routing.route == route then
         "bg-white black"
       else
         ""
@@ -42,14 +42,14 @@ nav address model =
       [ div
           [ class "left" ]
           [ button
-              [ class ("btn py2 button-narrow mr1 " ++ activeClass Routing.PlayersView)
+              [ class ("btn py2 button-narrow mr1 " ++ activeClass Routing.PlayersRoute)
               , onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/players")
               ]
               [ i [ class "fa fa-users mr1" ] []
               , text "Players"
               ]
           , button
-              [ class ("btn py2 button-narrow " ++ activeClass Routing.PerksView)
+              [ class ("btn py2 button-narrow " ++ activeClass Routing.PerksRoute)
               , onClick (Signal.forwardTo address Actions.RoutingAction) (Routing.NavigateTo "/perks")
               ]
               [ i [ class "fa fa-bookmark mr1" ] []
@@ -61,17 +61,17 @@ nav address model =
 
 page : Signal.Address Action -> AppModel -> Html.Html
 page address model =
-  case model.routing.view of
-    Routing.PlayersView ->
+  case model.routing.route of
+    Routing.PlayersRoute ->
       playersPage address model
 
-    Routing.PlayerEditView ->
-      playerEditPage address model
+    Routing.PlayerEditRoute playerId ->
+      playerEditPage address model playerId
 
-    Routing.PerksView ->
+    Routing.PerksRoute ->
       perksPage address model
 
-    Routing.NotFoundView ->
+    Routing.NotFoundRoute ->
       notFoundView
 
 
@@ -87,17 +87,12 @@ playersPage address model =
     Players.List.view (Signal.forwardTo address PlayersAction) viewModel
 
 
-playerEditPage : Signal.Address Action -> AppModel -> Html.Html
-playerEditPage address model =
+playerEditPage : Signal.Address Action -> AppModel -> PlayerId -> Html.Html
+playerEditPage address model playerId =
   let
-    playerId =
-      model.routing.routerPayload.params
-        |> Dict.get "id"
-        |> Maybe.withDefault ""
-
     maybePlayer =
       model.players
-        |> List.filter (\player -> (toString player.id) == playerId)
+        |> List.filter (\player -> player.id == playerId)
         |> List.head
   in
     case maybePlayer of
