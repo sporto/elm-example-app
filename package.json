@@ -18,8 +18,11 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "api": "node api.js",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "dev": "webpack-dev-server --port 3000"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sporto/elm-tutorial-app.git"
