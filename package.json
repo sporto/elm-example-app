@@ -4,7 +4,17 @@
   "description": "",
   "main": "api.js",
   "dependencies": {
-    "json-server": "^0.8.14"
+    "ace-css": "^1.0.1",
+    "css-loader": "^0.23.1",
+    "elm-webpack-loader": "^3.0.1",
+    "file-loader": "^0.8.5",
+    "font-awesome": "^4.6.1",
+    "json-server": "^0.8.14",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.1",
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {},
   "scripts": {
