@@ -6,5 +6,7 @@ import Players.Models exposing (Player)
 update : Msg -> List Player -> ( List Player, Cmd Msg )
 update action players =
   case action of
-    NoOp ->
+    FetchAllDone newPlayers ->
+      ( newPlayers, Cmd.none )
+    FetchAllFail error ->
       ( players, Cmd.none )
