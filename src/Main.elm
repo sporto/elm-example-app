@@ -32,10 +32,6 @@ urlUpdate result model =
         ( { model | route = currentRoute }, Cmd.none )
 
 
-
--- MAIN
-
-
 main : Program Never
 main =
     Navigation.program Routing.parser
