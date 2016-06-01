@@ -1,8 +1,6 @@
 module Main exposing (..)
 
-import Html.App
 import Navigation
-import Hop.Types
 import Messages exposing (Msg(..))
 import Models exposing (Model, initialModel)
 import View exposing (view)
@@ -11,9 +9,13 @@ import Players.Commands exposing (fetchAll)
 import Routing exposing (Route)
 
 
-init : ( Route, Hop.Types.Location ) -> ( Model, Cmd Msg )
-init ( route, location ) =
-    ( initialModel location route, Cmd.map PlayersMsg fetchAll )
+init : Result String Route -> ( Model, Cmd Msg )
+init result =
+    let
+        currentRoute =
+            Routing.routeFromResult result
+    in
+        ( initialModel currentRoute, Cmd.map PlayersMsg fetchAll )
 
 
 subscriptions : Model -> Sub Msg
@@ -21,15 +23,20 @@ subscriptions model =
     Sub.none
 
 
-urlUpdate : ( Route, Hop.Types.Location ) -> Model -> ( Model, Cmd Msg )
-urlUpdate ( route, location ) model =
-    ( { model | routing = Routing.Model location route }, Cmd.none )
+urlUpdate : Result String Route -> Model -> ( Model, Cmd Msg )
+urlUpdate result model =
+    let
+        currentRoute =
+            Routing.routeFromResult result
+    in
+        ( { model | route = currentRoute }, Cmd.none )
 
 
 
 -- MAIN
 
 
+main : Program Never
 main =
     Navigation.program Routing.parser
         { init = init

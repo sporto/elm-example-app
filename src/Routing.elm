@@ -1,10 +1,8 @@
 module Routing exposing (..)
 
+import String
 import Navigation
-import Hop exposing (matchUrl)
-import Hop.Types exposing (Config, Location, PathMatcher, Router, newLocation)
-import Hop.Matchers exposing (match1, match2, match3, int)
-import Messages exposing (Msg)
+import UrlParser exposing (..)
 import Players.Models exposing (PlayerId)
 
 
@@ -22,59 +20,20 @@ type Route
    Create a routing model where to store the current location and route
 -}
 type alias Model =
-    { location : Location
-    , route : Route
+    { route : Route
     }
-
-
-{-|
-   Route matchers
-
-   This are in charge of matching the browser path to our routes defined above.
-   e.g. "/players" --> PlayersRoute
--}
-indexMatcher : PathMatcher Route
-indexMatcher =
-    match1 PlayersRoute ""
 
 
 {-|
    This matcher will match "/players" which is the list of players
 -}
-playersMatcher : PathMatcher Route
-playersMatcher =
-    match1 PlayersRoute "/players"
-
-
-{-|
-   This matcher will match something like "/players/1"
-   Which is the view for a particular player
--}
-playerEditMatch : PathMatcher Route
-playerEditMatch =
-    match2 PlayerRoute "/players/" int
-
-
-matchers : List (PathMatcher Route)
+matchers : Parser (Route -> a) a
 matchers =
-    [ indexMatcher
-    , playersMatcher
-    , playerEditMatch
-    ]
-
-
-{-|
-   Create a router configuration record
-   We will use hash routing
-   notFound is the message we will receive when there are no matches
--}
-routerConfig : Config Route
-routerConfig =
-    { hash = True
-    , basePath = ""
-    , matchers = matchers
-    , notFound = NotFoundRoute
-    }
+    oneOf
+        [ format PlayersRoute (s "")
+        , format PlayerRoute (s "players" </> int)
+        , format PlayersRoute (s "players")
+        ]
 
 
 {-|
@@ -91,6 +50,21 @@ routerConfig =
   and a Hop.Types.Location record
 
 -}
-parser : Navigation.Parser ( Route, Hop.Types.Location )
+hashParser : Navigation.Location -> Result String Route
+hashParser location =
+    parse identity matchers (String.dropLeft 1 location.hash)
+
+
+parser : Navigation.Parser (Result String Route)
 parser =
-    Navigation.makeParser (.href >> matchUrl routerConfig)
+    Navigation.makeParser hashParser
+
+
+routeFromResult : Result String Route -> Route
+routeFromResult result =
+    case result of
+        Ok route ->
+            route
+
+        Err string ->
+            NotFoundRoute
