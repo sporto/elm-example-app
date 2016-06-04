@@ -45,13 +45,13 @@ formLevel player =
 
 btnLevelDecrease : Player -> Html.Html Msg
 btnLevelDecrease player =
-    a [ class "btn ml1 h1" ]
+    a [ class "btn ml1 h1", onClick (ChangeLevel player.id -1) ]
         [ i [ class "fa fa-minus-circle" ] [] ]
 
 
 btnLevelIncrease : Player -> Html.Html Msg
 btnLevelIncrease player =
-    a [ class "btn ml1 h1" ]
+    a [ class "btn ml1 h1", onClick (ChangeLevel player.id 1) ]
         [ i [ class "fa fa-plus-circle" ] [] ]
 
 
