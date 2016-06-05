@@ -5,23 +5,28 @@ import Messages exposing (Msg(..))
 import Models exposing (Model, initialModel)
 import View exposing (view)
 import Update exposing (update)
-import Players.Commands exposing(fetchAll)
+import Players.Commands exposing (fetchAll)
 
-init : (Model, Cmd Msg)
+
+init : ( Model, Cmd Msg )
 init =
-  ( initialModel, Cmd.map PlayersMsg fetchAll )
+    ( initialModel, Cmd.map PlayersMsg fetchAll )
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+    Sub.none
+
+
 
 -- MAIN
 
-main =
-  Html.App.program
-    { init = init
-    , view = view
-    , update = update
-    , subscriptions = subscriptions
-    }
 
+main : Program Never
+main =
+    Html.App.program
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
