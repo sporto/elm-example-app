@@ -6,12 +6,13 @@ import Messages exposing (Msg(..))
 import Models exposing (Model)
 import Players.List
 
+
 view : Model -> Html Msg
 view model =
-  div
-    []
-    [ page model ]
+    div []
+        [ page model ]
+
 
 page : Model -> Html Msg
 page model =
-  Html.App.map PlayersMsg (Players.List.view model.players)
+    Html.App.map PlayersMsg (Players.List.view model.players)
