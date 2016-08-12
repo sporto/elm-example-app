@@ -40,10 +40,10 @@ update message players =
             ( players, Cmd.none )
 
         ShowPlayers ->
-            ( players, Navigation.modifyUrl "#players" )
+            ( players, Navigation.newUrl "#players" )
 
         ShowPlayer id ->
-            ( players, Navigation.modifyUrl ("#players/" ++ (toString id)) )
+            ( players, Navigation.newUrl ("#players/" ++ (toString id)) )
 
         ChangeLevel id howMuch ->
             ( players, changeLevelCommands id howMuch players |> Cmd.batch )
