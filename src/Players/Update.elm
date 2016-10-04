@@ -19,7 +19,7 @@ changeLevelCommands playerId howMuch =
 
 
 updatePlayer : Player -> List Player -> List Player
-updatePlayer updatedPlayer =
+updatePlayer updatedPlayer players =
     let
         select existingPlayer =
             if existingPlayer.id == updatedPlayer.id then
@@ -27,7 +27,7 @@ updatePlayer updatedPlayer =
             else
                 existingPlayer
     in
-        List.map select
+        List.map select players
 
 
 update : Msg -> List Player -> ( List Player, Cmd Msg )
