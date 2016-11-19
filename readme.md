@@ -7,14 +7,26 @@ An example Elm single page application built for http://www.elm-tutorial.org/
 - [Install Elm](http://elm-lang.org/install)
 - [Install Node](https://nodejs.org/en/download/)
 
-Install the necessary node packages:
+Install global packages
+
+```
+npm install -g foreman
+```
+
+Foreman is a package that allows running several servers with one command.
+
+Install the necessary local node packages:
 
 ```
 npm install
 ```
 
-Run the fake api server:
+## Running the application:
+
+In terminal run:
 
 ```
-node api.js
+nf start
 ```
+
+Open `http://localhost:3000`
