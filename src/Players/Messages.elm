@@ -9,5 +9,4 @@ type Msg
     | ShowPlayers
     | ShowPlayer PlayerId
     | ChangeLevel PlayerId Int
-    | SaveSuccess Player
-    | SaveFail Http.Error
+    | OnSave (Result Http.Error Player)

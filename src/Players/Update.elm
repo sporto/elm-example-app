@@ -48,8 +48,8 @@ update message players =
         ChangeLevel id howMuch ->
             ( players, changeLevelCommands id howMuch players |> Cmd.batch )
 
-        SaveSuccess updatedPlayer ->
+        OnSave (Ok updatedPlayer) ->
             ( updatePlayer updatedPlayer players, Cmd.none )
 
-        SaveFail error ->
+        OnSave (Err error) ->
             ( players, Cmd.none )

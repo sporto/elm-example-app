@@ -6,7 +6,6 @@ import Json.Encode as Encode
 import Players.Messages exposing (..)
 import Players.Models exposing (PlayerId, Player)
 import Players.Models exposing (PlayerId, Player)
-import Task
 
 
 fetchAll : Cmd Msg
@@ -25,29 +24,23 @@ saveUrl playerId =
     "http://localhost:4000/players/" ++ (toString playerId)
 
 
-saveTask : Player -> Task.Task Http.Error Player
-saveTask player =
-    let
-        body =
-            memberEncoded player
-                |> Encode.encode 0
-                |> Http.string
-
-        config =
-            { verb = "PATCH"
-            , headers = [ ( "Content-Type", "application/json" ) ]
-            , url = saveUrl player.id
-            , body = body
-            }
-    in
-        Http.send Http.defaultSettings config
-            |> Http.fromJson memberDecoder
+saveRequest : Player -> Http.Request Player
+saveRequest player =
+    Http.request
+        { body = memberEncoded player |> Http.jsonBody
+        , expect = Http.expectJson memberDecoder
+        , headers = [ Http.header "Content-Type" "application/json" ]
+        , method = "PATCH"
+        , timeout = Nothing
+        , url = saveUrl player.id
+        , withCredentials = False
+        }
 
 
 save : Player -> Cmd Msg
 save player =
-    saveTask player
-        |> Task.perform SaveFail SaveSuccess
+    saveRequest player
+        |> Http.send OnSave
 
 
 
