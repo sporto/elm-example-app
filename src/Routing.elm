@@ -1,9 +1,8 @@
 module Routing exposing (..)
 
-import String
-import Navigation
-import UrlParser exposing (..)
+import Navigation exposing (Location)
 import Players.Models exposing (PlayerId)
+import UrlParser exposing (..)
 
 
 type Route
@@ -15,29 +14,17 @@ type Route
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ format PlayersRoute (s "")
-        , format PlayerRoute (s "players" </> int)
-        , format PlayersRoute (s "players")
+        [ map PlayersRoute top
+        , map PlayerRoute (s "players" </> int)
+        , map PlayersRoute (s "players")
         ]
 
 
-hashParser : Navigation.Location -> Result String Route
-hashParser location =
-    location.hash
-        |> String.dropLeft 1
-        |> parse identity matchers
-
-
-parser : Navigation.Parser (Result String Route)
-parser =
-    Navigation.makeParser hashParser
-
-
-routeFromResult : Result String Route -> Route
-routeFromResult result =
-    case result of
-        Ok route ->
+parseLocation : Location -> Route
+parseLocation location =
+    case (parseHash matchers location) of
+        Just route ->
             route
 
-        Err string ->
+        Nothing ->
             NotFoundRoute

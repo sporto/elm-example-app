@@ -33,10 +33,10 @@ updatePlayer updatedPlayer players =
 update : Msg -> List Player -> ( List Player, Cmd Msg )
 update message players =
     case message of
-        FetchAllDone newPlayers ->
+        FetchAll (Ok newPlayers) ->
             ( newPlayers, Cmd.none )
 
-        FetchAllFail error ->
+        FetchAll (Err error) ->
             ( players, Cmd.none )
 
         ShowPlayers ->
