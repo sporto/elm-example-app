@@ -1,12 +1,13 @@
 module Main exposing (..)
 
-import Navigation
+import Html exposing (Html, div, text)
 import Messages exposing (Msg(..))
 import Models exposing (Model, initialModel)
-import View exposing (view)
-import Update exposing (update)
+import Navigation
 import Players.Commands exposing (fetchAll)
 import Routing exposing (Route)
+import Update exposing (update)
+import View exposing (view)
 
 
 init : Result String Route -> ( Model, Cmd Msg )
@@ -32,7 +33,7 @@ urlUpdate result model =
         ( { model | route = currentRoute }, Cmd.none )
 
 
-main : Program Never
+main : Program Never Model Msg
 main =
     Navigation.program Routing.parser
         { init = init
