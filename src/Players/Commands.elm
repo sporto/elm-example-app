@@ -29,7 +29,7 @@ saveRequest player =
     Http.request
         { body = memberEncoded player |> Http.jsonBody
         , expect = Http.expectJson memberDecoder
-        , headers = [ Http.header "Content-Type" "application/json" ]
+        , headers = []
         , method = "PATCH"
         , timeout = Nothing
         , url = saveUrl player.id
