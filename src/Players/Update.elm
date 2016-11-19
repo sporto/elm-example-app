@@ -8,10 +8,10 @@ import Navigation
 update : Msg -> List Player -> ( List Player, Cmd Msg )
 update message players =
     case message of
-        FetchAll (Ok newPlayers) ->
+        OnFetchAll (Ok newPlayers) ->
             ( newPlayers, Cmd.none )
 
-        FetchAll (Err error) ->
+        OnFetchAll (Err error) ->
             ( players, Cmd.none )
 
         ShowPlayers ->
