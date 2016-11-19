@@ -1,16 +1,15 @@
 module Players.Commands exposing (..)
 
 import Http
-import Json.Decode as Decode exposing ((:=))
-import Task
-import Players.Models exposing (PlayerId, Player)
+import Json.Decode as Decode exposing (field)
 import Players.Messages exposing (..)
+import Players.Models exposing (PlayerId, Player)
 
 
 fetchAll : Cmd Msg
 fetchAll =
-    Http.get collectionDecoder fetchAllUrl
-        |> Task.perform FetchAllFail FetchAllDone
+    Http.get fetchAllUrl collectionDecoder
+        |> Http.send FetchAll
 
 
 fetchAllUrl : String
@@ -25,7 +24,7 @@ collectionDecoder =
 
 memberDecoder : Decode.Decoder Player
 memberDecoder =
-    Decode.object3 Player
-        ("id" := Decode.int)
-        ("name" := Decode.string)
-        ("level" := Decode.int)
+    Decode.map3 Player
+        (field "id" Decode.int)
+        (field "name" Decode.string)
+        (field "level" Decode.int)
