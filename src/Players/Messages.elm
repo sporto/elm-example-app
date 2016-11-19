@@ -5,7 +5,7 @@ import Players.Models exposing (PlayerId, Player)
 
 
 type Msg
-    = FetchAll (Result Http.Error (List Player))
+    = OnFetchAll (Result Http.Error (List Player))
     | ShowPlayers
     | ShowPlayer PlayerId
     | ChangeLevel PlayerId Int

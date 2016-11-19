@@ -11,7 +11,7 @@ import Players.Models exposing (PlayerId, Player)
 fetchAll : Cmd Msg
 fetchAll =
     Http.get fetchAllUrl collectionDecoder
-        |> Http.send FetchAll
+        |> Http.send OnFetchAll
 
 
 fetchAllUrl : String
