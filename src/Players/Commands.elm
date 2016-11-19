@@ -64,7 +64,7 @@ memberEncoded : Player -> Encode.Value
 memberEncoded player =
     let
         list =
-            [ ( "id", Encode.int player.id )
+            [ ( "id", Encode.string player.id )
             , ( "name", Encode.string player.name )
             , ( "level", Encode.int player.level )
             ]
