@@ -21,7 +21,7 @@ fetchAllUrl =
 
 saveUrl : PlayerId -> String
 saveUrl playerId =
-    "http://localhost:4000/players/" ++ (toString playerId)
+    "http://localhost:4000/players/" ++ playerId
 
 
 saveRequest : Player -> Http.Request Player
