@@ -55,7 +55,7 @@ collectionDecoder =
 memberDecoder : Decode.Decoder Player
 memberDecoder =
     Decode.map3 Player
-        (field "id" Decode.int)
+        (field "id" Decode.string)
         (field "name" Decode.string)
         (field "level" Decode.int)
 
