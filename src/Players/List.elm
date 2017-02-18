@@ -9,13 +9,13 @@ import Models exposing (Player)
 view : List Player -> Html Msg
 view players =
     div []
-        [ nav players
+        [ nav
         , list players
         ]
 
 
-nav : List Player -> Html Msg
-nav players =
+nav : Html Msg
+nav =
     div [ class "clearfix mb2 white bg-black" ]
         [ div [ class "left p2" ] [ text "Players" ] ]
 
