@@ -2,7 +2,7 @@ module Players.List exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class)
-import Messages exposing (..)
+import Msgs exposing (Msg)
 import Models exposing (Player)
 
 
