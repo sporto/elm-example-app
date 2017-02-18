@@ -2,6 +2,7 @@ module Players.List exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class)
+import Html.Events exposing (onClick)
 import Msgs exposing (Msg)
 import Models exposing (Player)
 import RemoteData exposing (WebData)
@@ -61,5 +62,14 @@ playerRow player =
         , td [] [ text player.name ]
         , td [] [ text (toString player.level) ]
         , td []
-            []
+            [ editBtn player ]
         ]
+
+
+editBtn : Player -> Html.Html Msg
+editBtn player =
+    button
+        [ class "btn regular"
+        , onClick (Msgs.ShowPlayer player.id)
+        ]
+        [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]
