@@ -8,4 +8,3 @@ import RemoteData exposing (WebData)
 type Msg
     = OnFetchPlayers (WebData (List Player))
     | OnLocationChange Location
-    | ChangeLocation String

@@ -2,7 +2,6 @@ module Update exposing (..)
 
 import Models exposing (Model)
 import Msgs exposing (Msg)
-import Navigation
 import Routing exposing (parseLocation)
 
 
@@ -18,6 +17,3 @@ update msg model =
                     parseLocation location
             in
                 ( { model | route = newRoute }, Cmd.none )
-
-        Msgs.ChangeLocation path ->
-            ( model, Navigation.newUrl path )
