@@ -1,11 +1,12 @@
 module Players.List exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
-import Html.Events exposing (onClick)
-import Msgs exposing (Msg)
+import Html.Attributes exposing (class, href)
 import Models exposing (Player)
+import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
+import Routing exposing (playerPath)
+import Shared exposing (onLinkClick)
 
 
 view : WebData (List Player) -> Html Msg
@@ -68,8 +69,13 @@ playerRow player =
 
 editBtn : Player -> Html.Html Msg
 editBtn player =
-    button
-        [ class "btn regular"
-        , onClick (Msgs.ShowPlayer player.id)
-        ]
-        [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]
+    let
+        path =
+            playerPath player.id
+    in
+        a
+            [ class "btn regular"
+            , href path
+            , onLinkClick (Msgs.ChangeLocation path)
+            ]
+            [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]

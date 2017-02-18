@@ -19,8 +19,5 @@ update msg model =
             in
                 ( { model | route = newRoute }, Cmd.none )
 
-        Msgs.ShowPlayers ->
-            ( model, Navigation.newUrl "#players" )
-
-        Msgs.ShowPlayer id ->
-            ( model, Navigation.newUrl ("#players/" ++ id) )
+        Msgs.ChangeLocation path ->
+            ( model, Navigation.newUrl path )
