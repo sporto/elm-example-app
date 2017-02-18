@@ -1,4 +1,4 @@
-module Messages exposing (..)
+module Msgs exposing (..)
 
 import Models exposing (Player)
 import Navigation exposing (Location)

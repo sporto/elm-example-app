@@ -1,8 +1,9 @@
 module View exposing (..)
 
 import Html exposing (Html, div, text)
-import Messages exposing (Msg)
-import Models exposing (Model, PlayerId, Route(..))
+import Models exposing (Model, PlayerId)
+import Models exposing (Model)
+import Msgs exposing (Msg)
 import Players.Edit
 import Players.List
 import RemoteData
@@ -17,13 +18,13 @@ view model =
 page : Model -> Html Msg
 page model =
     case model.route of
-        PlayersRoute ->
+        Models.PlayersRoute ->
             Players.List.view model.players
 
-        PlayerRoute id ->
+        Models.PlayerRoute id ->
             playerEditPage model id
 
-        NotFoundRoute ->
+        Models.NotFoundRoute ->
             notFoundView
 
 
