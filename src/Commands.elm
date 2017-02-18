@@ -3,7 +3,7 @@ module Commands exposing (..)
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
-import Messages exposing (..)
+import Msgs exposing (Msg)
 import Models exposing (PlayerId, Player)
 import RemoteData
 
@@ -12,7 +12,7 @@ fetchPlayers : Cmd Msg
 fetchPlayers =
     Http.get fetchPlayersUrl playersDecoder
         |> RemoteData.sendRequest
-        |> Cmd.map OnFetchPlayers
+        |> Cmd.map Msgs.OnFetchPlayers
 
 
 fetchPlayersUrl : String

@@ -2,8 +2,8 @@ module Main exposing (..)
 
 import Commands exposing (fetchPlayers)
 import Html exposing (program)
-import Messages exposing (..)
 import Models exposing (Model, initialModel)
+import Msgs exposing (Msg)
 import Update exposing (update)
 import View exposing (view)
 
