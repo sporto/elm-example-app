@@ -9,19 +9,19 @@
     "elm-webpack-loader": "^4.2.0",
     "file-loader": "^0.10.0",
     "font-awesome": "4",
+    "foreman": "^2.0.0",
     "json-server": "0.9.5",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^2.2.1",
-    "webpack-dev-middleware": "^1.10.1",
     "webpack-dev-server": "^2.4.0"
   },
   "devDependencies": {},
   "scripts": {
     "api": "node api.js",
     "build": "webpack",
-    "watch": "webpack --watch",
-    "dev": "webpack-dev-server --port 3000"
+    "client": "webpack-dev-server --port 3000",
+    "start": "nf start"
   },
   "repository": {
     "type": "git",
