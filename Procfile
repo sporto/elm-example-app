@@ -1,2 +1,2 @@
-api: npm run api
-client: npm run dev
+api: yarn api
+client: yarn client
