@@ -52,7 +52,7 @@ btnLevelDecrease player =
         message =
             ChangeLevel player -1
     in
-    a [ class "btn ml-1 h1", onClick message ]
+    button [ class "btn ml-1 h1", onClick message ]
         [ i [ class "fa fa-minus-circle" ] [] ]
 
 
@@ -62,7 +62,7 @@ btnLevelIncrease player =
         message =
             ChangeLevel player 1
     in
-    a [ class "btn ml-1 h1", onClick message ]
+    button [ class "btn ml-1 h1", onClick message ]
         [ i [ class "fa fa-plus-circle" ] [] ]
 
 
