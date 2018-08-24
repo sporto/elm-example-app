@@ -1,17 +1,20 @@
 module Models exposing (Model, Player, PlayerId, Route(..), initialModel)
 
+import Browser.Navigation exposing (Key)
 import RemoteData exposing (WebData)
 
 
 type alias Model =
     { players : WebData (List Player)
+    , key : Key
     , route : Route
     }
 
 
-initialModel : Route -> Model
-initialModel route =
+initialModel : Route -> Key -> Model
+initialModel route key =
     { players = RemoteData.Loading
+    , key = key
     , route = route
     }
 

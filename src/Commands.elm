@@ -2,7 +2,7 @@ module Commands exposing (fetchPlayers, fetchPlayersUrl, playerDecoder, playerEn
 
 import Http
 import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (decode, required)
+import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import Models exposing (Player, PlayerId)
 import Msgs exposing (Msg)
@@ -56,7 +56,7 @@ playersDecoder =
 
 playerDecoder : Decode.Decoder Player
 playerDecoder =
-    decode Player
+    Decode.succeed Player
         |> required "id" Decode.string
         |> required "name" Decode.string
         |> required "level" Decode.int

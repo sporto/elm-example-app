@@ -1,21 +1,27 @@
 module Main exposing (init, main, subscriptions)
 
+import Browser
+import Browser.Navigation exposing (Key)
 import Commands exposing (fetchPlayers)
 import Models exposing (Model, initialModel)
 import Msgs exposing (Msg)
-import Navigation exposing (Location)
 import Routing
 import Update exposing (update)
+import Url exposing (Url)
 import View exposing (view)
 
 
-init : Location -> ( Model, Cmd Msg )
-init location =
+type alias Flags =
+    {}
+
+
+init : Flags -> Url -> Key -> ( Model, Cmd Msg )
+init flags url key =
     let
         currentRoute =
-            Routing.parseLocation location
+            Routing.parseUrl url
     in
-    ( initialModel currentRoute, fetchPlayers )
+    ( initialModel currentRoute key, fetchPlayers )
 
 
 subscriptions : Model -> Sub Msg
@@ -27,11 +33,13 @@ subscriptions model =
 -- MAIN
 
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Navigation.program Msgs.OnLocationChange
+    Browser.application 
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
+        , onUrlRequest = Msgs.OnUrlRequest
+        , onUrlChange = Msgs.OnUrlChange
         }

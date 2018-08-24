@@ -35,7 +35,7 @@ maybeList response =
             list players
 
         RemoteData.Failure error ->
-            text (toString error)
+            text "Error"
 
 
 list : List Player -> Html Msg
@@ -60,7 +60,7 @@ playerRow player =
     tr []
         [ td [] [ text player.id ]
         , td [] [ text player.name ]
-        , td [] [ text (toString player.level) ]
+        , td [] [ text (String.fromInt player.level) ]
         , td []
             [ editBtn player ]
         ]

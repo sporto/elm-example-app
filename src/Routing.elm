@@ -1,8 +1,9 @@
-module Routing exposing (matchers, parseLocation, playerPath, playersPath)
+module Routing exposing (matchers, parseUrl, playerPath, playersPath)
 
 import Models exposing (PlayerId, Route(..))
-import Navigation exposing (Location)
-import UrlParser exposing (..)
+-- import Browser.Navigation exposing (Location)
+import Url exposing (Url)
+import Url.Parser exposing (..)
 
 
 matchers : Parser (Route -> a) a
@@ -14,9 +15,9 @@ matchers =
         ]
 
 
-parseLocation : Location -> Route
-parseLocation location =
-    case parseHash matchers location of
+parseUrl : Url -> Route
+parseUrl url =
+    case parse matchers url of
         Just route ->
             route
 

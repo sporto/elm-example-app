@@ -1,10 +1,13 @@
 module Update exposing (update, updatePlayer)
 
+import Browser 
+import Browser.Navigation as Navigation
 import Commands exposing (savePlayerCmd)
 import Models exposing (Model, Player)
 import Msgs exposing (Msg)
 import RemoteData
-import Routing exposing (parseLocation)
+import Routing exposing (parseUrl)
+import Url
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -13,10 +16,22 @@ update msg model =
         Msgs.OnFetchPlayers response ->
             ( { model | players = response }, Cmd.none )
 
-        Msgs.OnLocationChange location ->
+        Msgs.OnUrlRequest urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model
+                    , Navigation.pushUrl model.key (Url.toString url)
+                    )
+
+                Browser.External url ->
+                    ( model
+                    , Navigation.load url
+                    )
+
+        Msgs.OnUrlChange url ->
             let
                 newRoute =
-                    parseLocation location
+                    parseUrl url
             in
             ( { model | route = newRoute }, Cmd.none )
 

@@ -1,5 +1,6 @@
 module View exposing (notFoundView, page, playerEditPage, view)
 
+import Browser
 import Html exposing (Html, div, text)
 import Models exposing (Model, PlayerId)
 import Msgs exposing (Msg)
@@ -8,10 +9,11 @@ import Players.List
 import RemoteData
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-    div []
-        [ page model ]
+    { title = "App"
+    , body = [ page model ]
+    }
 
 
 page : Model -> Html Msg
@@ -51,7 +53,7 @@ playerEditPage model playerId =
                     notFoundView
 
         RemoteData.Failure err ->
-            text (toString err)
+            text "Error"
 
 
 notFoundView : Html msg
