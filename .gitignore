@@ -6,3 +6,4 @@ npm-debug.log
 yarn-error.log
 dist
 /index.Html
+/elm-out
