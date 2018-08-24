@@ -1,4 +1,4 @@
-module Pages.Edit exposing (btnLevelDecrease, btnLevelIncrease, form, formLevel, listBtn, view)
+module Pages.Edit exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href, value)
@@ -7,10 +7,21 @@ import Routes exposing (playersPath)
 import Shared exposing (..)
 
 
-view : Player -> Html.Html Msg
-view model =
-    div []
-        [ form model ]
+view : List Player -> PlayerId -> Html.Html Msg
+view players playerId =
+    case findPlayer players playerId of
+        Just player ->
+            form player
+
+        Nothing ->
+            div [] [ text "Player not found" ]
+
+
+findPlayer : List Player -> PlayerId -> Maybe Player
+findPlayer players playerId =
+    players
+        |> List.filter (\player -> player.id == playerId)
+        |> List.head
 
 
 form : Player -> Html.Html Msg
@@ -24,7 +35,7 @@ form player =
 formLevel : Player -> Html.Html Msg
 formLevel player =
     div
-        [ class "clearfix py-1"
+        [ class "py-1"
         ]
         [ div [ class "col col-5" ] [ text "Level" ]
         , div [ class "col col-7" ]

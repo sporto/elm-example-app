@@ -120,20 +120,36 @@ page : Model -> Html Msg
 page model =
     let
         content =
-            case model.route of
-                PlayersRoute ->
-                    Pages.List.view model.players
+            case model.players of
+                RemoteData.NotAsked ->
+                    text ""
 
-                PlayerRoute id ->
-                    playerEditPage model id
+                RemoteData.Loading ->
+                    text "Loading ..."
 
-                NotFoundRoute ->
-                    notFoundView
+                RemoteData.Success players ->
+                    pageWithData model players
+
+                RemoteData.Failure err ->
+                    text "Error"
     in
     section []
         [ nav model
         , content
         ]
+
+
+pageWithData : Model -> List Player -> Html Msg
+pageWithData model players =
+    case model.route of
+        PlayersRoute ->
+            Pages.List.view players
+
+        PlayerRoute id ->
+            Pages.Edit.view players id
+
+        NotFoundRoute ->
+            notFoundView
 
 
 nav : Model -> Html Msg
@@ -155,35 +171,9 @@ nav model =
         linkToList =
             a [ href Routes.playersPath, class "text-white" ] [ text "List" ]
     in
-    div [ class "clearfix mb2 text-white bg-black p-2" ]
+    div
+        [ class "mb-2 text-white bg-black p-4" ]
         links
-
-
-playerEditPage : Model -> PlayerId -> Html Msg
-playerEditPage model playerId =
-    case model.players of
-        RemoteData.NotAsked ->
-            text ""
-
-        RemoteData.Loading ->
-            text "Loading ..."
-
-        RemoteData.Success players ->
-            let
-                maybePlayer =
-                    players
-                        |> List.filter (\player -> player.id == playerId)
-                        |> List.head
-            in
-            case maybePlayer of
-                Just player ->
-                    Pages.Edit.view player
-
-                Nothing ->
-                    notFoundView
-
-        RemoteData.Failure err ->
-            text "Error"
 
 
 notFoundView : Html msg

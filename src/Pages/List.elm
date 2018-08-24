@@ -1,36 +1,13 @@
-module Pages.List exposing (editBtn, list, maybeList, playerRow, view)
+module Pages.List exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
-import RemoteData exposing (WebData)
 import Routes exposing (playerPath)
 import Shared exposing (..)
 
 
-view : WebData (List Player) -> Html Msg
-view response =
-    div []
-        [ maybeList response ]
-
-
-maybeList : WebData (List Player) -> Html Msg
-maybeList response =
-    case response of
-        RemoteData.NotAsked ->
-            text ""
-
-        RemoteData.Loading ->
-            text "Loading..."
-
-        RemoteData.Success players ->
-            list players
-
-        RemoteData.Failure error ->
-            text "Error"
-
-
-list : List Player -> Html Msg
-list players =
+view : List Player -> Html Msg
+view players =
     div [ class "p-2" ]
         [ table []
             [ thead []
