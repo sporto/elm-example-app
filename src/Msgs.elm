@@ -1,4 +1,4 @@
-module Msgs exposing (..)
+module Msgs exposing (Msg(..))
 
 import Http
 import Models exposing (Player, PlayerId)

@@ -1,4 +1,4 @@
-module Models exposing (..)
+module Models exposing (Model, Player, PlayerId, Route(..), initialModel)
 
 import RemoteData exposing (WebData)
 

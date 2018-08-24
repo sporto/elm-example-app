@@ -1,4 +1,4 @@
-module Players.List exposing (..)
+module Players.List exposing (editBtn, list, maybeList, nav, playerRow, view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
@@ -72,8 +72,8 @@ editBtn player =
         path =
             playerPath player.id
     in
-        a
-            [ class "btn regular"
-            , href path
-            ]
-            [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]
+    a
+        [ class "btn regular"
+        , href path
+        ]
+        [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]

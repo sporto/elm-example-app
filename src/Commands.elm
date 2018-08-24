@@ -1,11 +1,11 @@
-module Commands exposing (..)
+module Commands exposing (fetchPlayers, fetchPlayersUrl, playerDecoder, playerEncoder, playersDecoder, savePlayerCmd, savePlayerRequest, savePlayerUrl)
 
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
+import Models exposing (Player, PlayerId)
 import Msgs exposing (Msg)
-import Models exposing (PlayerId, Player)
 import RemoteData
 
 
@@ -71,4 +71,4 @@ playerEncoder player =
             , ( "level", Encode.int player.level )
             ]
     in
-        Encode.object attributes
+    Encode.object attributes

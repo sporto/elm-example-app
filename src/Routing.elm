@@ -1,7 +1,7 @@
-module Routing exposing (..)
+module Routing exposing (matchers, parseLocation, playerPath, playersPath)
 
-import Navigation exposing (Location)
 import Models exposing (PlayerId, Route(..))
+import Navigation exposing (Location)
 import UrlParser exposing (..)
 
 
@@ -16,7 +16,7 @@ matchers =
 
 parseLocation : Location -> Route
 parseLocation location =
-    case (parseHash matchers location) of
+    case parseHash matchers location of
         Just route ->
             route
 

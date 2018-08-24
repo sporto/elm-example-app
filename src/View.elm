@@ -1,8 +1,7 @@
-module View exposing (..)
+module View exposing (notFoundView, page, playerEditPage, view)
 
 import Html exposing (Html, div, text)
 import Models exposing (Model, PlayerId)
-import Models exposing (Model)
 import Msgs exposing (Msg)
 import Players.Edit
 import Players.List
@@ -44,12 +43,12 @@ playerEditPage model playerId =
                         |> List.filter (\player -> player.id == playerId)
                         |> List.head
             in
-                case maybePlayer of
-                    Just player ->
-                        Players.Edit.view player
+            case maybePlayer of
+                Just player ->
+                    Players.Edit.view player
 
-                    Nothing ->
-                        notFoundView
+                Nothing ->
+                    notFoundView
 
         RemoteData.Failure err ->
             text (toString err)
