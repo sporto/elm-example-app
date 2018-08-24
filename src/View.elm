@@ -4,8 +4,8 @@ import Browser
 import Html exposing (Html, div, text)
 import Models exposing (Model, PlayerId)
 import Msgs exposing (Msg)
-import Players.Edit
-import Players.List
+import Pages.Edit
+import Pages.List
 import RemoteData
 
 
@@ -20,7 +20,7 @@ page : Model -> Html Msg
 page model =
     case model.route of
         Models.PlayersRoute ->
-            Players.List.view model.players
+            Pages.List.view model.players
 
         Models.PlayerRoute id ->
             playerEditPage model id
@@ -47,7 +47,7 @@ playerEditPage model playerId =
             in
             case maybePlayer of
                 Just player ->
-                    Players.Edit.view player
+                    Pages.Edit.view player
 
                 Nothing ->
                     notFoundView

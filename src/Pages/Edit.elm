@@ -1,4 +1,4 @@
-module Players.Edit exposing (btnLevelDecrease, btnLevelIncrease, form, formLevel, listBtn, nav, view)
+module Pages.Edit exposing (btnLevelDecrease, btnLevelIncrease, form, formLevel, listBtn, nav, view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href, value)
@@ -18,13 +18,13 @@ view model =
 
 nav : Player -> Html.Html Msg
 nav model =
-    div [ class "clearfix mb2 white bg-black p1" ]
+    div [ class "clearfix mb2 text-white bg-black p-2" ]
         [ listBtn ]
 
 
 form : Player -> Html.Html Msg
 form player =
-    div [ class "m3" ]
+    div [ class "m-3" ]
         [ h1 [] [ text player.name ]
         , formLevel player
         ]
@@ -33,7 +33,7 @@ form player =
 formLevel : Player -> Html.Html Msg
 formLevel player =
     div
-        [ class "clearfix py1"
+        [ class "clearfix py-1"
         ]
         [ div [ class "col col-5" ] [ text "Level" ]
         , div [ class "col col-7" ]
@@ -50,7 +50,7 @@ btnLevelDecrease player =
         message =
             Msgs.ChangeLevel player -1
     in
-    a [ class "btn ml1 h1", onClick message ]
+    a [ class "btn ml-1 h1", onClick message ]
         [ i [ class "fa fa-minus-circle" ] [] ]
 
 
@@ -60,7 +60,7 @@ btnLevelIncrease player =
         message =
             Msgs.ChangeLevel player 1
     in
-    a [ class "btn ml1 h1", onClick message ]
+    a [ class "btn ml-1 h1", onClick message ]
         [ i [ class "fa fa-plus-circle" ] [] ]
 
 
@@ -70,4 +70,4 @@ listBtn =
         [ class "btn regular"
         , href playersPath
         ]
-        [ i [ class "fa fa-chevron-left mr1" ] [], text "List" ]
+        [ i [ class "fa fa-chevron-left mr-1" ] [], text "List" ]

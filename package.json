@@ -14,7 +14,7 @@
   "scripts": {
     "api": "node api.js",
     "build": "elm make ./src/Main.elm --output dist/app.js",
-    "client": "live-server --port=3000 --watch=src --entry-file=index.html",
+    "client": "live-server --port=3000 --watch=dist --entry-file=index.html",
     "start": "nf start"
   },
   "repository": {
