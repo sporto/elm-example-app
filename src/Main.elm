@@ -7,7 +7,7 @@ import Html exposing (Html, div, text)
 import Pages.Edit
 import Pages.List
 import RemoteData
-import Routing
+import Routes
 import Shared exposing (..)
 import Url exposing (Url)
 
@@ -20,7 +20,7 @@ init : Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags url key =
     let
         currentRoute =
-            Routing.parseUrl url
+            Routes.parseUrl url
     in
     ( initialModel currentRoute key, fetchPlayers )
 
@@ -51,7 +51,7 @@ update msg model =
         OnUrlChange url ->
             let
                 newRoute =
-                    Routing.parseUrl url
+                    Routes.parseUrl url
             in
             ( { model | route = newRoute }, Cmd.none )
 

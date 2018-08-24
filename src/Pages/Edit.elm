@@ -3,7 +3,7 @@ module Pages.Edit exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, href, value)
 import Html.Events exposing (onClick)
-import Routing exposing (playersPath)
+import Routes exposing (playersPath)
 import Shared exposing (..)
 
 
