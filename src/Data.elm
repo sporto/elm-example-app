@@ -5,14 +5,13 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import Shared exposing (..)
-import RemoteData
+
 
 
 fetchPlayers : Cmd Msg
 fetchPlayers =
     Http.get fetchPlayersUrl playersDecoder
-        |> RemoteData.sendRequest
-        |> Cmd.map OnFetchPlayers
+        |> Http.send OnFetchPlayers
 
 
 fetchPlayersUrl : String

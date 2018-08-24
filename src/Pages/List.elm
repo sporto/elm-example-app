@@ -8,18 +8,16 @@ import Shared exposing (..)
 
 view : List Player -> Html Msg
 view players =
-    div [ class "p-2" ]
-        [ table []
-            [ thead []
-                [ tr []
-                    [ th [ class "p-2" ] [ text "Id" ]
-                    , th [ class "p-2" ] [ text "Name" ]
-                    , th [ class "p-2" ] [ text "Level" ]
-                    , th [ class "p-2" ] [ text "Actions" ]
-                    ]
+    table []
+        [ thead []
+            [ tr []
+                [ th [ class "p-2" ] [ text "Id" ]
+                , th [ class "p-2" ] [ text "Name" ]
+                , th [ class "p-2" ] [ text "Level" ]
+                , th [ class "p-2" ] [ text "Actions" ]
                 ]
-            , tbody [] (List.map playerRow players)
             ]
+        , tbody [] (List.map playerRow players)
         ]
 
 

@@ -7,7 +7,6 @@ import Html exposing (Html, a, div, section, text)
 import Html.Attributes exposing (class, href)
 import Pages.Edit
 import Pages.List
-import RemoteData
 import Routes
 import Shared exposing (..)
 import Url exposing (Url)
@@ -34,8 +33,11 @@ subscriptions model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        OnFetchPlayers response ->
-            ( { model | players = response }, Cmd.none )
+        OnFetchPlayers (Ok players) ->
+            ( { model | players = Loaded players }, Cmd.none )
+
+        OnFetchPlayers (Err err) ->
+            ( { model | players = Failure }, Cmd.none )
 
         OnUrlRequest urlRequest ->
             case urlRequest of
@@ -64,29 +66,32 @@ update msg model =
             ( model, Data.savePlayerCmd updatedPlayer )
 
         OnPlayerSave (Ok player) ->
-            ( updatePlayer model player, Cmd.none )
+            ( updatePlayerInModel player model, Cmd.none )
 
         OnPlayerSave (Err error) ->
             ( model, Cmd.none )
 
 
-updatePlayer : Model -> Player -> Model
-updatePlayer model updatedPlayer =
+updatePlayerInModel : Player -> Model -> Model
+updatePlayerInModel player model =
+    let
+        updatedPlayers =
+            mapRemoteData (updatePlayerInList player) model.players
+    in
+    { model | players = updatedPlayers }
+
+
+updatePlayerInList : Player -> List Player -> List Player
+updatePlayerInList player players =
     let
         pick currentPlayer =
-            if updatedPlayer.id == currentPlayer.id then
-                updatedPlayer
+            if currentPlayer.id == player.id then
+                player
 
             else
                 currentPlayer
-
-        updatePlayerList players =
-            List.map pick players
-
-        updatedPlayers =
-            RemoteData.map updatePlayerList model.players
     in
-    { model | players = updatedPlayers }
+    List.map pick players
 
 
 
@@ -121,21 +126,21 @@ page model =
     let
         content =
             case model.players of
-                RemoteData.NotAsked ->
+                NotAsked ->
                     text ""
 
-                RemoteData.Loading ->
+                Loading ->
                     text "Loading ..."
 
-                RemoteData.Success players ->
+                Loaded players ->
                     pageWithData model players
 
-                RemoteData.Failure err ->
+                Failure ->
                     text "Error"
     in
     section []
         [ nav model
-        , content
+        , div [ class "p-4" ] [ content ]
         ]
 
 

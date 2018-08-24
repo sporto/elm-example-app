@@ -26,20 +26,19 @@ findPlayer players playerId =
 
 form : Player -> Html.Html Msg
 form player =
-    div [ class "m-3" ]
+    div []
         [ h1 [] [ text player.name ]
-        , formLevel player
+        , inputLevel player
         ]
 
 
-formLevel : Player -> Html.Html Msg
-formLevel player =
+inputLevel : Player -> Html.Html Msg
+inputLevel player =
     div
-        [ class "py-1"
-        ]
-        [ div [ class "col col-5" ] [ text "Level" ]
-        , div [ class "col col-7" ]
-            [ span [ class "h2 bold" ] [ text (String.fromInt player.level) ]
+        [ class "flex items-end py-2" ]
+        [ label [ class "mr-3" ] [ text "Level" ]
+        , div [ class "" ]
+            [ span [ class "bold text-2xl" ] [ text (String.fromInt player.level) ]
             , btnLevelDecrease player
             , btnLevelIncrease player
             ]
