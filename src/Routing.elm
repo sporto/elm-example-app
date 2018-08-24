@@ -27,9 +27,9 @@ parseUrl url =
 
 playersPath : String
 playersPath =
-    "#players"
+    "/players"
 
 
 playerPath : PlayerId -> String
 playerPath id =
-    "#players/" ++ id
+    "/players/" ++ id

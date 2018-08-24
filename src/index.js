@@ -9,5 +9,7 @@ require('./index.html');
 var Elm = require('../elm-out/app.js');
 var mountNode = document.getElementById('main');
 
-// The third value on embed are the initial values for incomming ports into Elm
-var app = Elm.Main.embed(mountNode);
+var app = Elm.Elm.Main.init({
+  node: mountNode,
+  flags: {},
+});
