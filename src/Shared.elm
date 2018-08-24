@@ -1,7 +1,10 @@
-module Models exposing (Model, Player, PlayerId, Route(..), initialModel)
+module Shared exposing (Model, Msg(..), Player, PlayerId, Route(..), initialModel)
 
+import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
+import Http
 import RemoteData exposing (WebData)
+import Url exposing (Url)
 
 
 type alias Model =
@@ -34,3 +37,11 @@ type Route
     = PlayersRoute
     | PlayerRoute PlayerId
     | NotFoundRoute
+
+
+type Msg
+    = OnFetchPlayers (WebData (List Player))
+    | OnUrlChange Url
+    | OnUrlRequest UrlRequest
+    | ChangeLevel Player Int
+    | OnPlayerSave (Result Http.Error Player)

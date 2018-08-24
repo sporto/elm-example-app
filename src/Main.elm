@@ -1,18 +1,15 @@
 module Main exposing (init, main, subscriptions)
 
 import Browser
-import Browser.Navigation exposing (Key)
+import Browser.Navigation as Nav exposing (Key)
+import Data exposing (fetchPlayers)
 import Html exposing (Html, div, text)
-import Commands exposing (fetchPlayers)
-import Models exposing (Model, PlayerId, initialModel)
-import Msgs exposing (Msg)
 import Pages.Edit
 import Pages.List
-import Routing
-import Update exposing (update)
-import Url exposing (Url)
 import RemoteData
-
+import Routing
+import Shared exposing (..)
+import Url exposing (Url)
 
 
 type alias Flags =
@@ -33,24 +30,82 @@ subscriptions model =
     Sub.none
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        OnFetchPlayers response ->
+            ( { model | players = response }, Cmd.none )
+
+        OnUrlRequest urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model
+                    , Nav.pushUrl model.key (Url.toString url)
+                    )
+
+                Browser.External url ->
+                    ( model
+                    , Nav.load url
+                    )
+
+        OnUrlChange url ->
+            let
+                newRoute =
+                    Routing.parseUrl url
+            in
+            ( { model | route = newRoute }, Cmd.none )
+
+        ChangeLevel player howMuch ->
+            let
+                updatedPlayer =
+                    { player | level = player.level + howMuch }
+            in
+            ( model, Data.savePlayerCmd updatedPlayer )
+
+        OnPlayerSave (Ok player) ->
+            ( updatePlayer model player, Cmd.none )
+
+        OnPlayerSave (Err error) ->
+            ( model, Cmd.none )
+
+
+updatePlayer : Model -> Player -> Model
+updatePlayer model updatedPlayer =
+    let
+        pick currentPlayer =
+            if updatedPlayer.id == currentPlayer.id then
+                updatedPlayer
+
+            else
+                currentPlayer
+
+        updatePlayerList players =
+            List.map pick players
+
+        updatedPlayers =
+            RemoteData.map updatePlayerList model.players
+    in
+    { model | players = updatedPlayers }
+
+
 
 -- MAIN
 
 
 main : Program Flags Model Msg
 main =
-    Browser.application 
+    Browser.application
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , onUrlRequest = Msgs.OnUrlRequest
-        , onUrlChange = Msgs.OnUrlChange
+        , onUrlRequest = OnUrlRequest
+        , onUrlChange = OnUrlChange
         }
 
 
--- VIEWS
 
+-- VIEWS
 
 
 view : Model -> Browser.Document Msg
@@ -63,13 +118,13 @@ view model =
 page : Model -> Html Msg
 page model =
     case model.route of
-        Models.PlayersRoute ->
+        PlayersRoute ->
             Pages.List.view model.players
 
-        Models.PlayerRoute id ->
+        PlayerRoute id ->
             playerEditPage model id
 
-        Models.NotFoundRoute ->
+        NotFoundRoute ->
             notFoundView
 
 

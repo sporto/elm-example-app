@@ -1,11 +1,11 @@
-module Pages.List exposing (editBtn, list, maybeList, nav, playerRow, view)
+module Pages.List exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
-import Models exposing (Player)
-import Msgs exposing (Msg)
+
 import RemoteData exposing (WebData)
 import Routing exposing (playerPath)
+import Shared exposing (..)
 
 
 view : WebData (List Player) -> Html Msg

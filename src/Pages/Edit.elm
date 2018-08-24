@@ -1,11 +1,10 @@
-module Pages.Edit exposing (btnLevelDecrease, btnLevelIncrease, form, formLevel, listBtn, nav, view)
+module Pages.Edit exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href, value)
 import Html.Events exposing (onClick)
-import Models exposing (Player)
-import Msgs exposing (Msg)
 import Routing exposing (playersPath)
+import Shared exposing (..)
 
 
 view : Player -> Html.Html Msg
@@ -48,7 +47,7 @@ btnLevelDecrease : Player -> Html.Html Msg
 btnLevelDecrease player =
     let
         message =
-            Msgs.ChangeLevel player -1
+            ChangeLevel player -1
     in
     a [ class "btn ml-1 h1", onClick message ]
         [ i [ class "fa fa-minus-circle" ] [] ]
@@ -58,7 +57,7 @@ btnLevelIncrease : Player -> Html.Html Msg
 btnLevelIncrease player =
     let
         message =
-            Msgs.ChangeLevel player 1
+            ChangeLevel player 1
     in
     a [ class "btn ml-1 h1", onClick message ]
         [ i [ class "fa fa-plus-circle" ] [] ]

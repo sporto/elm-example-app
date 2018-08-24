@@ -1,6 +1,6 @@
-module Routing exposing (matchers, parseUrl, playerPath, playersPath)
+module Routing exposing (..)
 
-import Models exposing (PlayerId, Route(..))
+import Shared exposing (..)
 -- import Browser.Navigation exposing (Location)
 import Url exposing (Url)
 import Url.Parser exposing (..)
