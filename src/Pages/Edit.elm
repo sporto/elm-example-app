@@ -1,4 +1,4 @@
-module Pages.Edit exposing (..)
+module Pages.Edit exposing (btnLevelDecrease, btnLevelIncrease, form, formLevel, listBtn, view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href, value)
@@ -10,15 +10,7 @@ import Shared exposing (..)
 view : Player -> Html.Html Msg
 view model =
     div []
-        [ nav model
-        , form model
-        ]
-
-
-nav : Player -> Html.Html Msg
-nav model =
-    div [ class "clearfix mb2 text-white bg-black p-2" ]
-        [ listBtn ]
+        [ form model ]
 
 
 form : Player -> Html.Html Msg

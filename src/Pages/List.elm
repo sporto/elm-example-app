@@ -1,4 +1,4 @@
-module Pages.List exposing (editBtn, list, maybeList, nav, playerRow, view)
+module Pages.List exposing (editBtn, list, maybeList, playerRow, view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
@@ -10,15 +10,7 @@ import Shared exposing (..)
 view : WebData (List Player) -> Html Msg
 view response =
     div []
-        [ nav
-        , maybeList response
-        ]
-
-
-nav : Html Msg
-nav =
-    div [ class "clearfix mb-2 text-white bg-black p-2" ]
-        [ div [ class "left p-2" ] [ text "Players" ] ]
+        [ maybeList response ]
 
 
 maybeList : WebData (List Player) -> Html Msg

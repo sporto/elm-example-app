@@ -3,7 +3,8 @@ module Main exposing (init, main, subscriptions)
 import Browser
 import Browser.Navigation as Nav exposing (Key)
 import Data exposing (fetchPlayers)
-import Html exposing (Html, div, text)
+import Html exposing (Html, a, div, section, text)
+import Html.Attributes exposing (class, href)
 import Pages.Edit
 import Pages.List
 import RemoteData
@@ -117,15 +118,45 @@ view model =
 
 page : Model -> Html Msg
 page model =
-    case model.route of
-        PlayersRoute ->
-            Pages.List.view model.players
+    let
+        content =
+            case model.route of
+                PlayersRoute ->
+                    Pages.List.view model.players
 
-        PlayerRoute id ->
-            playerEditPage model id
+                PlayerRoute id ->
+                    playerEditPage model id
 
-        NotFoundRoute ->
-            notFoundView
+                NotFoundRoute ->
+                    notFoundView
+    in
+    section []
+        [ nav model
+        , content
+        ]
+
+
+nav : Model -> Html Msg
+nav model =
+    let
+        links =
+            case model.route of
+                PlayersRoute ->
+                    [ text "Players" ]
+
+                PlayerRoute _ ->
+                    [ linkToList
+                    ]
+
+                NotFoundRoute ->
+                    [ linkToList
+                    ]
+
+        linkToList =
+            a [ href Routes.playersPath, class "text-white" ] [ text "List" ]
+    in
+    div [ class "clearfix mb2 text-white bg-black p-2" ]
+        links
 
 
 playerEditPage : Model -> PlayerId -> Html Msg

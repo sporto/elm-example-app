@@ -24,11 +24,22 @@ parseUrl url =
             NotFoundRoute
 
 
-playersPath : String
+pathFor : Route -> String
+pathFor route =
+    case route of
+        PlayersRoute ->
+            "/players"
+
+        PlayerRoute id ->
+            "/players/" ++ id
+
+        NotFoundRoute ->
+            "/"
+
+
 playersPath =
-    "/players"
+    pathFor PlayersRoute
 
 
-playerPath : PlayerId -> String
 playerPath id =
-    "/players/" ++ id
+    pathFor (PlayerRoute id)
