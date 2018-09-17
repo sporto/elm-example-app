@@ -1,49 +1,9 @@
-module Shared exposing (Model, Msg(..), Player, PlayerId, RemoteData(..), Route(..), initialModel, mapRemoteData)
-
-import Browser exposing (UrlRequest)
-import Browser.Navigation exposing (Key)
-import Http
-import Url exposing (Url)
+module Shared exposing (Flags, RemoteData(..), mapRemoteData)
 
 
-type alias Model =
-    { players : RemoteData (List Player)
-    , key : Key
-    , route : Route
+type alias Flags =
+    { api : String
     }
-
-
-initialModel : Route -> Key -> Model
-initialModel route key =
-    { players = Loading
-    , key = key
-    , route = route
-    }
-
-
-type alias PlayerId =
-    String
-
-
-type alias Player =
-    { id : PlayerId
-    , name : String
-    , level : Int
-    }
-
-
-type Route
-    = PlayersRoute
-    | PlayerRoute PlayerId
-    | NotFoundRoute
-
-
-type Msg
-    = OnFetchPlayers (Result Http.Error (List Player))
-    | OnUrlChange Url
-    | OnUrlRequest UrlRequest
-    | ChangeLevel Player Int
-    | OnPlayerSave (Result Http.Error Player)
 
 
 type RemoteData a

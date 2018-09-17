@@ -1,13 +1,80 @@
-module Pages.List exposing (view)
+module Pages.List exposing (Model, Msg, init, subscriptions, update, view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
+import Http
+import Json.Decode as Decode
+import Player exposing (Player)
 import Routes
 import Shared exposing (..)
 
 
-view : List Player -> Html Msg
-view players =
+type alias Model =
+    { players : RemoteData (List Player)
+    }
+
+
+type Msg
+    = OnFetchPlayers (Result Http.Error (List Player))
+
+
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+    ( { players = Loading }, fetchPlayers flags )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        OnFetchPlayers (Ok players) ->
+            ( { model | players = Loaded players }, Cmd.none )
+
+        OnFetchPlayers (Err err) ->
+            ( { model | players = Failure }, Cmd.none )
+
+
+
+-- DATA
+
+
+fetchPlayers : Flags -> Cmd Msg
+fetchPlayers flags =
+    Http.get (flags.api ++ "/players") (Decode.list Player.decoder)
+        |> Http.send OnFetchPlayers
+
+
+
+-- VIEWS
+
+
+view : Model -> Html Msg
+view model =
+    let
+        content =
+            case model.players of
+                NotAsked ->
+                    text ""
+
+                Loading ->
+                    text "Loading ..."
+
+                Loaded players ->
+                    viewWithData players
+
+                Failure ->
+                    text "Error"
+    in
+    section [ class "p-4" ]
+        [ content ]
+
+
+viewWithData : List Player -> Html Msg
+viewWithData players =
     table []
         [ thead []
             [ tr []

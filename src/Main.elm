@@ -1,49 +1,97 @@
 module Main exposing (init, main, subscriptions)
 
-import Browser
+import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
 import Html exposing (Html, a, div, section, text)
 import Html.Attributes exposing (class, href)
-import Pages.Edit
-import Pages.List
-import Player exposing (fetchPlayers)
-import Routes
+import Pages.Edit as Edit
+import Pages.List as List
+import Routes exposing (Route)
 import Shared exposing (..)
 import Url exposing (Url)
 
 
-type alias Flags =
-    {}
+type alias Model =
+    { flags : Flags
+    , navKey : Key
+    , route : Route
+    , page : Page
+    }
+
+
+type Page
+    = Page_None
+    | Page_List List.Model
+    | Page_Edit Edit.Model
+
+
+type Msg
+    = OnUrlChange Url
+    | OnUrlRequest UrlRequest
+    | Msg_List List.Msg
+    | Msg_Edit Edit.Msg
 
 
 init : Flags -> Url -> Key -> ( Model, Cmd Msg )
-init flags url key =
+init flags url navKey =
     let
-        currentRoute =
-            Routes.parseUrl url
+        model =
+            { flags = flags
+            , navKey = navKey
+            , route = Routes.parseUrl url
+            , page = Page_None
+            }
     in
-    ( initialModel currentRoute key, fetchPlayers )
+    ( model, Cmd.none )
+        |> loadCurrentPage
+
+
+loadCurrentPage : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+loadCurrentPage ( model, cmd ) =
+    let
+        ( page, newCmd ) =
+            case model.route of
+                Routes.PlayersRoute ->
+                    let
+                        ( pageModel, pageCmd ) =
+                            List.init model.flags
+                    in
+                    ( Page_List pageModel, Cmd.map Msg_List pageCmd )
+
+                Routes.PlayerRoute playerId ->
+                    let
+                        ( pageModel, pageCmd ) =
+                            Edit.init model.flags playerId
+                    in
+                    ( Page_Edit pageModel, Cmd.map Msg_Edit pageCmd )
+
+                Routes.NotFoundRoute ->
+                    ( Page_None, Cmd.none )
+    in
+    ( { model | page = page }, Cmd.batch [ cmd, newCmd ] )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    case model.page of
+        Page_List pageModel ->
+            Sub.map Msg_List (List.subscriptions pageModel)
+
+        Page_Edit pageModel ->
+            Sub.map Msg_Edit (Edit.subscriptions pageModel)
+
+        Page_None ->
+            Sub.none
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        OnFetchPlayers (Ok players) ->
-            ( { model | players = Loaded players }, Cmd.none )
-
-        OnFetchPlayers (Err err) ->
-            ( { model | players = Failure }, Cmd.none )
-
-        OnUrlRequest urlRequest ->
+    case ( msg, model.page ) of
+        ( OnUrlRequest urlRequest, _ ) ->
             case urlRequest of
                 Browser.Internal url ->
                     ( model
-                    , Nav.pushUrl model.key (Url.toString url)
+                    , Nav.pushUrl model.navKey (Url.toString url)
                     )
 
                 Browser.External url ->
@@ -51,51 +99,34 @@ update msg model =
                     , Nav.load url
                     )
 
-        OnUrlChange url ->
+        ( OnUrlChange url, _ ) ->
             let
                 newRoute =
                     Routes.parseUrl url
             in
             ( { model | route = newRoute }, Cmd.none )
+                |> loadCurrentPage
 
-        ChangeLevel player howMuch ->
+        ( Msg_List subMsg, Page_List pageModel ) ->
             let
-                updatedPlayer =
-                    { player | level = player.level + howMuch }
+                ( newPageModel, newCmd ) =
+                    List.update subMsg pageModel
             in
-            ( model, Player.savePlayerCmd updatedPlayer )
+            ( { model | page = Page_List newPageModel }
+            , Cmd.map Msg_List newCmd
+            )
 
-        OnPlayerSave (Ok player) ->
-            ( updatePlayerInModel player model, Cmd.none )
+        ( Msg_Edit subMsg, Page_Edit pageModel ) ->
+            let
+                ( newPageModel, newCmd ) =
+                    Edit.update model.flags subMsg pageModel
+            in
+            ( { model | page = Page_Edit newPageModel }
+            , Cmd.map Msg_Edit newCmd
+            )
 
-        OnPlayerSave (Err error) ->
+        ( _, _ ) ->
             ( model, Cmd.none )
-
-
-updatePlayerInModel : Player -> Model -> Model
-updatePlayerInModel player model =
-    let
-        updatedPlayers =
-            mapRemoteData (updatePlayerInList player) model.players
-    in
-    { model | players = updatedPlayers }
-
-
-updatePlayerInList : Player -> List Player -> List Player
-updatePlayerInList player players =
-    let
-        pick currentPlayer =
-            if currentPlayer.id == player.id then
-                player
-
-            else
-                currentPlayer
-    in
-    List.map pick players
-
-
-
--- MAIN
 
 
 main : Program Flags Model Msg
@@ -117,44 +148,30 @@ main =
 view : Model -> Browser.Document Msg
 view model =
     { title = "App"
-    , body = [ page model ]
+    , body = [ currentPage model ]
     }
 
 
-page : Model -> Html Msg
-page model =
+currentPage : Model -> Html Msg
+currentPage model =
     let
-        content =
-            case model.players of
-                NotAsked ->
-                    text ""
+        page =
+            case model.page of
+                Page_List pageModel ->
+                    List.view pageModel
+                        |> Html.map Msg_List
 
-                Loading ->
-                    text "Loading ..."
+                Page_Edit pageModel ->
+                    Edit.view pageModel
+                        |> Html.map Msg_Edit
 
-                Loaded players ->
-                    pageWithData model players
-
-                Failure ->
-                    text "Error"
+                Page_None ->
+                    notFoundView
     in
     section []
         [ nav model
-        , div [ class "p-4" ] [ content ]
+        , page
         ]
-
-
-pageWithData : Model -> List Player -> Html Msg
-pageWithData model players =
-    case model.route of
-        PlayersRoute ->
-            Pages.List.view players
-
-        PlayerRoute id ->
-            Pages.Edit.view players id
-
-        NotFoundRoute ->
-            notFoundView
 
 
 nav : Model -> Html Msg
@@ -162,14 +179,14 @@ nav model =
     let
         links =
             case model.route of
-                PlayersRoute ->
+                Routes.PlayersRoute ->
                     [ text "Players" ]
 
-                PlayerRoute _ ->
+                Routes.PlayerRoute _ ->
                     [ linkToList
                     ]
 
-                NotFoundRoute ->
+                Routes.NotFoundRoute ->
                     [ linkToList
                     ]
 

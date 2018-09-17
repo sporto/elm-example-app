@@ -1,8 +1,13 @@
-module Routes exposing (matchers, parseUrl, playerPath, playersPath)
+module Routes exposing (Route(..), parseUrl, playerPath, playersPath)
 
-import Shared exposing (..)
 import Url exposing (Url)
 import Url.Parser exposing (..)
+
+
+type Route
+    = PlayersRoute
+    | PlayerRoute String
+    | NotFoundRoute
 
 
 matchers : Parser (Route -> a) a
