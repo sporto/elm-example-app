@@ -12,7 +12,7 @@
     "elm-live": "^3.0.0"
   },
   "scripts": {
-    "api": "node api.js",
+    "api": "json-server --watch db.json --port 4000",
     "build": "elm make ./src/Main.elm --output dist/app.js",
     "client": "elm-live ./src/Main.elm --output=dist/app.js --pushstate",
     "start": "nf start"
