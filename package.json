@@ -14,7 +14,7 @@
   "scripts": {
     "api": "json-server --watch db.json --port 4000",
     "build": "elm make ./src/Main.elm --output dist/app.js",
-    "client": "elm-live ./src/Main.elm --output=dist/app.js --pushstate",
+    "client": "cp ./src/index.html ./dist && elm-live ./src/Main.elm --output=dist/app.js --dir=dist --pushstate",
     "start": "nf start"
   },
   "repository": {
