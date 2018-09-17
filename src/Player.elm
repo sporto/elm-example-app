@@ -1,11 +1,10 @@
-module Data exposing (..)
+module Player exposing (fetchPlayers, fetchPlayersUrl, playerDecoder, playerEncoder, playersDecoder, savePlayerCmd, savePlayerRequest, savePlayerUrl)
 
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import Shared exposing (..)
-
 
 
 fetchPlayers : Cmd Msg

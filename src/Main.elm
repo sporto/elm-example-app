@@ -2,11 +2,11 @@ module Main exposing (init, main, subscriptions)
 
 import Browser
 import Browser.Navigation as Nav exposing (Key)
-import Data exposing (fetchPlayers)
 import Html exposing (Html, a, div, section, text)
 import Html.Attributes exposing (class, href)
 import Pages.Edit
 import Pages.List
+import Player exposing (fetchPlayers)
 import Routes
 import Shared exposing (..)
 import Url exposing (Url)
@@ -63,7 +63,7 @@ update msg model =
                 updatedPlayer =
                     { player | level = player.level + howMuch }
             in
-            ( model, Data.savePlayerCmd updatedPlayer )
+            ( model, Player.savePlayerCmd updatedPlayer )
 
         OnPlayerSave (Ok player) ->
             ( updatePlayerInModel player model, Cmd.none )
