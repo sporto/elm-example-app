@@ -116,6 +116,9 @@ update msg model =
             , Cmd.map Msg_List newCmd
             )
 
+        ( Msg_List subMsg, _ ) ->
+            ( model, Cmd.none )
+
         ( Msg_Edit subMsg, Page_Edit pageModel ) ->
             let
                 ( newPageModel, newCmd ) =
@@ -125,7 +128,7 @@ update msg model =
             , Cmd.map Msg_Edit newCmd
             )
 
-        ( _, _ ) ->
+        ( Msg_Edit subMsg, _ ) ->
             ( model, Cmd.none )
 
 
