@@ -11,12 +11,11 @@ An example Elm single page application built for http://www.elm-tutorial.org/
 
 - [Install Elm](http://elm-lang.org/install)
 - [Install Node](https://nodejs.org/en/download/)
-- [Install Yarn](https://yarnpkg.com/)
 
 Install node packages:
 
 ```
-yarn
+npm i
 ```
 
 ## Running the application:
@@ -24,7 +23,7 @@ yarn
 In terminal run:
 
 ```
-yarn start
+npm run start
 ```
 
 Open `http://localhost:3000`
