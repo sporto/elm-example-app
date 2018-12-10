@@ -2,7 +2,6 @@ module Player exposing (Player, decoder, encode)
 
 import Http
 import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import Shared exposing (..)
 
@@ -20,10 +19,10 @@ type alias Player =
 
 decoder : Decode.Decoder Player
 decoder =
-    Decode.succeed Player
-        |> required "id" Decode.string
-        |> required "name" Decode.string
-        |> required "level" Decode.int
+    Decode.map3 Player
+        (Decode.field "id" Decode.string)
+        (Decode.field "name" Decode.string)
+        (Decode.field "level" Decode.int)
 
 
 encode : Player -> Encode.Value
